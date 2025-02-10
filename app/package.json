@@ -9,13 +9,14 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.1",
-    "bulma": "^0.9.0",
+    "bulma": "^1.0.3",
     "compression-webpack-plugin": "^4.0.0",
     "core-js": "^3.6.5",
     "deep-object-diff": "^1.1.0",
     "deepmerge": "^4.2.2",
     "imagemin-webpack-plugin": "^2.4.2",
     "jszip": "^3.5.0",
+    "moment": "^2.30.1",
     "path-that-svg": "^1.2.4",
     "qrcode": "^1.4.4",
     "three": "^0.118.3",
@@ -32,10 +33,10 @@
     "@vue/cli-plugin-babel": "^4.4.6",
     "@vue/cli-service": "^4.4.6",
     "babel-eslint": "^10.1.0",
+    "pug": "^3.0.3",
     "raw-loader": "^4.0.1",
     "vite": "^5.3.4",
-    "vue-template-compiler": "^2.6.11",
-    "pug": "^3.0.3"
+    "vue-template-compiler": "^2.6.11"
   },
   "browserslist": [
     "> 1%",

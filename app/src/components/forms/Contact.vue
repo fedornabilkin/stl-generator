@@ -83,7 +83,7 @@
       <div class="field-body">
         <div class="field">
           <p class="control">
-            <input class="input" type="text" :placeholder="$t('emailPlaceHolder')" v-model="contact.email" />
+            <input class="input" type="text" placeholder="email@email.ru" v-model="contact.email" />
           </p>
         </div>
       </div>

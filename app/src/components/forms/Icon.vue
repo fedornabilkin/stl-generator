@@ -8,7 +8,7 @@ const selected = (name) => {
   if (name !== 'none') {
     props.options.icon.active = true
 
-    const promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve) => {
       setTimeout(() => {
         resolve()
       }, 1000)
@@ -85,7 +85,7 @@ const icons = [
                       span.title.is-size-7 {{$t('noIcon')}}
                   .column.is-4(v-for='icon in icons' :key='icon')
                     .icon-item.dropdown-item.is-vcentered(@click='selected(icon)')
-                      img(width='18' height='18' :src="'icons/' + icon + '.svg'" loading='lazy')
+                      img.is-skeleton(width='18' height='18' :src="'icons/' + icon + '.svg'" loading='lazy')
 
           object(
             v-if="props.options.icon.active"

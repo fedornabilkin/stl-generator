@@ -132,12 +132,11 @@ const setActiveTab = (idx) => {
           p.control
             a.button.is-static.is-small {{unit}}
 
-  .box.mt-1(:class="{'is-hidden': !props.options.code.preview.src}" style="width: fit-content")
-    figure.image.is-128x128
+  .box.mt-1(style="width: fit-content")
+    figure.image.is-128x128.is-skeleton
       img(:src="props.options.code.preview.src")
 
 </template>
 
 <style scoped>
-
 </style>

@@ -35,11 +35,13 @@ import JSZip from 'jszip';
 // 3D settings panel
 import QRCodeModelOptionsPanel from './QRCodeModelOptionsPanel.vue';
 import ScannerModal from './ScannerModal.vue';
-// import { bus } from '../main';
-import { save, saveAsString, saveAsArrayBuffer } from '../utils';
+import { save, saveAsString, saveAsArrayBuffer } from '@/utils';
 import QRCode3D from "@/qrcode3d";
 import {QRCodeModel} from "@/v3d/create/base";
 import {Model} from "@/v3d/create/model";
+import {useShareHash} from "@/service/shareHash";
+import {useExportList} from "@/store/exportList";
+import {Share} from "@/entity/share";
 
 const defaultOptions = {
   activeTabIndex: 0,
@@ -136,6 +138,7 @@ export default {
   props: {
     initData: Object,
     scene: Object,
+    renderer: Object,
     exporter: Object,
   },
   components: {
@@ -145,11 +148,10 @@ export default {
   data() {
     return {
       options: JSON.parse(JSON.stringify(defaultOptions)),
+      diffOptions: {},
       qrCodeBitMask: null,
       unit: 'mm',
       mesh: null,
-      stlType: 'binary',
-      dualExtrusion: false,
       blockWidth: null,
       blockHeight: null,
       isGenerating: false,
@@ -178,15 +180,27 @@ export default {
       const strategy = new QRCodeModel()
       this.model3d = new Model()
       this.model3d.setStrategy(strategy)
-      const parts = await this.model3d.create(this.generator)
 
-      for(const key in parts) {
-        this.addedMeshes.push(parts[key])
-        this.scene.add(parts[key])
-      }
 
-      this.$emit('exportReady', diff(defaultOptions, this.options), this.addedMeshes)
-      this.isGenerating = false
+      const addPromise = new Promise((resolve) => {
+        const parts = this.model3d.create(this.generator)
+
+        resolve(parts)
+      })
+
+      addPromise
+          .then((result) => {
+            this.addedMeshes = result
+            for(const key in result) {
+              this.scene.add(result[key])
+            }
+          })
+          .then(() => {
+            this.diffOptions = diff(defaultOptions, this.options)
+            this.$emit('exportReady', this.diffOptions, this.addedMeshes)
+            this.isGenerating = false
+          })
+
     },
     async prepareData() {
       this.$emit('generating')
@@ -255,57 +269,16 @@ export default {
           saveAsString(result, filename)
         }
       }
+      this.addLastExport()
+    },
+    addLastExport() {
+      const shareHash = useShareHash()
+      const hash = shareHash.create(this.diffOptions)
+      const exportList = useExportList()
+      const imgDataUrl = this.renderer.domElement.toDataURL()
 
-      // const timestamp = new Date().getTime();
-      // const exportAsBinary = (stlType === 'binary');
-      //
-      // if (multipleParts) {
-      //   const zip = new JSZip();
-      //   const filenameBase = `base-${timestamp}.stl`;
-      //   const filenameQrcode = `qrcode-${timestamp}.stl`;
-      //   const filenameBorder = `border-${timestamp}.stl`;
-      //   const filenameIcon = `icon-${timestamp}.stl`;
-      //   const filenameText = `text-${timestamp}.stl`;
-      //   const filenameKeychain = `attachment-${timestamp}.stl`;
-      //   const baseSTL = this.exporter.parse(this.baseMesh, { binary: exportAsBinary });
-      //   const qrcodeSTL = this.exporter.parse(this.qrcodeMesh, { binary: exportAsBinary });
-      //   zip.file(filenameBase, baseSTL.buffer);
-      //   zip.file(filenameQrcode, qrcodeSTL.buffer);
-      //
-      //   if (this.borderMesh) {
-      //     const borderSTL = this.exporter.parse(this.borderMesh, { binary: exportAsBinary });
-      //     zip.file(filenameBorder, borderSTL.buffer);
-      //   }
-      //
-      //   if (this.iconMesh) {
-      //     const iconSTL = this.exporter.parse(this.iconMesh, { binary: exportAsBinary });
-      //     zip.file(filenameIcon, iconSTL.buffer);
-      //   }
-      //
-      //   if (this.subtitleMesh) {
-      //     const textSTL = this.exporter.parse(this.subtitleMesh, { binary: exportAsBinary });
-      //     zip.file(filenameText, textSTL.buffer);
-      //   }
-      //
-      //   if (this.keychainAttachmentMesh) {
-      //     const kcaSTL = this.exporter.parse(this.keychainAttachmentMesh, { binary: exportAsBinary });
-      //     zip.file(filenameKeychain, kcaSTL.buffer);
-      //   }
-      //
-      //   zip.generateAsync({ type: 'blob' })
-      //     .then((content) => {
-      //       save(new Blob([content]), `vsqr-${timestamp}.zip`);
-      //     });
-      // } else {
-      //   const mesh = this.model3d.export(this.generator)
-      //   const filename = `vsqr-3d-${timestamp}.stl`
-      //   const result = this.exporter.parse(mesh, {binary: exportAsBinary})
-      //   if (exportAsBinary) {
-      //     saveAsArrayBuffer(result, filename)
-      //   } else {
-      //     saveAsString(result, filename)
-      //   }
-      // }
+      exportList.add(new Share({hash: hash, img: {src: imgDataUrl}, date: new Date().getTime()}))
+      window.localStorage.setItem(exportList.keyStore, JSON.stringify(exportList.getCollection()))
     },
     openQRScanner() {
       this.scannerModalVisible = true;
@@ -315,10 +288,9 @@ export default {
       this.options.activeTabIndex = 0
     },
     wifiQREscape(str) {
-      const regex = /([:|\\|;|,|"])/gm;
-      const subst = '\\$1';
-      const result = str.replace(regex, subst);
-      return result;
+      const regex = /([:|\\|;|,|"])/gm
+      const subst = '\\$1'
+      return str.replace(regex, subst)
     },
     getQRText() {
 

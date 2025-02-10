@@ -19,7 +19,15 @@ div.container.is-fluid(id="main")
         //  span Text
       //hr
 
-      QRCodeMenu(v-if="mode === 'QR'" ref="qrcode" :scene="scene" :exporter="exporter" :initData="shareData" @generating="generating" @exportReady="exportReady")
+      QRCodeMenu(v-if="mode === 'QR'"
+        ref="qrcode"
+        :scene="scene"
+        :renderer="renderer"
+        :exporter="exporter"
+        :initData="shareData"
+        @generating="generating"
+        @exportReady="exportReady"
+      )
       //SpotifyMenu(v-if="mode === 'Spotify'" ref="spotifycode" :scene="scene" :exporter="exporter" :initData="shareData" @generating="generating" @exportReady="exportReady")
       //TextMenu(v-if="mode === 'Text'" ref="text" :scene="scene" :exporter="exporter" :initData="shareData" @generating="generating" @exportReady="exportReady")
 
@@ -55,6 +63,8 @@ div.container.is-fluid(id="main")
                   i.fa.fa-image
                 span {{$t('expPngButton')}}
 
+      .mt-1
+      ExportList
 
 <!--    <PrintGuide />-->
 <!--    <div.content container">-->
@@ -76,16 +86,22 @@ import ChangelogModal from '../ChangelogModal.vue';
 import ExportModal from '../ExportModal.vue';
 import QRCodeMenu from '../QRCodeMenu.vue';
 import PrintGuide from '../PrintGuide.vue';
-import { getRandomBanner, saveAsArrayBuffer, trimCanvas } from '../../utils';
+import { saveAsArrayBuffer, trimCanvas } from '@/utils';
 import { toRaw } from '@vue/reactivity'
 import {Box} from "@/v3d/box";
 import Export from "@/components/forms/Export.vue";
+import {useShareHash} from "@/service/shareHash";
+import {useExportList} from "@/store/exportList";
+import {Share} from "@/entity/share";
+import ExportList from "@/components/generator/ExportList.vue";
 
-const shareHashMarker = '#share';
+const shareHashMarker = '#share'
+const shareHash = useShareHash()
 
 export default {
   name: 'Main',
   components: {
+    ExportList,
     Export,
     QRCodeMenu,
     PrintGuide,
@@ -101,8 +117,6 @@ export default {
         type: 'binary',
         multiple: false,
       },
-      stlType: 'binary',
-      multipleParts: false,
       changelogModalVisible: false,
       // changelog: changelog.split('\n').slice(3).join('\n'),
       changelog: '',
@@ -114,23 +128,17 @@ export default {
       camera: null,
       renderer: null,
       grid: null,
-      mesh: null,
       addedMeshes: [],
     };
   },
   created() {
-    // bus.$on('openChangelogModal', () => { this.changelogModalVisible = true; });
-    // bus.$on('closeChangelogModal', () => { this.changelogModalVisible = false; });
-    // bus.$on('openExportModal', () => { this.exportModalVisible = true; });
-    // bus.$on('closeExportModal', () => { this.exportModalVisible = false; });
-
     this.parseUrlShareHash()
+    this.fillExportList()
   },
   mounted() {
     this.initScene()
     this.startAnimation()
     this.exporter = new STLExporter()
-    // this.exportModalVisible = true
   },
   methods: {
     changeMode(mode) {
@@ -224,10 +232,9 @@ export default {
       }, 1000);
     },
     parseUrlShareHash() {
-      if (window.location.hash.startsWith(shareHashMarker)) {
+      if (shareHash.shareIsValid(window.location.hash)) {
         try {
-          const rawShareData = window.location.hash.split('-')
-          this.shareData = Object.assign(JSON.parse(atob(rawShareData[1])), {})
+          this.shareData = shareHash.parse(window.location.hash)
         } catch (error) {
           this.shareData = null
           console.error('Invalid Sharing URL')
@@ -235,11 +242,19 @@ export default {
         }
       }
     },
+    fillExportList() {
+      const exportList = useExportList()
+      const list = JSON.parse(window.localStorage.getItem(exportList.keyStore)) || []
+      const collection = list.map((item) => {
+        return new Share(item)
+      })
+      exportList.fillCollection(collection)
+    },
     exportReady(options, meshes) {
       this.expSettings.active = true
       this.addedMeshes = meshes
       try {
-        window.location.hash = `${shareHashMarker}-${btoa(JSON.stringify(options))}`
+        window.location.hash = shareHash.create(options)
       } catch (error) {
         console.error(error)
       } finally {
@@ -311,7 +326,7 @@ export default {
   position: absolute;
   top: -10px;
   right: -10px;
-  padding: 0px 5px;
+  padding: 0 5px;
   background-color: hsl(348, 100%, 61%);
   color: #fff;
   font-weight: bold;

@@ -3,14 +3,8 @@ import fontInterSemiBold from './assets/fonts/Inter_SemiBold.json';
 import fontInterSemiBoldItalic from './assets/fonts/Inter_SemiBold_Italic.json';
 import fontInterExtraBold from './assets/fonts/Inter_ExtraBold.json';
 import fontInterExtraBoldItalic from './assets/fonts/Inter_ExtraBold_Italic.json';
-import {
-  getRoundedRectShape, getCustomRoundedRectShape, subtractMesh, unionMesh, getBoundingBoxSize,
-} from './utils';
-import {
-  RectangleRoundedCornerShape,
-  RectangleRoundedShape,
-  RectangleShape
-} from "@/v3d/primitives/shape";
+import {subtractMesh, unionMesh, getBoundingBoxSize} from './utils';
+import {RectangleRoundedCornerShape, RectangleRoundedShape} from "@/v3d/primitives/shape";
 import {SVGLoader} from "three/examples/jsm/loaders/SVGLoader";
 
 const LINE_HEIGHT = 1.5
@@ -58,10 +52,9 @@ class BaseTag3D {
   }
 
   createMaterial(color) {
-    const material = new THREE.MeshBasicMaterial({
+    return new THREE.MeshBasicMaterial({
       color: color,
     })
-    return material
   }
 
   /**
@@ -278,7 +271,6 @@ class BaseTag3D {
       return undefined
     }
     const holeRadius = this.options.keychain.holeDiameter / 2
-    const cornerPlacementOffset = holeRadius * 2
     const keyChainBorder = 3
     const height = this.options.keychain.holeDiameter + keyChainBorder
     const width = this.options.keychain.holeDiameter + keyChainBorder
@@ -511,7 +503,6 @@ class BaseTag3D {
   combined(collection) {
     const combined = new THREE.Geometry()
     for (const key in collection) {
-      console.log(key)
       combined.merge(collection[key].geometry, collection[key].matrix)
     }
     return new THREE.Mesh(combined, this.materialBase)

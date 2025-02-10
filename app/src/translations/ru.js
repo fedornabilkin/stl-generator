@@ -164,6 +164,12 @@ export default {
   expStlButton: 'STL',
   expPngButton: 'PNG',
 
+  expList: 'Последние проекты',
+  expListTableImg: 'Миниатюра',
+  expListTableLink: 'Ссылка на проект',
+  expListTableDate: 'Дата загрузки',
+  expListLoadItem: 'Загрузить проект',
+
   /**
    * Export modal
    */
