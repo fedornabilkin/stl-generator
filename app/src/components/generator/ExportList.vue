@@ -12,7 +12,7 @@ const dateTimeFormat = (dt, format='DD.MM.YY HH:mm:ss') => {
 .panel(v-if="exportList.getCollection().length")
   .panel-heading {{$t('expList')}}
   .panel-block
-    table.table.is-striped.is-fullwidth.is-skeleton
+    table.table.is-striped.is-fullwidth
       thead
         tr
           th {{ $t('expListTableImg') }}

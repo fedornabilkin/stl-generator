@@ -184,15 +184,14 @@ export default {
 
       const addPromise = new Promise((resolve) => {
         const parts = this.model3d.create(this.generator)
-
         resolve(parts)
       })
 
       addPromise
           .then((result) => {
-            this.addedMeshes = result
             for(const key in result) {
               this.scene.add(result[key])
+              this.addedMeshes.push(result[key])
             }
           })
           .then(() => {
@@ -364,22 +363,6 @@ export default {
 </script>
 
 <style scoped>
-#main {
-  margin-top: 20px;
-}
-
-.export-button {
-  margin: 0 10px;
-}
-
-#notifications {
-  margin-top: 10px;
-}
-
-.field-label {
-  text-align: left;
-}
-
 #mode-buttons>button {
   margin-right: 20px;
 }

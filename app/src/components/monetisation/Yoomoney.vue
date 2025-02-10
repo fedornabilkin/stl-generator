@@ -5,7 +5,7 @@ const showingThankYou = ref(false)
 </script>
 
 <template lang="pug">
-  a.button(
+  a.button.is-light.jello-horizontal(
     v-if="!showingThankYou"
     href="https://yoomoney.ru/fundraise/187LKGIJ2GT.250205"
     target="_blank"
@@ -26,5 +26,18 @@ const showingThankYou = ref(false)
 </template>
 
 <style scoped>
-
+.jello-horizontal{
+  animation:jello-horizontal 10s linear both;
+  animation-iteration-count: infinite;
+  animation-delay: 3s;
+}
+@keyframes jello-horizontal{
+  0%{transform:scale3d(1,1,1)}
+  3%{transform:scale3d(1.25,.75,1)}
+  4%{transform:scale3d(.75,1.25,1)}
+  5%{transform:scale3d(1.15,.85,1)}
+  6%{transform:scale3d(.95,1.05,1)}
+  7%{transform:scale3d(1.05,.95,1)}
+  100%{transform:scale3d(1,1,1)}
+}
 </style>
