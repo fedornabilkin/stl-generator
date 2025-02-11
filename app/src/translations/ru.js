@@ -186,6 +186,24 @@ export default {
   moneySupportProject: 'Поддержать проект',
   moneyThankYou: 'Спасибо.',
 
+  /**
+   * Share
+   */
+  socialEmail: 'Отправить электронную почту',
+  socTelegram: 'Отправить в телеграм',
+  socVk: 'Поделиться вконтакте',
+  socOk: 'Поделиться в одноклассники',
+  socFacebook: 'Поделиться в фейсбук',
+  socInstagram: '',
+  socLinkedin: '',
+  socWhatsapp: '',
+  socTwitter: 'Твитнуть',
+  socTiktok: '',
+  socReddit: 'Отправить в реддит',
+  socPinterest: 'Закрепить это',
+  socPocket: 'Добавить в покет',
+  socCopyLink: 'Скопировать ссылку',
+
   //
   // Print Guide
   // with HTML Tags included!

@@ -2,7 +2,7 @@
   <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="/">
-        <img src="../../assets/logo.png" />
+        <img src="../../assets/logo.png" alt="vsqr 3d генератор stl" />
       </a>
 
       <p class="is-hidden-mobile navbar-item" v-if="showShareNotice">
@@ -32,22 +32,12 @@
         <div class="navbar-item">
           <LanguageSelector />
         </div>
-<!--        <div class="navbar-item">-->
-<!--          <ShareButtons />-->
-<!--        </div>-->
-<!--        <div class="navbar-item" v-if="showThankYou">-->
-<!--          <div class="buttons">-->
-<!--            <a class="button is-danger" href="https://paypal.me/fstein42" target="_blank" @click="showThanks">-->
-<!--              <span class="icon">-->
-<!--                <i class="fa fa-heart"></i>-->
-<!--              </span>-->
-<!--              <span>Thank You!</span>-->
-<!--            </a>-->
-<!--          </div>-->
-<!--        </div>-->
+        <div class="navbar-item">
+          <ShareButtons />
+        </div>
         <div class="navbar-item" v-if="!showThankYou">
           <div class="buttons">
-            <Yoomoney></Yoomoney>
+            <Yoomoney />
           </div>
         </div>
 <!--        <div class="navbar-item">-->
@@ -76,11 +66,10 @@
 </template>
 
 <script>
-import ShareButtons from '../ShareButtons.vue';
-import LanguageSelector from '../LanguageSelector.vue';
+import ShareButtons from './ShareButtons.vue';
+import LanguageSelector from './LanguageSelector.vue';
 import packageJson from '../../../package.json';
 import Yoomoney from "@/components/monetisation/Yoomoney.vue";
-// import { bus } from '../main';
 
 export default {
   name: 'Header',

@@ -149,7 +149,7 @@ import { diff } from 'deep-object-diff';
 import merge from 'deepmerge';
 import JSZip from 'jszip';
 
-import { save, saveAsString, saveAsArrayBuffer } from '../utils';
+import { save, saveAsString, saveAsArrayBuffer } from '../../utils';
 import BaseTag3D from "@/base";
 import {Model} from "@/v3d/create/model";
 import {TextModel} from "@/v3d/create/base";

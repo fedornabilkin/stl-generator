@@ -84,7 +84,7 @@ import { STLExporter } from 'three/examples/jsm/exporters/STLExporter';
 // import changelog from 'raw-loader!../../../CHANGELOG.md';
 import ChangelogModal from '../ChangelogModal.vue';
 import ExportModal from '../ExportModal.vue';
-import QRCodeMenu from '../QRCodeMenu.vue';
+import QRCodeMenu from '../generator/QRCodeMenu.vue';
 import PrintGuide from '../PrintGuide.vue';
 import { saveAsArrayBuffer, trimCanvas } from '@/utils';
 import { toRaw } from '@vue/reactivity'

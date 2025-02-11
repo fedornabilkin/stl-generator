@@ -1,3 +1,8 @@
+<script setup>
+import ShareButtons from './ShareButtons.vue';
+import Yoomoney from "@/components/monetisation/Yoomoney.vue";
+</script>
+
 <template lang="pug">
 footer.footer
   .columns
@@ -7,6 +12,8 @@ footer.footer
       a(href="https://t.me/+dSgck2GM29syZTQ6" target="_blank")
         i.fab.fa-telegram
         | &nbsp;telegram
+    .column
+      ShareButtons
 
 <!--    <div class="content has-text-centered">-->
 <!--      <p>-->
@@ -32,19 +39,4 @@ footer.footer
 <!--    </div>-->
 </template>
 
-<script>
-import ShareButtons from '../ShareButtons.vue';
-import Yoomoney from "@/components/monetisation/Yoomoney.vue";
-
-export default {
-  name: 'Footer',
-  components: {
-    Yoomoney,
-    ShareButtons,
-  },
-};
-</script>
-
-<style>
-
-</style>
+<style></style>
