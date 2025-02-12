@@ -2,7 +2,7 @@
   <div class="dropdown is-hoverable">
     <div class="dropdown-trigger">
       <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-        <span><img :src="'flags/gif/' + currentLocale + '.gif'"/> {{$t("changeLanguage")}}</span>
+        <span><img :src="'flags/gif/' + currentLocale + '.gif'" :alt="currentLocale" /> {{$t("changeLanguage")}}</span>
         <span class="icon is-small">
           <i class="fas fa-angle-down" aria-hidden="true"></i>
         </span>
@@ -11,7 +11,7 @@
     <div class="dropdown-menu" id="dropdown-menu" role="menu">
       <div class="dropdown-content">
         <a class="dropdown-item" v-for="locale in locales" :key="locale" @click="changeLanguage(locale)">
-          <img :src="'flags/gif/' + locale + '.gif'"/> {{ $i18n.messages[locale]['languageLocalName'] }}
+          <img :src="'flags/gif/' + locale + '.gif'" :alt="locale" /> {{ $i18n.messages[locale]['languageLocalName'] }}
         </a>
 <!--        <hr class="dropdown-divider">-->
 <!--        <a href="https://github.com/flxn/qrcode2stl#contribute-a-translation" class="dropdown-item" rel="nofollow noopener" target="_blank">-->

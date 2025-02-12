@@ -26,7 +26,12 @@ const showingThankYou = ref(false)
 </template>
 
 <style scoped>
-/* https://xsgames.co/animatiss */
+/*
+https://xsgames.co/animatiss
+https://cssreference.io/
+https://cssmasterclass.io/
+https://jgthms.com/web-design-in-4-minutes
+*/
 .jello-horizontal{
   animation:jello-horizontal 10s linear both;
   animation-iteration-count: infinite;
