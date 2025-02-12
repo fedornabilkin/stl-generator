@@ -10,11 +10,8 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.1",
     "bulma": "^1.0.3",
-    "compression-webpack-plugin": "^4.0.0",
-    "core-js": "^3.6.5",
     "deep-object-diff": "^1.1.0",
     "deepmerge": "^4.2.2",
-    "imagemin-webpack-plugin": "^2.4.2",
     "jszip": "^3.5.0",
     "moment": "^2.30.1",
     "path-that-svg": "^1.2.4",
@@ -24,18 +21,13 @@
     "vcards-js": "^2.10.0",
     "vue": "^3.5.13",
     "vue-i18n": "^9.14.2",
-    "vue-markdown": "^2.2.4",
-    "vue-qrcode-reader": "^3.0.3",
-    "worker-plugin": "^5.0.0"
+    "vue-qrcode-reader": "^3.0.3"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",
-    "@vue/cli-plugin-babel": "^4.4.6",
-    "@vue/cli-service": "^4.4.6",
-    "babel-eslint": "^10.1.0",
     "pug": "^3.0.3",
     "raw-loader": "^4.0.1",
-    "vite": "^5.3.4",
+    "vite": "^6.1.0",
     "vue-template-compiler": "^2.6.11"
   },
   "browserslist": [

@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import VueMarkdown from 'vue-markdown';
+// import VueMarkdown from 'vue-markdown';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 // import changelog from 'raw-loader!../../CHANGELOG.md';
 import packageJson from '../../package.json';
@@ -31,7 +31,7 @@ import packageJson from '../../package.json';
 export default {
   name: 'ChangelogModal',
   components: {
-    VueMarkdown,
+    // VueMarkdown,
   },
   data() {
     return {

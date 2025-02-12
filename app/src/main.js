@@ -1,7 +1,6 @@
 import {createApp} from 'vue';
 // import {createPinia} from 'pinia';
 import { createI18n } from "vue-i18n";
-import VueMarkdown from 'vue-markdown';
 import translations from './translations/loader';
 
 import App from './App.vue';
@@ -18,7 +17,6 @@ const i18n = createI18n({
 const app = createApp(App)
 
 app
-  .use(VueMarkdown)
   // .use(createPinia())
   .use(i18n)
 
