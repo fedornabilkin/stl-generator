@@ -17,11 +17,14 @@ div(id="qrcodeMenu")
     | {{$t('printabilityWarningBody', { dimensions: `${Number(blockWidth).toFixed(1)}mm x ${Number(blockHeight).toFixed(1)}mm` })}}
 
   .columns
-    .column.is-5
+    .column
       button.button.is-success.is-large(:class="{'is-loading': isGenerating}" @click="prepareData")
         span.icon
           i.fa.fa-cube
         span {{$t('generateButton')}}
+    .column
+      progress.progress.is-success(v-if="isGenerating" :value="progressGenerating" max='100')
+        | {{ progressGenerating }}
 
   ScannerModal(v-if="scannerModalVisible" @decode="onDecode")
 </template>
@@ -106,6 +109,7 @@ const defaultOptions = {
     message: '',
   },
   base: {
+    active: true,
     shape: 'roundedRectangle',
     width: 100,
     height: 100,
@@ -145,32 +149,31 @@ export default {
     QRCodeModelOptionsPanel,
     ScannerModal,
   },
-  data() {
-    return {
-      options: JSON.parse(JSON.stringify(defaultOptions)),
-      diffOptions: {},
-      qrCodeBitMask: null,
-      unit: 'mm',
-      mesh: null,
-      blockWidth: null,
-      blockHeight: null,
-      isGenerating: false,
-      generateError: null,
-      scannerModalVisible: false,
-      addedMeshes: [],
-      generator: undefined,
-      model3d: undefined,
-    };
-  },
-  async mounted() {
+  data: () => ({
+    options: JSON.parse(JSON.stringify(defaultOptions)),
+    diffOptions: {},
+    qrCodeBitMask: null,
+    unit: 'mm',
+    mesh: null,
+    blockWidth: null,
+    blockHeight: null,
+    isGenerating: false,
+    progressGenerating: 0,
+    generateError: undefined,
+    scannerModalVisible: false,
+    addedMeshes: [],
+    generator: undefined,
+    model3d: undefined,
+  }),
+  mounted() {
     if (this.initData) {
       this.options = merge(this.options, this.initData)
-      await this.prepareData()
+      this.prepareData()
     }
   },
 
   methods: {
-    async render3d() {
+    render3d() {
       for(const item of this.addedMeshes) {
         this.scene.remove(item)
       }
@@ -182,9 +185,15 @@ export default {
       this.model3d.setStrategy(strategy)
 
 
-      const addPromise = new Promise((resolve) => {
-        const parts = this.model3d.create(this.generator)
-        resolve(parts)
+      let addPromise = new Promise((resolve) => {
+        this.model3d.create(this.generator)
+        this.generator.process = (percent) => {
+          this.progressGenerating = percent
+          if (percent >= 100) {
+            this.model3d.strategy.addMesh('qr', this.generator.finalBlock)
+            resolve(this.model3d.collection())
+          }
+        }
       })
 
       addPromise
@@ -197,15 +206,17 @@ export default {
           .then(() => {
             this.diffOptions = diff(defaultOptions, this.options)
             this.$emit('exportReady', this.diffOptions, this.addedMeshes)
-            this.isGenerating = false
           })
-
+          .finally(() => {
+            this.isGenerating = false
+            this.generateError = ''
+            this.progressGenerating = 0
+          })
     },
-    async prepareData() {
-      this.$emit('generating')
-
-      this.generateError = null
+    prepareData() {
+      this.generateError = ''
       this.isGenerating = true
+      this.$emit('generating')
 
       const txt = this.getQRText()
       if (this.options.code.active && txt === '') {
@@ -221,7 +232,7 @@ export default {
       if (this.options.code.active) {
         try {
           const qrConfig = {errorCorrectionLevel: this.options.code.errorCorrectionLevel}
-          const qrCodeObject = await qrcode.create(txt, qrConfig)
+          const qrCodeObject = qrcode.create(txt, qrConfig)
           this.qrCodeBitMask = qrCodeObject.modules.data
 
           qrConfig.margin = 1
@@ -238,7 +249,7 @@ export default {
         }
       }
 
-      await this.render3d()
+      this.render3d()
     },
     async exportSTL(stlType, multipleParts) {
       const timestamp = new Date().getTime()

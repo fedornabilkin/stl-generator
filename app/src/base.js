@@ -58,9 +58,12 @@ class BaseTag3D {
   }
 
   /**
-   * @return {THREE.Mesh} the mesh of the base
+   * @return {THREE.Mesh|undefined} the mesh of the base
    */
   getBaseMesh() {
+    if (!this.options.base.active) {
+      return undefined
+    }
     // TODO: rethink handling of rounded rectangle: Different shape category vs only corner radius adjustment
     // const cornerRadius = this.getCornerRadius();
     // const textBaseOffset = this.getTextBaseOffset();

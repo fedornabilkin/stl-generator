@@ -12,6 +12,9 @@ import * as THREE from "three";
 export class Box {
 
   scene = undefined
+  camera = undefined
+  renderer = undefined
+  grid = undefined
   debug = false
 
   constructor(config = {}) {
@@ -40,21 +43,25 @@ export class Box {
   }
 
   createCamera(width, height) {
-    const camera = new PerspectiveCamera(50, width / height, 1, 10000)
-    camera.position.set(0, 0, 150)
+    this.camera = new PerspectiveCamera(50, width / height, 1, 10000)
+    this.camera.position.set(0, 0, 150)
 
-    return camera
+    return this.camera
   }
 
   createRenderer(width, height, pixelRatio) {
-    const renderer = new WebGLRenderer({
+    this.renderer = new WebGLRenderer({
       antialias: true,
       preserveDrawingBuffer: true,
       alpha: true
     })
-    renderer.setPixelRatio(pixelRatio)
-    renderer.setSize(width, height)
-    return renderer
+    this.renderer.setPixelRatio(pixelRatio)
+    this.renderer.setSize(width, height)
+    return this.renderer
+  }
+
+  render() {
+    this.renderer.render(this.scene, this.camera)
   }
 
   createLight() {
@@ -74,12 +81,12 @@ export class Box {
   }
 
   createGrid() {
-    const grid = new GridHelper(1000, 100, 0x000000, 0x000000)
-    grid.material.opacity = 0.2
-    grid.material.transparent = true
-    grid.rotation.x = Math.PI / 2
+    this.grid = new GridHelper(1000, 100, 0x000000, 0x000000)
+    this.grid.material.opacity = 0.2
+    this.grid.material.transparent = true
+    this.grid.rotation.x = Math.PI / 2
 
-    return grid
+    return this.grid
   }
 
   testPrimitives() {

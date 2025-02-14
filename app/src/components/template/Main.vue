@@ -4,20 +4,6 @@ div.container.is-fluid(id="main")
     div.column.is-6-widescreen.is-6-fullhd.is-12
       h1.title {{ $t("title") }}
       //h2.subtitle {{ $t("subtitle") }}
-      //div(id="mode-buttons")
-        //button.button.is-large(:class="{'is-primary': mode === 'QR'}" @click="changeMode('QR')")
-        //  span.icon.is-medium
-        //    i.fa.fa-qrcode
-        //  span QR Code
-        //button.button.is-large(:class="{'is-primary': mode === 'Spotify'}" @click="changeMode('Spotify')")
-        //  span.icon.is-medium
-        //    i.fab.fa-spotify
-        //  span Spotify Code
-        //button.button.is-large(:class="{'is-primary': mode === 'Text'}" @click="changeMode('Text')")
-        //  span.icon.is-medium
-        //    i.fa.fa-font
-        //  span Text
-      //hr
 
       QRCodeMenu(v-if="mode === 'QR'"
         ref="qrcode"
@@ -28,8 +14,6 @@ div.container.is-fluid(id="main")
         @generating="generating"
         @exportReady="exportReady"
       )
-      //SpotifyMenu(v-if="mode === 'Spotify'" ref="spotifycode" :scene="scene" :exporter="exporter" :initData="shareData" @generating="generating" @exportReady="exportReady")
-      //TextMenu(v-if="mode === 'Text'" ref="text" :scene="scene" :exporter="exporter" :initData="shareData" @generating="generating" @exportReady="exportReady")
 
     .column.is-6-widescreen.is-6-fullhd.is-12
       .columns
@@ -37,14 +21,8 @@ div.container.is-fluid(id="main")
           p.title {{$t('preview')}}
           p.subtitle {{ $t("controlsHint") }}
 
-      hr
-      .has-text-centered(v-if="isGenerating")
-        p.title {{$t('isGenerating')}}
-        hr
+      .mb-5(id="container3d" :class="{ 'is-loading': isGenerating }")
 
-      div(id="container3d" :class="{ 'is-loading': isGenerating }")
-
-      hr
 
       .panel(v-if="expSettings.active")
         .panel-heading {{$t('expSettings')}}
@@ -58,7 +36,7 @@ div.container.is-fluid(id="main")
                 span.icon
                   i.fa.fa-cube
                 span {{$t('expStlButton')}}
-              button.button.export-button.is-primary.is-medium(@click="renderPNG")
+              //button.button.export-button.is-primary.is-medium(@click="renderPNG")
                 span.icon
                   i.fa.fa-image
                 span {{$t('expPngButton')}}
@@ -66,13 +44,6 @@ div.container.is-fluid(id="main")
       .mt-1
       ExportList
 
-<!--    <PrintGuide />-->
-<!--    <div.content container">-->
-<!--      <h2.title">Changelog</h2>-->
-<!--      <hr>-->
-<!--      <vue-markdown :source="changelog".content"></vue-markdown>-->
-<!--    </div>-->
-<!--    <ChangelogModal v-if="changelogModalVisible"/>-->
       ExportModal(v-if="exportModalVisible" :isActive="exportModalVisible" @close="exportModalVisible=false")
 </template>
 
@@ -80,12 +51,8 @@ div.container.is-fluid(id="main")
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { STLExporter } from 'three/examples/jsm/exporters/STLExporter';
-// import VueMarkdown from 'vue-markdown';
-// import changelog from 'raw-loader!../../../CHANGELOG.md';
-import ChangelogModal from '../ChangelogModal.vue';
-import ExportModal from '../ExportModal.vue';
+import ExportModal from './ExportModal.vue';
 import QRCodeMenu from '../generator/QRCodeMenu.vue';
-import PrintGuide from '../PrintGuide.vue';
 import { saveAsArrayBuffer, trimCanvas } from '@/utils';
 import { toRaw } from '@vue/reactivity'
 import {Box} from "@/v3d/box";
@@ -95,8 +62,8 @@ import {useExportList} from "@/store/exportList";
 import {Share} from "@/entity/share";
 import ExportList from "@/components/generator/ExportList.vue";
 
-const shareHashMarker = '#share'
 const shareHash = useShareHash()
+const box = new Box({debug: false})
 
 export default {
   name: 'Main',
@@ -104,10 +71,7 @@ export default {
     ExportList,
     Export,
     QRCodeMenu,
-    PrintGuide,
-    ChangelogModal,
     ExportModal,
-    // VueMarkdown,
   },
   data() {
     return {
@@ -141,36 +105,25 @@ export default {
     this.exporter = new STLExporter()
   },
   methods: {
-    changeMode(mode) {
-      window.location.hash = ''
-      this.shareData = null
-      this.mode = mode
-      this.clearScene()
-    },
     initScene() {
       const container = document.getElementById('container3d')
 
-      const box = new Box({debug: false})
       this.scene = box.createScene()
       this.camera = box.createCamera(container.clientWidth, container.clientHeight)
       this.renderer = box.createRenderer(container.clientWidth, container.clientHeight, window.devicePixelRatio)
 
       container.appendChild(this.renderer.domElement)
-      const controls = new OrbitControls(this.camera, this.renderer.domElement)
+      const controls = new OrbitControls(box.camera, box.renderer.domElement)
       controls.target.set(0, 0, 0)
       controls.update()
-    },
-    clearScene() {
-      for(const item of this.addedMeshes) {
-        this.scene.remove(item)
-      }
     },
     generating() {
       this.isGenerating = true
     },
     startAnimation() {
       const animate = () => {
-        this.renderer.render(toRaw(this.scene), toRaw(this.camera))
+        box.render()
+        // this.renderer.render(toRaw(this.scene), toRaw(this.camera))
         requestAnimationFrame(animate)
       };
       requestAnimationFrame(animate)
@@ -260,7 +213,6 @@ export default {
       } finally {
         this.isGenerating = false
       }
-      // bus.$emit('exportReady')
     },
   },
 
@@ -302,14 +254,6 @@ export default {
 
 .export-button {
   margin: 0 10px;
-}
-
-#notifications {
-  margin-top: 10px;
-}
-
-.field-label {
-  text-align: left !important;
 }
 
 #mode-buttons>button {

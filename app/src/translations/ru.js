@@ -103,12 +103,16 @@ export default {
   //
   modelOptions: 'Настройки 3D модели',
   base: 'Основа',
+  baseActive: 'Основной слой',
+  baseActiveLabel: 'Другие слои используют данные основы, даже если отключить.',
   width: 'Ширина',
   height: 'Высота',
   depth: 'Глубина',
   cornerRadius: 'Радиус угла',
+
   border: 'Рамка',
   borderAroundBase: 'Добавить рамку на основу.',
+
   margin: 'Отступ',
   block: 'Block',
   style: 'Style',
@@ -135,15 +139,19 @@ export default {
   fontInfoText: 'Меняй шрифт для каждой строки:',
   italicInfoText: '*курсив*',
   boldInfoText: '**жирный**',
+
   cityMode: 'QR-город',
   cityModeText: 'Случайная высота черных блоков.',
+  qrHelp: 'Настройка для QR-кода',
   invert: 'Invert',
   invertText: 'Inverts the structure of the code',
+
   keychain: 'Брелок',
   keychainHelp: 'Добавить отверстие.',
   mirrorHoles: 'Зеркально',
   mirrorHolesHelp: 'Отразить зеркально.',
   keychainHoleDiameter: 'Диаметр',
+
   nfcIndentation: 'NFC/RFID',
   nfcIndentationHelp: 'Adds an indentation on the bottom side of the base where one can insert an NFC/RFID tag.',
   indentation: 'Indentation',

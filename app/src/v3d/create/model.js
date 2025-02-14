@@ -9,6 +9,10 @@ export class Model {
     return this.strategy.create(generator)
   }
 
+  collection(generator) {
+    return this.strategy.getCollectMesh(generator)
+  }
+
   export(generator) {
     return this.strategy.export(generator)
   }

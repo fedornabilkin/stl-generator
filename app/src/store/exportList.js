@@ -14,7 +14,7 @@ export function useExportList () {
 
   const add = (item) => {
     collection.value.unshift(item)
-    if(collection.value.length > 10) {
+    if(collection.value.length > 5) {
       collection.value.pop()
     }
   }
