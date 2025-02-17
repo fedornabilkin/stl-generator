@@ -85,7 +85,7 @@ const icons = [
                       span.title.is-size-7 {{$t('noIcon')}}
                   .column.is-4(v-for='icon in icons' :key='icon')
                     .icon-item.dropdown-item.is-vcentered(@click='selected(icon)')
-                      img(width='18' height='18' :src="'icons/' + icon + '.svg'" loading='lazy')
+                      img(width='18' height='18' :src="'/icons/' + icon + '.svg'" loading='lazy')
 
           object(
             v-if="props.options.icon.active"
@@ -93,7 +93,7 @@ const icons = [
             type='image/svg+xml'
             width='32'
             height='32'
-            :data="'icons/' + props.options.icon.name + '.svg'"
+            :data="'/icons/' + props.options.icon.name + '.svg'"
           )
           .is-size-7(v-if="props.options.icon.name !== 'none'")
             | Icons by Fontawesome&nbsp;

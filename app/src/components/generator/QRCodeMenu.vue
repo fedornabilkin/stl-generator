@@ -117,7 +117,7 @@ const defaultOptions = {
     cornerRadius: 5,
     hasNfcIndentation: false,
     nfcIndentationShape: 'square',
-    nfcIndentationSize: 30,
+    nfcIndentationSize: 10,
     nfcIndentationDepth: 1,
     nfcIndentationHidden: false,
   },
@@ -187,12 +187,17 @@ export default {
 
       let addPromise = new Promise((resolve) => {
         this.model3d.create(this.generator)
-        this.generator.process = (percent) => {
-          this.progressGenerating = percent
-          if (percent >= 100) {
-            this.model3d.strategy.addMesh('qr', this.generator.finalBlock)
-            resolve(this.model3d.collection())
+
+        if (this.options.code.active) {
+          this.generator.process = (percent) => {
+            this.progressGenerating = percent
+            if (percent >= 100) {
+              this.model3d.strategy.addMesh('qr', this.generator.finalBlock)
+              resolve(this.model3d.collection())
+            }
           }
+        } else {
+          resolve(this.model3d.collection())
         }
       })
 

@@ -116,11 +116,11 @@ export default {
   margin: 'Отступ',
   block: 'Block',
   style: 'Style',
-  shape: 'Shape',
+  shape: 'Форма',
   rectangle: 'rectangle',
   roundedRectangle: 'rounded rectangle',
-  square: 'square',
-  round: 'round',
+  square: 'квадрат',
+  round: 'круг',
   size: 'Размер',
   blockSizeHelp: `
   90% оставляет зазор между черными блоками, а 105% соединяет черные блоки и упрощает печать.
@@ -151,6 +151,9 @@ export default {
   mirrorHoles: 'Зеркально',
   mirrorHolesHelp: 'Отразить зеркально.',
   keychainHoleDiameter: 'Диаметр',
+
+  magnet: 'Углубление',
+  magnetHelp: 'Добавить углубление для магнита или NFC-метки с обратной стороны модели.',
 
   nfcIndentation: 'NFC/RFID',
   nfcIndentationHelp: 'Adds an indentation on the bottom side of the base where one can insert an NFC/RFID tag.',

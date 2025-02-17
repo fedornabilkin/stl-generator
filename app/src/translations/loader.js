@@ -9,9 +9,9 @@ import langGAL from './gal'
 export default {
   ru: langRU,
   en: langEN,
-  de: langDE,
-  fr: langFR,
-  br: langBR,
-  cz: langCZ,
-  esptgal: langGAL,
+  // de: langDE,
+  // fr: langFR,
+  // br: langBR,
+  // cz: langCZ,
+  // esptgal: langGAL,
 }

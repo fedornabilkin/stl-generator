@@ -23,11 +23,11 @@ class BaseTag3D {
     this.options = { ...defaultOptions, ...options }
 
     // default material for the base
-    this.materialBase = new THREE.MeshBasicMaterial({
+    this.materialBase = new THREE.MeshPhongMaterial({
       color: this.options.baseColor,
     });
     // default material for qr code, border, etc.
-    this.materialDetail = new THREE.MeshBasicMaterial({
+    this.materialDetail = new THREE.MeshPhongMaterial({
       color: this.options.qrcodeColor,
     });
 
@@ -64,11 +64,6 @@ class BaseTag3D {
     if (!this.options.base.active) {
       return undefined
     }
-    // TODO: rethink handling of rounded rectangle: Different shape category vs only corner radius adjustment
-    // const cornerRadius = this.getCornerRadius();
-    // const textBaseOffset = this.getTextBaseOffset();
-    // const isOffsetTopBottom = this.options.base.textPlacement === 'top' || this.options.base.textPlacement === 'bottom' || this.options.base.textPlacement === 'center';
-    // const isOffsetLeftRight = this.options.base.textPlacement === 'left' || this.options.base.textPlacement === 'right';
 
     const shape = new RectangleRoundedShape({
       x: -this.options.base.width / 2,
@@ -78,24 +73,6 @@ class BaseTag3D {
       h: this.options.base.height,
     })
 
-    // if (isOffsetTopBottom) {
-    //   shape = getRoundedRectShape(
-    //     -(this.options.base.height + textBaseOffset) / 2,
-    //     -this.options.base.width / 2,
-    //     this.options.base.height + textBaseOffset,
-    //     this.options.base.width,
-    //     cornerRadius,
-    //   );
-    // } else if (isOffsetLeftRight) {
-    //   shape = getRoundedRectShape(
-    //     -this.options.base.height / 2,
-    //     -(this.options.base.width + textBaseOffset) / 2,
-    //     this.options.base.height,
-    //     this.options.base.width + textBaseOffset,
-    //     cornerRadius,
-    //   );
-    // }
-
     const model = new THREE.ExtrudeGeometry(shape.create(), {
       steps: 1,
       depth: this.options.base.depth,
@@ -103,57 +80,37 @@ class BaseTag3D {
     })
 
     let baseMesh = new THREE.Mesh(model, this.materialBase)
-    // baseMesh.position.set(0, 0, 0);
-
-    // if (textBaseOffset > 0) {
-    //   // shift base in x direction to align with text
-    //   if (this.options.base.textPlacement === 'bottom') {
-    //     baseMesh.position.x = textBaseOffset / 2;
-    //   } else if (this.options.base.textPlacement === 'top') {
-    //     baseMesh.position.x = -textBaseOffset / 2;
-    //   } else if (this.options.base.textPlacement === 'center') {
-    //     baseMesh.position.x = 0;
-    //   } else if (this.options.base.textPlacement === 'left') {
-    //     baseMesh.position.y = -textBaseOffset / 2;
-    //   } else if (this.options.base.textPlacement === 'right') {
-    //     baseMesh.position.y = textBaseOffset / 2;
-    //   }
-    // }
-    // baseMesh.rotation.set(0, 0, Math.PI / 2)
-    baseMesh.updateMatrix();
+    baseMesh.updateMatrix()
 
     if (this.options.base.hasNfcIndentation) {
+      const width = this.options.base.nfcIndentationSize
+      const height = this.options.base.nfcIndentationSize
+      const depth = this.options.base.nfcIndentationDepth
+      console.log('magnet: ')
       let holeMesh;
       if (this.options.base.nfcIndentationShape === 'round') {
-        holeMesh = new THREE.Mesh(new THREE.CylinderGeometry(
-          this.options.base.nfcIndentationSize / 2,
-          this.options.base.nfcIndentationSize / 2,
-          this.options.base.nfcIndentationDepth,
-          32,
-        ), this.materialBase);
-        holeMesh.rotation.x = -Math.PI / 2;
+        const geometryMagnet = new THREE.CylinderGeometry(width / 2, height / 2, depth, 32)
+        holeMesh = new THREE.Mesh(geometryMagnet, this.materialBase)
+        holeMesh.rotation.x = -Math.PI / 2
       } else {
         // shape = square
-        holeMesh = new THREE.Mesh(new THREE.BoxGeometry(
-          this.options.base.nfcIndentationSize,
-          this.options.base.nfcIndentationSize,
-          this.options.base.nfcIndentationDepth,
-        ), this.materialBase);
+        const geometryMagnet = new THREE.BoxGeometry(width, height, depth)
+        holeMesh = new THREE.Mesh(geometryMagnet, this.materialBase)
       }
-      holeMesh.position.z = this.options.base.nfcIndentationDepth / 2;
+      holeMesh.position.z = this.options.base.nfcIndentationDepth / 2
       if (this.options.base.nfcIndentationHidden) {
         holeMesh.position.z += 1;
       }
 
-      holeMesh.position.x = baseMesh.position.x;
+      holeMesh.position.x = baseMesh.position.x
+      // holeMesh.position.z += 10
+      holeMesh.updateMatrix()
 
-      holeMesh.updateMatrix();
-
-      baseMesh = subtractMesh(baseMesh, holeMesh);
-      baseMesh.updateMatrix();
+      baseMesh = subtractMesh(baseMesh, holeMesh)
+      baseMesh.updateMatrix()
     }
 
-    return baseMesh;
+    return baseMesh
   }
 
   /**
@@ -416,6 +373,10 @@ class BaseTag3D {
     return iconMesh
   }
 
+  /**
+   * @deprecated
+   * @returns {number|string|number|*}
+   */
   getCornerRadius() {
     if (this.options.base.shape === 'roundedRectangle') {
       return this.options.base.cornerRadius;
@@ -424,6 +385,7 @@ class BaseTag3D {
   }
 
   /**
+   * @deprecated
    * Returns the offset of the text in the 3D model
    */
   getTextBaseOffset() {
@@ -443,6 +405,7 @@ class BaseTag3D {
   }
 
   /**
+   * @deprecated
    * Returns the size of the rendered text in the 3D model
    * used in getTextMesh to calculate the line breaks
    */
@@ -486,6 +449,10 @@ class BaseTag3D {
     return maxWidth;
   }
 
+  /**
+   * @deprecated
+   * @returns {number}
+   */
   getTextTopOffset() {
     if (this.options.base.textPlacement === 'top') {
       return 2 * this.getTextBaseOffset() - 0.1; // TODO: does not work without the -0.1. Find out what's wrong here.
@@ -493,6 +460,10 @@ class BaseTag3D {
     return 0;
   }
 
+  /**
+   * @deprecated
+   * @returns {number}
+   */
   getTextLeftOffset() {
     if (this.options.base.textPlacement === 'left') {
       return 2 * this.getTextBaseOffset();
