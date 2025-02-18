@@ -7,8 +7,7 @@ div.container.is-fluid(id="main")
 
       QRCodeMenu(v-if="mode === 'QR'"
         ref="qrcode"
-        :scene="scene"
-        :renderer="renderer"
+        :box="box"
         :exporter="exporter"
         :initData="shareData"
         @generating="generating"
@@ -20,6 +19,16 @@ div.container.is-fluid(id="main")
         .column
           p.title {{$t('preview')}}
           p.subtitle {{ $t("controlsHint") }}
+        .column
+          .field.is-horizontal
+            .field-label.is-small
+              label.label {{$t('autoRotation')}}
+            .field-body
+              .control
+                label.checkbox
+                  .field
+                    input(type='checkbox' v-model='autoRotation')
+                    span.is-size-7
 
       .mb-5(id="container3d" :class="{ 'is-loading': isGenerating }")
 
@@ -49,21 +58,21 @@ div.container.is-fluid(id="main")
 
 <script>
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { STLExporter } from 'three/examples/jsm/exporters/STLExporter';
-import ExportModal from './ExportModal.vue';
+import ExportModal from '../generator/ExportModal.vue';
 import QRCodeMenu from '../generator/QRCodeMenu.vue';
 import { saveAsArrayBuffer, trimCanvas } from '@/utils';
-import { toRaw } from '@vue/reactivity'
 import {Box} from "@/v3d/box";
 import Export from "@/components/forms/Export.vue";
 import {useShareHash} from "@/service/shareHash";
 import {useExportList} from "@/store/exportList";
 import {Share} from "@/entity/share";
 import ExportList from "@/components/generator/ExportList.vue";
+import {BaseRotation} from "@/v3d/animation/baseRotation";
 
 const shareHash = useShareHash()
-const box = new Box({debug: false})
+const box = new Box({debug: false, animation: new BaseRotation()})
+box.createScene()
 
 export default {
   name: 'Main',
@@ -81,6 +90,8 @@ export default {
         type: 'binary',
         multiple: false,
       },
+      box: undefined,
+      autoRotation: true,
       changelogModalVisible: false,
       // changelog: changelog.split('\n').slice(3).join('\n'),
       changelog: '',
@@ -98,6 +109,7 @@ export default {
   created() {
     this.parseUrlShareHash()
     this.fillExportList()
+    this.box = box
   },
   mounted() {
     this.initScene()
@@ -108,28 +120,28 @@ export default {
     initScene() {
       const container = document.getElementById('container3d')
 
-      this.scene = box.createScene()
       this.camera = box.createCamera(container.clientWidth, container.clientHeight)
       this.renderer = box.createRenderer(container.clientWidth, container.clientHeight, window.devicePixelRatio)
 
+      box.createControl()
       container.appendChild(this.renderer.domElement)
-      const controls = new OrbitControls(box.camera, box.renderer.domElement)
-      controls.target.set(0, 0, 0)
-      controls.update()
+
     },
     generating() {
       this.isGenerating = true
     },
     startAnimation() {
-      const animate = () => {
+      const animate = (time) => {
+        time *= 0.001
+        box.animate(this.autoRotation, time)
         box.render()
-        // this.renderer.render(toRaw(this.scene), toRaw(this.camera))
         requestAnimationFrame(animate)
       };
       requestAnimationFrame(animate)
     },
     exportSTL() {
       this.exportModalVisible = true
+      this.autoRotation = false
 
       setTimeout(() => {
         this.$refs.qrcode.exportSTL(this.expSettings.type, this.expSettings.multiple)

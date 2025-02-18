@@ -1,5 +1,6 @@
 import {createApp} from 'vue';
 // import {createPinia} from 'pinia';
+import {router} from './router';
 import { createI18n } from "vue-i18n";
 import translations from './translations/loader';
 
@@ -18,6 +19,7 @@ const app = createApp(App)
 
 app
   // .use(createPinia())
+  .use(router)
   .use(i18n)
 
 app.mount('#app')

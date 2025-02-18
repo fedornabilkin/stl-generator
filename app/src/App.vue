@@ -1,13 +1,12 @@
 <template lang="pug">
-  div(id="app")
-    Header
-    Main
-    Footer
+Header
+router-view
+Footer
 </template>
 
 <script>
 import Header from './components/template/Header.vue';
-import Main from './components/template/Main.vue';
+import Main from './components/page/Main.vue';
 import Footer from './components/template/Footer.vue';
 
 export default {

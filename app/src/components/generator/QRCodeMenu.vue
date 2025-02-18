@@ -6,13 +6,30 @@ div(id="qrcodeMenu")
   //    i.fa.fa-camera
   //  span {{$t('copyExistingQRCode')}}
 
-  QRCodeModelOptionsPanel(:options="options" :unit="unit")
+  nav.panel
+    p.panel-heading {{$t('modelOptions')}}
+    .panel-block
+      .columns(style='width: 100%')
+        .column.is-12-widescreen.is-12-fullhd.is-8
+          // Base Settings
+          Base(:options='options' :unit='unit')
+          // QR Settings
+          Qr(:options='options' :unit='unit')
+          // Text Settings
+          Text(:options='options' :unit='unit')
+          // Border Settings
+          Border(:options='options' :unit='unit')
+          // Keychain Settings
+          Keychain(:options='options' :unit='unit')
+          // Icon Settings
+          Icon(:options='options')
+          // NFC Tag Section
+          Magnet(:options='options' :unit='unit')
 
   .notification.is-danger.is-light(v-if="generateError" style="margin-top: 20px 0;")
     | {{generateError}}
 
   .notification.is-warning.is-light(v-if="(blockWidth && blockHeight) && (blockWidth < 2 || blockHeight < 2)")
-
     strong {{$t('printabilityWarning')}}:
     | {{$t('printabilityWarningBody', { dimensions: `${Number(blockWidth).toFixed(1)}mm x ${Number(blockHeight).toFixed(1)}mm` })}}
 
@@ -35,8 +52,6 @@ import vcardjs from 'vcards-js';
 import { diff } from 'deep-object-diff';
 import merge from 'deepmerge';
 import JSZip from 'jszip';
-// 3D settings panel
-import QRCodeModelOptionsPanel from './QRCodeModelOptionsPanel.vue';
 import ScannerModal from './ScannerModal.vue';
 import { save, saveAsString, saveAsArrayBuffer } from '@/utils';
 import QRCode3D from "@/qrcode3d";
@@ -45,6 +60,13 @@ import {Model} from "@/v3d/create/model";
 import {useShareHash} from "@/service/shareHash";
 import {useExportList} from "@/store/exportList";
 import {Share} from "@/entity/share";
+import Base from "@/components/forms/Base.vue";
+import Qr from "@/components/forms/Qr.vue";
+import Text from "@/components/forms/Text.vue";
+import Border from "@/components/forms/Border.vue";
+import Keychain from "@/components/forms/Keychain.vue";
+import Icon from "@/components/forms/Icon.vue";
+import Magnet from "@/components/forms/Magnet.vue";
 
 const defaultOptions = {
   activeTabIndex: 0,
@@ -141,12 +163,17 @@ export default {
   name: 'QRCodeMenu',
   props: {
     initData: Object,
-    scene: Object,
-    renderer: Object,
+    box: Object,
     exporter: Object,
   },
   components: {
-    QRCodeModelOptionsPanel,
+    Magnet,
+    Icon,
+    Keychain,
+    Border,
+    Text,
+    Qr,
+    Base,
     ScannerModal,
   },
   data: () => ({
@@ -175,7 +202,7 @@ export default {
   methods: {
     render3d() {
       for(const item of this.addedMeshes) {
-        this.scene.remove(item)
+        this.box.removeNode(item)
       }
 
       this.generator = new QRCode3D(this.qrCodeBitMask, this.options)
@@ -204,7 +231,7 @@ export default {
       addPromise
           .then((result) => {
             for(const key in result) {
-              this.scene.add(result[key])
+              this.box.addNode(result[key])
               this.addedMeshes.push(result[key])
             }
           })
@@ -290,7 +317,7 @@ export default {
       const shareHash = useShareHash()
       const hash = shareHash.create(this.diffOptions)
       const exportList = useExportList()
-      const imgDataUrl = this.renderer.domElement.toDataURL()
+      const imgDataUrl = this.box.imgDataUrl()
 
       exportList.add(new Share({hash: hash, img: {src: imgDataUrl}, date: new Date().getTime()}))
       window.localStorage.setItem(exportList.keyStore, JSON.stringify(exportList.getCollection()))

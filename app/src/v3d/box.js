@@ -8,6 +8,7 @@ import {
   WebGLRenderer
 } from "three";
 import * as THREE from "three";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 
 export class Box {
 
@@ -15,17 +16,46 @@ export class Box {
   camera = undefined
   renderer = undefined
   grid = undefined
+
+  sceneGraphRoot = undefined
+  animation = undefined
+
   debug = false
 
   constructor(config = {}) {
     Object.assign(this, config)
   }
 
+  addNode(node) {
+    this.sceneGraphRoot.add(node)
+  }
+
+  removeNode(node) {
+    this.sceneGraphRoot.remove(node)
+  }
+
+  setAnimation(animation) {
+    this.animation = animation
+  }
+
+  animate(flag, time) {
+    this.animation.setNode(this.sceneGraphRoot)
+    if (flag) {
+      this.scene.remove(this.grid)
+      this.animation.animate(time / 5, time / 10, time / 15)
+    } else {
+      this.animation.stop()
+      this.scene.add(this.grid)
+    }
+  }
+
   createScene() {
     this.scene = new Scene()
     this.scene.background = new Color(0xa0a0a0)
     // this.scene.rotation.z = -Math.PI / 2
+    this.sceneGraphRoot = new THREE.Object3D()
 
+    this.scene.add(this.sceneGraphRoot)
     this.scene.add(this.createGrid())
 
     const {
@@ -33,7 +63,7 @@ export class Box {
       directionalLight,
       directionalLightBack
     } = this.createLight()
-    this.scene.add(ambientLight)
+    // this.scene.add(ambientLight)
     this.scene.add(directionalLight)
     this.scene.add(directionalLightBack)
 
@@ -64,18 +94,28 @@ export class Box {
     this.renderer.render(this.scene, this.camera)
   }
 
+  imgDataUrl() {
+    return this.renderer.domElement.toDataURL()
+  }
+
+  createControl() {
+    const controls = new OrbitControls(this.camera, this.renderer.domElement)
+    controls.target.set(0, 0, 0)
+    controls.update()
+  }
+
   createLight() {
     const ambientLight = new AmbientLight(0x333333)
 
-    const directionalLight = new DirectionalLight(0xFFFFFF, 1.0)
+    const directionalLight = new DirectionalLight(0xFFFFFF, 3)
     directionalLight.position.x = -1
-    directionalLight.position.y = 0
-    directionalLight.position.z = 1
+    directionalLight.position.y = 2
+    directionalLight.position.z = 4
 
-    const directionalLightBack = new DirectionalLight(0xaaaaaa, 0.3)
-    directionalLightBack.position.x = -0.6
-    directionalLightBack.position.y = 0
-    directionalLightBack.position.z = -1
+    const directionalLightBack = new DirectionalLight(0xaaaaaa, 1)
+    directionalLightBack.position.x = -1
+    directionalLightBack.position.y = -2
+    directionalLightBack.position.z = -4
 
     return {ambientLight, directionalLight, directionalLightBack}
   }
