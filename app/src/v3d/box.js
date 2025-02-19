@@ -42,7 +42,7 @@ export class Box {
     this.animation.setNode(this.sceneGraphRoot)
     if (flag) {
       this.scene.remove(this.grid)
-      this.animation.animate(time / 5, time / 10, time / 15)
+      this.animation.animate(time)
     } else {
       this.animation.stop()
       this.scene.add(this.grid)

@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router';
-import Main from './components/page/Main.vue';
-import PageNotFound from './components/page/PageNotFound.vue';
+import Main from '@/components/page/Main.vue';
+import PageNotFound from '@/components/page/PageNotFound.vue';
+import Example from "@/components/page/Example.vue";
 
 
 const routes = [
@@ -10,6 +11,7 @@ const routes = [
     // },
 
     { path: '/', component: Main },
+    { path: '/example', component: Example },
 
     { path: '/:pathMatch(.*)', component: PageNotFound },
 
@@ -20,7 +22,7 @@ const router = createRouter({
     routes,
 })
 
-router.beforeEach((to, from) => {
+// router.beforeEach((to, from) => {
     // instead of having to check every route record with
     // to.matched.some(record => record.meta.requiresAuth)
     // if (to.meta.requiresAuth && store.getters['auth/isAuthorized'] === false) {
@@ -32,6 +34,6 @@ router.beforeEach((to, from) => {
     //         //query: { redirect: to.fullPath },
     //     }
     // }
-})
+// })
 
 export { router }

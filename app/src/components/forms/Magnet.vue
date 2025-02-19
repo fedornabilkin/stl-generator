@@ -10,11 +10,11 @@ const props = defineProps(['options', 'unit'])
     .control
       label.checkbox
         .field
-          input(type='checkbox' v-model='props.options.base.hasNfcIndentation')
+          input(type='checkbox' v-model='props.options.magnet.active')
           span.is-size-7
             |  {{$t('magnetHelp')}}
 
-.subsection(v-if='props.options.base.hasNfcIndentation')
+.subsection(v-if='props.options.magnet.active')
   .field.is-horizontal
     .field-label.is-small
       label.label {{$t('shape')}}
@@ -22,7 +22,7 @@ const props = defineProps(['options', 'unit'])
       .field
         .control.has-icons-left
           .select.is-small
-            select(v-model='props.options.base.nfcIndentationShape')
+            select(v-model='props.options.magnet.shape')
               option(value='round') {{$t('round')}}
               option(value='square') {{$t('square')}}
             span.icon.is-small.is-left
@@ -33,7 +33,7 @@ const props = defineProps(['options', 'unit'])
     .field-body
       .field.has-addons
         .control
-          input.input.is-small(type='number' v-model.number='props.options.base.nfcIndentationSize')
+          input.input.is-small(type='number' v-model.number='props.options.magnet.size')
         p.control
           a.button.is-static.is-small {{unit}}
   .field.is-horizontal
@@ -42,7 +42,7 @@ const props = defineProps(['options', 'unit'])
     .field-body
       .field.has-addons
         .control
-          input.input.is-small(type='number' v-model.number='props.options.base.nfcIndentationDepth')
+          input.input.is-small(type='number' v-model.number='props.options.magnet.depth')
         p.control
           a.button.is-static.is-small {{props.unit}}
   //.field.is-horizontal
@@ -52,7 +52,7 @@ const props = defineProps(['options', 'unit'])
       .control
         label.checkbox
           .field
-            input(type='checkbox' v-model='props.options.base.nfcIndentationHidden')
+            input(type='checkbox' v-model='props.options.magnet.hidden')
             span.is-size-7
               i.fa.fa-layer-group
               |  {{$t('nfcIndentationHiddenHelp')}}

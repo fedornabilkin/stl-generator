@@ -67,37 +67,33 @@ import Border from "@/components/forms/Border.vue";
 import Keychain from "@/components/forms/Keychain.vue";
 import Icon from "@/components/forms/Icon.vue";
 import Magnet from "@/components/forms/Magnet.vue";
+import {
+  Base as BaseEntity,
+  Border as BorderEntity,
+  Code as CodeEntity,
+  Text as TextEntity,
+  Keychain as KeychainEntity,
+  Icon as IconEntity,
+  Magnet as MagnetEntity,
+} from "@/v3d/entity";
+
+const base = new BaseEntity({active: true})
+const border = new BorderEntity()
+const code = new CodeEntity()
+const text = new TextEntity()
+const icon = new IconEntity()
+const keychain = new KeychainEntity()
+const magnet = new MagnetEntity()
 
 const defaultOptions = {
   activeTabIndex: 0,
-  border: {
-    active: true,
-    width: 1,
-    depth: 1,
-  },
-  text: {
-    active: false,
-    message: '',
-    placement: 'center',
-    align: 'center',
-    margin: 1,
-    size: 10,
-    depth: 1,
-    height: 10,
-  },
-  keychain: {
-    active: false,
-    placement: 'left',
-    holeDiameter: 6,
-    mirror: false,
-  },
-  icon: {
-    active: false,
-    name: 'none',
-    ratio: 20,
-    data: undefined,
-    htmlId: 'icon-preview'
-  },
+  base: base,
+  border: border,
+  code: code,
+  text: text,
+  icon: icon,
+  keychain: keychain,
+  magnet: magnet,
   content: '',
   wifi: {
     ssid: '',
@@ -130,34 +126,7 @@ const defaultOptions = {
     recipient: '',
     message: '',
   },
-  base: {
-    active: true,
-    shape: 'roundedRectangle',
-    width: 100,
-    height: 100,
-    depth: 3,
-    cornerRadius: 5,
-    hasNfcIndentation: false,
-    nfcIndentationShape: 'square',
-    nfcIndentationSize: 10,
-    nfcIndentationDepth: 1,
-    nfcIndentationHidden: false,
-  },
-  code: {
-    active: true,
-    depth: 1,
-    margin: 2,
-    blockSizeMultiplier: 100,
-    cityMode: false,
-    depthMax: 2,
-    errorCorrectionLevel: 'M',
-    invert: false,
-    preview: {
-      src: null,
-      htmlId: 'qr-image-preview',
-    },
-  },
-};
+}
 
 export default {
   name: 'QRCodeMenu',

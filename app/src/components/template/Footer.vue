@@ -9,11 +9,21 @@ footer.footer
     .column
       Yoomoney
     .column
-      a(href="https://t.me/+dSgck2GM29syZTQ6" target="_blank")
-        i.fab.fa-telegram
-        | &nbsp;telegram
+      a(href="/example") Примеры
+
     .column
       ShareButtons
+
+  .box
+
+    .is-pulled-right
+      a(href="/") vsqr.ru
+      | &nbsp;&copy; 2025
+
+    .is-dark
+      a(href="https://t.me/+dSgck2GM29syZTQ6" target="_blank")
+        i.fab.fa-telegram
+        | &nbsp;обсудить
 
 <!--    <div class="content has-text-centered">-->
 <!--      <p>-->
@@ -39,4 +49,6 @@ footer.footer
 <!--    </div>-->
 </template>
 
-<style></style>
+<style scoped>
+footer.footer {padding-bottom: .5rem}
+</style>

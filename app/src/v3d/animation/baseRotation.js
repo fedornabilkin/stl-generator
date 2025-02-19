@@ -3,10 +3,10 @@ export class BaseRotation {
   startPosition = {x: 0, y: 0, z: 0}
   startRotation = {x: 0, y: 0, z: 0}
 
-  animate(x, y, z) {
-    this.node.rotation.x = x
-    this.node.rotation.y = y
-    this.node.rotation.z = z
+  animate(time) {
+    this.node.rotation.x = time * .01
+    this.node.rotation.y = time * .05
+    this.node.rotation.z = time * .1
   }
 
   pause() {

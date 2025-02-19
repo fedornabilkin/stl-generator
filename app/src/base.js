@@ -82,13 +82,13 @@ class BaseTag3D {
     let baseMesh = new THREE.Mesh(model, this.materialBase)
     baseMesh.updateMatrix()
 
-    if (this.options.base.hasNfcIndentation) {
-      const width = this.options.base.nfcIndentationSize
-      const height = this.options.base.nfcIndentationSize
-      const depth = this.options.base.nfcIndentationDepth
+    if (this.options.magnet.active) {
+      const width = this.options.magnet.size
+      const height = this.options.magnet.size
+      const depth = this.options.magnet.depth
       console.log('magnet: ')
       let holeMesh;
-      if (this.options.base.nfcIndentationShape === 'round') {
+      if (this.options.magnet.shape === 'round') {
         const geometryMagnet = new THREE.CylinderGeometry(width / 2, height / 2, depth, 32)
         holeMesh = new THREE.Mesh(geometryMagnet, this.materialBase)
         holeMesh.rotation.x = -Math.PI / 2
@@ -97,13 +97,12 @@ class BaseTag3D {
         const geometryMagnet = new THREE.BoxGeometry(width, height, depth)
         holeMesh = new THREE.Mesh(geometryMagnet, this.materialBase)
       }
-      holeMesh.position.z = this.options.base.nfcIndentationDepth / 2
-      if (this.options.base.nfcIndentationHidden) {
-        holeMesh.position.z += 1;
+      holeMesh.position.z = depth / 2
+      if (this.options.magnet.hidden) {
+        holeMesh.position.z += 1
       }
 
       holeMesh.position.x = baseMesh.position.x
-      // holeMesh.position.z += 10
       holeMesh.updateMatrix()
 
       baseMesh = subtractMesh(baseMesh, holeMesh)
