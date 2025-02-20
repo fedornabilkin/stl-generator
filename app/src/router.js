@@ -11,7 +11,7 @@ const routes = [
     // },
 
     { path: '/', component: Main },
-    { path: '/example', component: Example },
+    { path: '/examples', component: Example },
 
     { path: '/:pathMatch(.*)', component: PageNotFound },
 
