@@ -3,12 +3,9 @@ const props = defineProps(['options', 'unit'])
 </script>
 
 <template lang="pug">
-.field.is-horizontal
-  .field-label.is-small
-    label.label {{ $t("base") }}
-  .field-body
-    .control
-.subsection
+.field
+  label.label {{ $t("base") }}
+.box
   //.field.is-horizontal
   //  .field-label.is-small
   //    label.label {{ $t("shape") }}

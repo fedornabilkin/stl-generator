@@ -173,14 +173,14 @@ export default {
   expSettings: 'Настройки экспорта',
   expTypeLabel: 'Тип файла',
   expMultipleLabel: 'По частям',
-  expStlButton: 'STL',
+  expStlButton: 'Скачать STL',
   expPngButton: 'PNG',
 
   expList: 'Последние проекты',
   expListTableImg: 'Миниатюра',
   expListTableLink: 'Ссылка на проект',
   expListTableDate: 'Дата загрузки',
-  expListLoadItem: 'Загрузить проект',
+  expListLoadItem: 'Загрузить',
 
   /**
    * Export modal

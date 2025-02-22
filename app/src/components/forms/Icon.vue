@@ -69,7 +69,7 @@ const icons = [
     .field-body
       .field
         .control
-          .dropdown.is-hoverable
+          .dropdown.is-hoverable.mr-2
             .dropdown-trigger
               button.button.is-small(aria-haspopup='true' aria-controls='dropdown-menu2')
                 span.icon.is-small
@@ -80,7 +80,7 @@ const icons = [
             #dropdown-menu2.dropdown-menu(role='menu')
               #dropdown-content2.dropdown-content
                 .columns.is-multiline
-                  .column.is-4
+                  .column.is-12
                     .no-icon.icon-item.dropdown-item.is-vcentered(@click="selected('none')")
                       span.title.is-size-7 {{$t('noIcon')}}
                   .column.is-4(v-for='icon in icons' :key='icon')

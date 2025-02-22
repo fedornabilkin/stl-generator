@@ -1,8 +1,6 @@
 import * as THREE from 'three';
-import { CSG } from 'three-csg-ts';
 import BaseTag3D from './base';
-import { getRoundedRectShape, getBoundingBoxSize, subtractMesh } from './utils';
-import {SVGLoader} from "three/examples/jsm/loaders/SVGLoader";
+import { getBoundingBoxSize } from './utils';
 
 /**
  * Class used for generating the 3D model from a bitmask that contains the QR Code Data.
@@ -11,7 +9,7 @@ import {SVGLoader} from "three/examples/jsm/loaders/SVGLoader";
 class QRCode3D extends BaseTag3D {
   finalBlock
   blockGeometry
-  process = (percent) => {}
+  process = (percent) => {return percent}
 
   constructor(qrCodeBitmask, options) {
     super(options)
@@ -29,7 +27,7 @@ class QRCode3D extends BaseTag3D {
     this.maskWidth = Math.sqrt(this.bitMask.length)
     this.xCountPosition = this.maskWidth
     this.yCountPosition = this.maskWidth
-    this.blockWidth = (this.availableWidth / this.maskWidth) * (this.options.code.blockSizeMultiplier / 100)
+    this.blockWidth = (this.availableWidth / this.maskWidth) * (this.options.code.block.ratio / 100)
 
     const qrSystem = new THREE.Object3D()
 
@@ -40,6 +38,8 @@ class QRCode3D extends BaseTag3D {
       this.iconSize = getBoundingBoxSize(this.iconMesh)
     }
 
+    const rotationBlock = this.options.code.block.shape === 'rotation'
+    const roundBlock = this.options.code.block.shape === 'round'
     let etoQr = this
     let x = 0
 
@@ -51,11 +51,11 @@ class QRCode3D extends BaseTag3D {
           if (isBlack) {
             // if pixel is black create a block
             let blockDepth = etoQr.options.code.depth;
-            if (etoQr.options.code.cityMode) {
-              blockDepth = Math.min(etoQr.options.code.depth, etoQr.options.code.depthMax) + Math.random() * Math.abs(etoQr.options.code.depthMax - etoQr.options.code.depth)
+            if (etoQr.options.code.block.cityMode) {
+              blockDepth = Math.min(etoQr.options.code.depth, etoQr.options.code.block.depth) + Math.random() * Math.abs(etoQr.options.code.block.depth - etoQr.options.code.depth)
             }
 
-            const meshBlock = etoQr.createMeshBlock(etoQr.blockWidth, etoQr.blockWidth, blockDepth)
+            const meshBlock = etoQr.createMeshBlock(etoQr.blockWidth, etoQr.blockWidth, blockDepth, roundBlock)
 
             const posX = etoQr.correctPositionX(etoQr.availableWidth, etoQr.xCountPosition, etoQr.blockWidth, x)
             let posY = etoQr.correctPositionY(etoQr.availableWidth, etoQr.yCountPosition, etoQr.blockWidth, y)
@@ -73,6 +73,11 @@ class QRCode3D extends BaseTag3D {
 
             // add qr code blocks to qrcode and combined model
             meshBlock.position.set(posX, posY, posZ)
+            if(rotationBlock) {
+              meshBlock.rotation.z = Math.PI / 4
+            }else if(roundBlock) {
+              meshBlock.rotation.x = Math.PI / 2
+            }
             meshBlock.updateMatrix()
             qrSystem.add(meshBlock)
 
@@ -156,11 +161,12 @@ class QRCode3D extends BaseTag3D {
    * @param w
    * @param h
    * @param d
+   * @param isRound bool
    * @returns {THREE.Mesh}
    */
-  createMeshBlock(w, h, d) {
+  createMeshBlock(w, h, d, isRound = false) {
     if (!this.blockGeometry) {
-      this.blockGeometry = new THREE.BoxGeometry(w, h, d)
+      this.blockGeometry = !isRound ? new THREE.BoxGeometry(w, h, d) : new THREE.CylinderGeometry(w/2, h/2, d)
     }
     return new THREE.Mesh(this.blockGeometry, this.materialDetail)
   }

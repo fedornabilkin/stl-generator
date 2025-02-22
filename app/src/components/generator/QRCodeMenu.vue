@@ -1,49 +1,49 @@
 <template lang="pug">
-div(id="qrcodeMenu")
+//div(id="qrcodeMenu")
 
   //button.button.is-info.is-medium.is-fullwidth.mb-3(@click="openQRScanner")
   //  span.icon
   //    i.fa.fa-camera
   //  span {{$t('copyExistingQRCode')}}
 
-  nav.panel
-    p.panel-heading {{$t('modelOptions')}}
-    .panel-block
-      .columns(style='width: 100%')
-        .column.is-12-widescreen.is-12-fullhd.is-8
-          // Base Settings
-          Base(:options='options' :unit='unit')
-          // QR Settings
-          Qr(:options='options' :unit='unit')
-          // Text Settings
-          Text(:options='options' :unit='unit')
-          // Border Settings
-          Border(:options='options' :unit='unit')
-          // Keychain Settings
-          Keychain(:options='options' :unit='unit')
-          // Icon Settings
-          Icon(:options='options')
-          // NFC Tag Section
-          Magnet(:options='options' :unit='unit')
+.panel
+  p.panel-heading {{$t('modelOptions')}}
+  .panel-block
+    .columns
+      .column
+        // Base Settings
+        Base(:options='options' :unit='unit')
+        // QR Settings
+        Qr(:options='options' :unit='unit')
+        // Text Settings
+        Text(:options='options' :unit='unit')
+        // Border Settings
+        Border(:options='options' :unit='unit')
+        // Keychain Settings
+        Keychain(:options='options' :unit='unit')
+        // Icon Settings
+        Icon(:options='options')
+        // NFC Tag Section
+        Magnet(:options='options' :unit='unit')
 
-  .notification.is-danger.is-light(v-if="generateError" style="margin-top: 20px 0;")
-    | {{generateError}}
+.notification.is-danger.is-light(v-if="generateError" style="margin-top: 20px 0;")
+  | {{generateError}}
 
-  .notification.is-warning.is-light(v-if="(blockWidth && blockHeight) && (blockWidth < 2 || blockHeight < 2)")
-    strong {{$t('printabilityWarning')}}:
-    | {{$t('printabilityWarningBody', { dimensions: `${Number(blockWidth).toFixed(1)}mm x ${Number(blockHeight).toFixed(1)}mm` })}}
+.notification.is-warning.is-light(v-if="(blockWidth && blockHeight) && (blockWidth < 2 || blockHeight < 2)")
+  strong {{$t('printabilityWarning')}}:
+  | {{$t('printabilityWarningBody', { dimensions: `${Number(blockWidth).toFixed(1)}mm x ${Number(blockHeight).toFixed(1)}mm` })}}
 
-  .columns
-    .column
-      button.button.is-success.is-large(:class="{'is-loading': isGenerating}" @click="prepareData")
-        span.icon
-          i.fa.fa-cube
-        span {{$t('generateButton')}}
-    .column
-      progress.progress.is-success(v-if="isGenerating" :value="progressGenerating" max='100')
-        | {{ progressGenerating }}
+.columns
+  .column
+    button.button.is-success.is-large(:class="{'is-loading': isGenerating}" @click="prepareData")
+      span.icon
+        i.fa.fa-cube
+      span {{$t('generateButton')}}
+  .column
+    progress.progress.is-success(v-if="isGenerating" :value="progressGenerating" max='100')
+      | {{ progressGenerating }}
 
-  ScannerModal(v-if="scannerModalVisible" @decode="onDecode")
+ScannerModal(v-if="scannerModalVisible" @decode="onDecode")
 </template>
 
 <script>

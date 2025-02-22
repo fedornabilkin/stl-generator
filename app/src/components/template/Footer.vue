@@ -5,23 +5,24 @@ import Yoomoney from "@/components/monetisation/Yoomoney.vue";
 
 <template lang="pug">
 footer.footer
-  .columns
-    .column
-      Yoomoney
-    .column
-      a(href="/examples") Примеры
+  .container
+    .columns
+      .column
+        Yoomoney
+      .column
+        a(href="/examples") Примеры
 
-    .column
-      ShareButtons
+      .column
+        ShareButtons
 
-  .box
-    .is-pulled-right
-      a(href="/") vsqr.ru
-      | &nbsp;&copy; 2025
-    .is-dark
-      a(href="https://t.me/+dSgck2GM29syZTQ6" target="_blank")
-        i.fab.fa-telegram
-        | &nbsp;обсудить
+    .box
+      .is-pulled-right
+        a(href="/") vsqr.ru
+        | &nbsp;&copy; 2025
+      .is-dark
+        a(href="https://t.me/+dSgck2GM29syZTQ6" target="_blank")
+          i.fab.fa-telegram
+          | &nbsp;обсудить
 </template>
 
 <style scoped>

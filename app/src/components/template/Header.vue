@@ -1,68 +1,26 @@
-<template>
-  <nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="/">
-        <img src="../../assets/logo.png" alt="vsqr 3d генератор stl" />
-      </a>
-
-      <p class="is-hidden-mobile navbar-item" v-if="showShareNotice">
-        <i class="fa fa-arrow-up shake-vertical"></i>
-        <span style="margin: 0 10px;">{{$t('headerShareNotice')}}</span>
-        <i class="fa fa-arrow-up shake-vertical"></i>
-      </p>
-
-      <a
-        role="button"
-        class="navbar-burger burger"
-        :class="{ 'is-active': navbarOpen }"
-        aria-label="menu"
-        aria-expanded="false"
-        @click="toggleNavigation"
-      >
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
-    </div>
-    <div class="navbar-menu" :class="{ 'is-active': navbarOpen }">
-
-    <div v-html="headerAd"></div>
-
-      <div class="navbar-end">
-        <div class="navbar-item">
-          <LanguageSelector />
-        </div>
-        <div class="navbar-item">
-          <ShareButtons />
-        </div>
-        <div class="navbar-item" v-if="!showThankYou">
-          <div class="buttons">
-            <Yoomoney />
-          </div>
-        </div>
-<!--        <div class="navbar-item">-->
-<!--          <div class="buttons">-->
-<!--            <a class="button" href="https://github.com/flxn/qrcode2stl" target="_blank">-->
-<!--              <span class="icon">-->
-<!--                <i class="fab fa-github"></i>-->
-<!--              </span>-->
-<!--              <span>{{$t('viewOnGithub')}}</span>-->
-<!--            </a>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="navbar-item">-->
-<!--          <div class="buttons">-->
-<!--            <a :class="{'button': true, 'is-info': newVersion, 'unread': newVersion}" @click="openChangelogModal">-->
-<!--              <span class="icon">-->
-<!--                <i class="fa fa-box"></i>-->
-<!--              </span>-->
-<!--              <span>v{{appVersion}}</span>-->
-<!--            </a>-->
-<!--          </div>-->
-<!--        </div>-->
-      </div>
-    </div>
-  </nav>
+<template lang="pug">
+nav.navbar(role='navigation' aria-label='main navigation')
+  .container
+    .navbar-brand
+      a.navbar-item(href='/')
+        img(src='../../assets/logo.png' alt='vsqr 3d генератор stl')
+      p.is-hidden-mobile.navbar-item(v-if='showShareNotice')
+        i.fa.fa-arrow-up.shake-vertical
+        span(style='margin: 0 10px;') {{$t('headerShareNotice')}}
+        i.fa.fa-arrow-up.shake-vertical
+      a.navbar-burger.burger(role='button' :class="{ 'is-active': navbarOpen }" aria-label='menu' aria-expanded='false' @click='toggleNavigation')
+        span(aria-hidden='true')
+        span(aria-hidden='true')
+        span(aria-hidden='true')
+    .navbar-menu(:class="{ 'is-active': navbarOpen }")
+      .navbar-end
+        .navbar-item
+          LanguageSelector
+        .navbar-item
+          ShareButtons
+        .navbar-item(v-if='!showThankYou')
+          .buttons
+            Yoomoney
 </template>
 
 <script>
@@ -96,28 +54,20 @@ export default {
       this.showThankYou = true;
     },
     openChangelogModal() {
-      // bus.$emit('openChangelogModal');
       window.localStorage.setItem('lastViewedVersion', this.appVersion);
       this.newVersion = false;
     },
   },
-  mounted() {
-    // this.headerAd = document.getElementById('adsenseloader-header').innerHTML;
-  },
   created() {
-    const lastViewedVersion = window.localStorage.getItem('lastViewedVersion') || '';
+    const lastViewedVersion = window.localStorage.getItem('lastViewedVersion') || ''
     if (lastViewedVersion !== this.appVersion) {
-      this.newVersion = true;
+      this.newVersion = true
     }
-    // bus.$on('exportReady', () => { this.showShareNotice = true; });
   },
 };
 </script>
 
 <style>
-#site-title {
-  font-style: bold;
-}
 
 .unread {
   animation: shake-horizontal 1s cubic-bezier(.645,.045,.355,1.000) 1.5s 4;

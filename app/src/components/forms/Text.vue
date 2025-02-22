@@ -16,7 +16,7 @@ const props = defineProps(['options', 'unit'])
             i.fa.fa-font &nbsp;
             | {{ $t("textOnEdge") }}
 
-.subsection(v-if="props.options.text.active")
+.box(v-if="props.options.text.active")
   .field.is-horizontal
     .field-body
       .field

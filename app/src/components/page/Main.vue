@@ -1,7 +1,7 @@
 <template lang="pug">
-div.container.is-fluid(id="main")
-  div.columns.is-multiline
-    div.column.is-6-widescreen.is-6-fullhd.is-12
+.container
+  .columns.is-multiline
+    .column
       h1.title {{ $t("title") }}
       //h2.subtitle {{ $t("subtitle") }}
 
@@ -14,21 +14,18 @@ div.container.is-fluid(id="main")
         @exportReady="exportReady"
       )
 
-    .column.is-6-widescreen.is-6-fullhd.is-12
+    .column
       .columns
         .column
           p.title {{$t('preview')}}
           p.subtitle {{ $t("controlsHint") }}
         .column
-          .field.is-horizontal
-            .field-label.is-small
-              label.label {{$t('autoRotation')}}
-            .field-body
-              .control
-                label.checkbox
-                  .field
-                    input(type='checkbox' v-model='autoRotation')
-                    span.is-size-7
+          .field.has-addons
+            .control
+              span.button
+                input.checkbox(type='checkbox' v-model='autoRotation')
+            .control
+              span.button.is-static.is-small {{$t('autoRotation')}}
 
       .mb-5(id="container3d" :class="{ 'is-loading': isGenerating }")
 
@@ -37,10 +34,10 @@ div.container.is-fluid(id="main")
         .panel-heading {{$t('expSettings')}}
         .panel-block
           .columns
-            .column.is-11-widescreen.is-11-fullhd.is-12
+            .column.is-half
               Export(:expSettings="expSettings")
 
-            .column.is-10-widescreen.is-10-fullhd.is-12
+            .column.is-half
               button.button.export-button.is-primary.is-medium(@click="exportSTL")
                 span.icon
                   i.fa.fa-cube
@@ -50,7 +47,6 @@ div.container.is-fluid(id="main")
                   i.fa.fa-image
                 span {{$t('expPngButton')}}
 
-      .mt-1
       ExportList
 
       ExportModal(v-if="exportModalVisible" :isActive="exportModalVisible" @close="exportModalVisible=false")
@@ -232,10 +228,6 @@ export default {
 </script>
 
 <style>
-#main {
-  margin-top: 20px;
-  padding-bottom: 20px;
-}
 
 #container3d {
   width: 100%;
@@ -288,13 +280,5 @@ export default {
   font-weight: bold;
   border-radius: 3px;
   z-index: 30;
-}
-
-.subsection {
-  border-radius: 6px;
-  background: #fbfbfb;
-  border: 1px solid #ededed;
-  padding: 1rem;
-  margin-bottom: 1rem;
 }
 </style>

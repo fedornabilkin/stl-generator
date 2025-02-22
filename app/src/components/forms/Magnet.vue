@@ -14,7 +14,7 @@ const props = defineProps(['options', 'unit'])
           span.is-size-7
             |  {{$t('magnetHelp')}}
 
-.subsection(v-if='props.options.magnet.active')
+.box(v-if='props.options.magnet.active')
   .field.is-horizontal
     .field-label.is-small
       label.label {{$t('shape')}}

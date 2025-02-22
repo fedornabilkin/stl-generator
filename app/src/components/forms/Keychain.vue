@@ -14,7 +14,7 @@ const props = defineProps(['options', 'unit'])
           span.is-size-7
             i.fa.fa-key &nbsp;
             | {{ $t("keychainHelp") }}
-.subsection(v-if='props.options.keychain.active')
+.box(v-if='props.options.keychain.active')
   .field.is-horizontal
     .field-label.is-small
       label.label {{ $t("placement") }}

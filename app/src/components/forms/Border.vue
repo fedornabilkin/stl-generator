@@ -16,7 +16,7 @@ const props = defineProps(['options', 'unit'])
             i.fa.fa-border-all &nbsp;
             | {{ $t("borderAroundBase") }}
 
-.subsection(v-if="props.options.border.active")
+.box(v-if="props.options.border.active")
   .field.is-horizontal
     .field-label.is-small
       label.label {{ $t("width") }}

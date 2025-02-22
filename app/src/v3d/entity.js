@@ -33,11 +33,16 @@ export class Border extends Entity {
 export class Code extends Entity {
   depth = 1
   margin = 2
-  blockSizeMultiplier = 100
   cityMode = false
   depthMax = 2
   errorCorrectionLevel = 'M'
   invert = false
+  block = {
+    ratio: 100,
+    cityMode: false,
+    depth: 2,
+    shape: 'classic',
+  }
   preview = {
     src: undefined,
     htmlId: 'qr-image-preview'
