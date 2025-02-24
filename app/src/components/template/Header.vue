@@ -1,32 +1,31 @@
 <template lang="pug">
 nav.navbar(role='navigation' aria-label='main navigation')
-  .container
-    .navbar-brand
-      a.navbar-item(href='/')
-        img(src='../../assets/logo.png' alt='vsqr 3d генератор stl')
-      p.is-hidden-mobile.navbar-item(v-if='showShareNotice')
-        i.fa.fa-arrow-up.shake-vertical
-        span(style='margin: 0 10px;') {{$t('headerShareNotice')}}
-        i.fa.fa-arrow-up.shake-vertical
-      a.navbar-burger.burger(role='button' :class="{ 'is-active': navbarOpen }" aria-label='menu' aria-expanded='false' @click='toggleNavigation')
-        span(aria-hidden='true')
-        span(aria-hidden='true')
-        span(aria-hidden='true')
-    .navbar-menu(:class="{ 'is-active': navbarOpen }")
-      .navbar-end
-        .navbar-item
-          LanguageSelector
-        .navbar-item
-          ShareButtons
-        .navbar-item(v-if='!showThankYou')
-          .buttons
-            Yoomoney
+  //.container
+  .navbar-brand
+    a.navbar-item(href='/')
+      img(src='../../assets/logo.png' alt='vsqr 3d генератор stl')
+    p.is-hidden-mobile.navbar-item(v-if='showShareNotice')
+      i.fa.fa-arrow-up.shake-vertical
+      span.mx-2 {{$t('headerShareNotice')}}
+      i.fa.fa-arrow-up.shake-vertical
+    a.navbar-burger.burger(role='button' :class="{ 'is-active': navbarOpen }" aria-label='menu' aria-expanded='false' @click='toggleNavigation')
+      span(aria-hidden='true')
+      span(aria-hidden='true')
+      span(aria-hidden='true')
+  .navbar-menu(:class="{ 'is-active': navbarOpen }")
+    .navbar-end
+      .navbar-item
+        LanguageSelector
+      .navbar-item
+        ShareButtons
+      .navbar-item(v-if='!showThankYou')
+        .buttons
+          Yoomoney
 </template>
 
 <script>
 import ShareButtons from './ShareButtons.vue';
 import LanguageSelector from './LanguageSelector.vue';
-import packageJson from '../../../package.json';
 import Yoomoney from "@/components/monetisation/Yoomoney.vue";
 
 export default {
@@ -40,7 +39,6 @@ export default {
     return {
       navbarOpen: false,
       showThankYou: false,
-      appVersion: packageJson.version,
       newVersion: false,
       showShareNotice: false,
       headerAd: '',

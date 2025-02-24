@@ -10,7 +10,7 @@ footer.footer
       .column
         Yoomoney
       .column
-        a(href="/examples") Примеры
+        a.button.is-info(href="/examples") Смотреть примеры
 
       .column
         ShareButtons
@@ -19,7 +19,7 @@ footer.footer
       .is-pulled-right
         a(href="/") vsqr.ru
         | &nbsp;&copy; 2025
-      .is-dark
+      .button.is-light
         a(href="https://t.me/+dSgck2GM29syZTQ6" target="_blank")
           i.fab.fa-telegram
           | &nbsp;обсудить

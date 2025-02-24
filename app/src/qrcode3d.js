@@ -78,6 +78,9 @@ class QRCode3D extends BaseTag3D {
             }else if(roundBlock) {
               meshBlock.rotation.x = Math.PI / 2
             }
+            if (etoQr.options.base.width < etoQr.options.base.height) {
+              meshBlock.position.y += (etoQr.options.base.height - etoQr.options.base.width) / 2
+            }
             meshBlock.updateMatrix()
             qrSystem.add(meshBlock)
 
@@ -95,10 +98,6 @@ class QRCode3D extends BaseTag3D {
     } // func
 
     iterateBitMask()
-
-    if (this.options.base.width < this.options.base.height) {
-      qrSystem.position.y = (this.options.base.height - this.options.base.width) / 2
-    }
 
     // if (etoQr.options.code.invert) {
     //   const cornerRadius = this.getCornerRadius();
@@ -166,7 +165,7 @@ class QRCode3D extends BaseTag3D {
    */
   createMeshBlock(w, h, d, isRound = false) {
     if (!this.blockGeometry) {
-      this.blockGeometry = !isRound ? new THREE.BoxGeometry(w, h, d) : new THREE.CylinderGeometry(w/2, h/2, d)
+      this.blockGeometry = !isRound ? new THREE.BoxGeometry(w, h, d) : new THREE.CylinderGeometry(w/2, h/2, d, 64)
     }
     return new THREE.Mesh(this.blockGeometry, this.materialDetail)
   }

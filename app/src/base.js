@@ -86,7 +86,7 @@ class BaseTag3D {
       const width = this.options.magnet.size
       const height = this.options.magnet.size
       const depth = this.options.magnet.depth
-      console.log('magnet: ')
+
       let holeMesh;
       if (this.options.magnet.shape === 'round') {
         const geometryMagnet = new THREE.CylinderGeometry(width / 2, height / 2, depth, 32)
@@ -476,7 +476,14 @@ class BaseTag3D {
   combined(collection) {
     const combined = new THREE.Geometry()
     for (const key in collection) {
-      combined.merge(collection[key].geometry, collection[key].matrix)
+      if (key === 'qr') {
+        for (const mesh of collection[key].children) {
+          combined.merge(mesh.geometry, mesh.matrix)
+        }
+      }
+      else {
+        combined.merge(collection[key].geometry, collection[key].matrix)
+      }
     }
     return new THREE.Mesh(combined, this.materialBase)
   }

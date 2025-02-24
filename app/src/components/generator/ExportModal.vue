@@ -12,12 +12,15 @@ div(:class="{'modal': true, 'is-active': isActive}")
         progress.progress.is-small.is-primary(max="100" v-if="seconds !== 0")
         progress.progress.is-small.is-primary(max="100" v-if="seconds === 0" value="100")
     section.modal-card-body
-      div {{ $t('expMotivationText') }}
-      div
+      .mb-4.message
+        .message-body {{ $t('expMotivationText') }}
+      .is-pulled-right
         Yoomoney
+      .is-light
+        a.button(href="/examples") Смотреть примеры
     footer.modal-card-foot
-      button.button(@click="close") OK
-      span.mr-1 {{ $t('expThankYouSupportProject') }}
+      button.button.mr-1(@click="close") OK
+      span {{ $t('expThankYouSupportProject') }}
 </template>
 
 <script>

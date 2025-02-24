@@ -76,6 +76,9 @@ import {
   Icon as IconEntity,
   Magnet as MagnetEntity,
 } from "@/v3d/entity";
+import {useGenerateList} from "@/store/generateList";
+
+const shareHash = useShareHash()
 
 const base = new BaseEntity({active: true})
 const border = new BorderEntity()
@@ -170,7 +173,7 @@ export default {
 
   methods: {
     render3d() {
-      for(const item of this.addedMeshes) {
+      for(const item of this.box.getNodes()) {
         this.box.removeNode(item)
       }
 
@@ -181,7 +184,7 @@ export default {
       this.model3d.setStrategy(strategy)
 
 
-      let addPromise = new Promise((resolve) => {
+      const addPromise = new Promise((resolve) => {
         this.model3d.create(this.generator)
 
         if (this.options.code.active) {
@@ -193,7 +196,10 @@ export default {
             }
           }
         } else {
-          resolve(this.model3d.collection())
+          this.progressGenerating = 95
+          setTimeout(() => {
+            resolve(this.model3d.collection())
+          }, 50)
         }
       })
 
@@ -201,13 +207,17 @@ export default {
           .then((result) => {
             for(const key in result) {
               this.box.addNode(result[key])
-              this.addedMeshes.push(result[key])
+              // this.addedMeshes.push(result[key])
             }
           })
           .then(() => {
             this.diffOptions = diff(defaultOptions, this.options)
-            this.$emit('exportReady', this.diffOptions, this.addedMeshes)
+            this.$emit('exportReady', this.diffOptions, this.box.getNodes())
+            setTimeout(() => {this.addLastGenerate()}, 500)
           })
+          // .then(() => {
+          //   this.addLastGenerate()
+          // })
           .finally(() => {
             this.isGenerating = false
             this.generateError = ''
@@ -252,13 +262,13 @@ export default {
 
       this.render3d()
     },
-    async exportSTL(stlType, multipleParts) {
+    exportSTL(stlType, multipleParts) {
       const timestamp = new Date().getTime()
       const exportAsBinary = stlType === 'binary'
       const expConfig = {binary: exportAsBinary}
 
       if (multipleParts) {
-        const parts = await this.model3d.create(this.generator)
+        const parts = this.model3d.collection()
         const zip = new JSZip()
 
         for(const key in parts) {
@@ -283,13 +293,19 @@ export default {
       this.addLastExport()
     },
     addLastExport() {
-      const shareHash = useShareHash()
-      const hash = shareHash.create(this.diffOptions)
       const exportList = useExportList()
-      const imgDataUrl = this.box.imgDataUrl()
 
-      exportList.add(new Share({hash: hash, img: {src: imgDataUrl}, date: new Date().getTime()}))
+      exportList.add(this.createShare(shareHash.create(this.diffOptions), this.box.imgDataUrl()))
       window.localStorage.setItem(exportList.keyStore, JSON.stringify(exportList.getCollection()))
+    },
+    addLastGenerate() {
+      const generateList = useGenerateList()
+
+      generateList.add(this.createShare(shareHash.create(this.diffOptions), this.box.imgDataUrl()))
+      window.sessionStorage.setItem(generateList.keyStore, JSON.stringify(generateList.getCollection()))
+    },
+    createShare(hash, src) {
+      return new Share({hash: hash, img: {src: src}, date: new Date().getTime()})
     },
     openQRScanner() {
       this.scannerModalVisible = true;

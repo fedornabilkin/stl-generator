@@ -18,6 +18,7 @@ export class Box {
   grid = undefined
 
   sceneGraphRoot = undefined
+  collectNodes = []
   animation = undefined
 
   debug = false
@@ -27,7 +28,12 @@ export class Box {
   }
 
   addNode(node) {
+    this.collectNodes.push(node)
     this.sceneGraphRoot.add(node)
+  }
+
+  getNodes() {
+    return this.collectNodes
   }
 
   removeNode(node) {

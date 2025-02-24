@@ -1,4 +1,8 @@
 <template lang="pug">
+.p-1.button.is-warning.is-small.share-button-shake(v-if='expSettings.active')
+  i.fa.fa-arrow-up.shake-vertical
+  span.mx-2 {{$t('headerShareNotice')}}
+  i.fa.fa-arrow-up.shake-vertical
 .container
   .columns.is-multiline
     .column
@@ -14,13 +18,26 @@
         @exportReady="exportReady"
       )
 
+      button.button(v-if="hasGenerateList" @click="historyModalVisible=true")
+        span.icon
+          i.fa.fa-calendar-day(aria-hidden="true")
+        span История
+
+      HistoryModal(
+        v-if="historyModalVisible"
+        :isActive="historyModalVisible"
+        :store="storeGenerate"
+        title="История"
+        @close="historyModalVisible=false"
+      )
+
     .column
       .columns
         .column
           p.title {{$t('preview')}}
           p.subtitle {{ $t("controlsHint") }}
         .column
-          .field.has-addons
+          //.field.has-addons
             .control
               span.button
                 input.checkbox(type='checkbox' v-model='autoRotation')
@@ -47,7 +64,7 @@
                   i.fa.fa-image
                 span {{$t('expPngButton')}}
 
-      ExportList
+      ExportList(:store="storeExport" title="История загрузок")
 
       ExportModal(v-if="exportModalVisible" :isActive="exportModalVisible" @close="exportModalVisible=false")
 </template>
@@ -65,14 +82,19 @@ import {useExportList} from "@/store/exportList";
 import {Share} from "@/entity/share";
 import ExportList from "@/components/generator/ExportList.vue";
 import {BaseRotation} from "@/v3d/animation/baseRotation";
+import {useGenerateList} from "@/store/generateList";
+import HistoryModal from "@/components/generator/HistoryModal.vue";
 
 const shareHash = useShareHash()
+const exportList = useExportList()
+const generateList = useGenerateList()
 const box = new Box({debug: false, animation: new BaseRotation()})
 box.createScene()
 
 export default {
   name: 'Main',
   components: {
+    HistoryModal,
     ExportList,
     Export,
     QRCodeMenu,
@@ -87,12 +109,16 @@ export default {
         multiple: false,
       },
       box: undefined,
-      autoRotation: true,
+      autoRotation: false,
       changelogModalVisible: false,
       // changelog: changelog.split('\n').slice(3).join('\n'),
       changelog: '',
+      historyModalVisible: false,
       exportModalVisible: false,
       shareData: null,
+      storeExport: null,
+      storeGenerate: null,
+      hasGenerateList: false,
       isGenerating: false,
       exporter: null,
       scene: null,
@@ -105,7 +131,10 @@ export default {
   created() {
     this.parseUrlShareHash()
     this.fillExportList()
+    this.fillGenerateList()
     this.box = box
+    this.storeExport = exportList
+    this.storeGenerate = generateList
   },
   mounted() {
     this.initScene()
@@ -204,16 +233,22 @@ export default {
       }
     },
     fillExportList() {
-      const exportList = useExportList()
       const list = JSON.parse(window.localStorage.getItem(exportList.keyStore)) || []
       const collection = list.map((item) => {
         return new Share(item)
       })
       exportList.fillCollection(collection)
     },
-    exportReady(options, meshes) {
+    fillGenerateList() {
+      const list = JSON.parse(window.sessionStorage.getItem(generateList.keyStore)) || []
+      const collection = list.map((item) => {
+        return new Share(item)
+      })
+      this.hasGenerateList = collection.length > 0
+      generateList.fillCollection(collection)
+    },
+    exportReady(options) {
       this.expSettings.active = true
-      this.addedMeshes = meshes
       try {
         window.location.hash = shareHash.create(options)
       } catch (error) {
@@ -224,7 +259,7 @@ export default {
     },
   },
 
-};
+}
 </script>
 
 <style>
@@ -280,5 +315,22 @@ export default {
   font-weight: bold;
   border-radius: 3px;
   z-index: 30;
+}
+
+div.share-button-shake {
+  position:fixed;
+  left:15%;
+  top:0;
+  z-index:100;
+}
+
+.share-button-shake .shake-vertical {
+  animation: shake-vertical 2s linear infinite;
+}
+
+@keyframes shake-vertical {
+  0%, 40%{transform: translateY(0)}
+  10%{transform: translateY(2px)}
+  30%{transform: translateY(-5px)}
 }
 </style>
