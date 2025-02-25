@@ -1,10 +1,10 @@
 <template lang="pug">
 //div(id="qrcodeMenu")
 
-  //button.button.is-info.is-medium.is-fullwidth.mb-3(@click="openQRScanner")
-  //  span.icon
-  //    i.fa.fa-camera
-  //  span {{$t('copyExistingQRCode')}}
+button.button.is-info.is-medium.is-fullwidth.mb-3(@click="scannerModalVisible=true")
+  span.icon
+    i.fa.fa-camera
+  span Сканировать QR-код
 
 .panel
   p.panel-heading {{$t('modelOptions')}}
@@ -43,7 +43,7 @@
     progress.progress.is-success(v-if="isGenerating" :value="progressGenerating" max='100')
       | {{ progressGenerating }}
 
-ScannerModal(v-if="scannerModalVisible" @decode="onDecode")
+ScannerModal(v-if="scannerModalVisible" :isActive="scannerModalVisible" @decode="onDecode" @close="scannerModalVisible=false")
 </template>
 
 <script>
@@ -310,9 +310,10 @@ export default {
     openQRScanner() {
       this.scannerModalVisible = true;
     },
-    onDecode(decodedText) {
-      this.options.content = decodedText
+    onDecode(rawValue) {
+      this.options.content = rawValue
       this.options.activeTabIndex = 0
+      this.options.code.active = true
     },
     wifiQREscape(str) {
       const regex = /([:|\\|;|,|"])/gm

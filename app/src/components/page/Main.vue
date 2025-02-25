@@ -1,5 +1,5 @@
 <template lang="pug">
-.p-1.button.is-warning.is-small.share-button-shake(v-if='expSettings.active')
+.px-1.py-0.button.is-warning.is-small.share-button-shake(v-if='expSettings.active')
   i.fa.fa-arrow-up.shake-vertical
   span.mx-2 {{$t('headerShareNotice')}}
   i.fa.fa-arrow-up.shake-vertical
@@ -249,6 +249,7 @@ export default {
     },
     exportReady(options) {
       this.expSettings.active = true
+      this.hasGenerateList = true
       try {
         window.location.hash = shareHash.create(options)
       } catch (error) {
