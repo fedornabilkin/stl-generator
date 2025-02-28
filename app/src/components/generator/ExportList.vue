@@ -23,7 +23,7 @@ const dateTimeFormat = (dt, format='DD.MM.YY HH:mm:ss') => {
           td
             img(v-if="item.img.src" :src="item.img.src" width="100")
           td
-            a.button(:href="`/${item.hash}`") {{ $t('expListLoadItem') }}
+            a.button(:href="`/${item.hash}`" target="_blank") {{ $t('expListLoadItem') }}
           td
             span.is-size-6.has-text-grey {{ dateTimeFormat(item.date) }}
 </template>

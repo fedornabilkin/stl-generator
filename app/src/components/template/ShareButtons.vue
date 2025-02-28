@@ -1,8 +1,8 @@
 <script setup>
-const url = 'http://vsqr.ru'
+const url = 'https://vsqr.ru'
 const title = 'STL генератор QR кодов для 3d печати.'
 const text = 'Создать QR-код для 3d печати в формате STL.'
-const imageUrl = 'http://vsqr.ru/android-chrome-192x192.png'
+const imageUrl = 'https://vsqr.ru/android-chrome-192x192.png'
 const fullText = `${text}: ${url}`
 const twitterHandle = 'fedornabilkin'
 

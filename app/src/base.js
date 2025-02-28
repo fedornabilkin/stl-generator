@@ -119,7 +119,7 @@ class BaseTag3D {
     if (!this.options.text.active) {
       return undefined
     }
-    const textGeometry = new THREE.Geometry();
+    const textGroup = new THREE.Group()
 
     const correctText = (text) => {
       let font = new THREE.Font(fontInterSemiBold)
@@ -160,20 +160,16 @@ class BaseTag3D {
       const alignment = -textSize.x / 2
 
       subtitleMesh.position.set(alignment, posY, this.options.base.depth)
+      subtitleMesh.position.y -= this.options.text.height / 2
 
-      subtitleMesh.updateMatrix()
-      textGeometry.merge(subtitleMesh.geometry, subtitleMesh.matrix)
+      if (this.options.code.active) {
+        subtitleMesh.position.y -= this.options.base.width - this.options.base.height / 2 + oneHeight - this.options.code.margin
+      }
+
+      textGroup.add(subtitleMesh)
     }
 
-    const mesh = new THREE.Mesh(textGeometry, this.materialDetail)
-    mesh.position.y = -this.options.text.height / 2
-
-    if (this.options.code.active && this.options.base.width < this.options.base.height) {
-      mesh.position.y = this.options.base.height / 2 - this.options.base.width - this.options.text.height
-    }
-
-    mesh.updateMatrix()
-    return mesh
+    return textGroup
   }
 
   /**
@@ -318,58 +314,55 @@ class BaseTag3D {
       return undefined
     }
 
+    const svgGroup = new THREE.Group()
     const svgLoader = new SVGLoader()
     const svgData = svgLoader.parse(this.options.icon.src)
-    const shapesS = svgData.paths.map((p) => p.toShapes(true, true)).flat()
-    const shapesX = shapesS.map((s) => s.toJSON())
 
-    const iconGeometry = new THREE.Geometry();
-    const shapes = shapesX.map((sj) => new THREE.Shape().fromJSON(sj));
-    // Each path has array of shapes
-    shapes.forEach((shape) => {
-      // Finally we can take each shape and extrude it
-      const pathGeometry = new THREE.ExtrudeGeometry(shape, {
-        steps: 1,
-        depth: this.options.code.depth,
-        bevelEnabled: false,
-      });
+    svgData.paths.forEach((path) => {
+      const shapes = path.toShapes(true)
+      shapes.forEach((shape) => {
+        const geometry = new THREE.ExtrudeGeometry(shape, {
+          depth: this.options.code.depth,
+          bevelEnabled: false
+        })
 
-      const pathMesh = new THREE.Mesh(pathGeometry, this.materialDetail);
-      pathMesh.position.set(0, 0, 0)
-      pathMesh.updateMatrix()
-      iconGeometry.merge(pathMesh.geometry, pathMesh.matrix);
-    });
+        const mesh = new THREE.Mesh(geometry, this.materialDetail)
 
-    const iconMesh = new THREE.Mesh(iconGeometry, this.materialDetail);
+        svgGroup.add(mesh)
+      })
+    })
 
-    // scale icon to correct size
-    let iconSize = getBoundingBoxSize(iconMesh);
+    // измеряем размер группы
+    const box = new THREE.Box3().setFromObject(svgGroup)
+    const size = new THREE.Vector3()
+    box.getSize(size)
 
-    const iconSizeRatio = this.options.icon.ratio / 100;
-    const scaleRatioY = iconSize.y / (this.availableWidth * iconSizeRatio);
-    const scaleRatioX = iconSize.x / (this.availableWidth * iconSizeRatio);
+    // scale
+    const iconSizeRatio = this.options.icon.ratio / 100
+    const scaleRatioY = size.y / (this.availableWidth * iconSizeRatio)
+    const scaleRatioX = size.x / (this.availableWidth * iconSizeRatio)
+    const scaleRatio = scaleRatioX > scaleRatioY ? scaleRatioX : scaleRatioY
 
-    const scaleRatio = scaleRatioX > scaleRatioY ? scaleRatioX : scaleRatioY;
-    iconMesh.scale.x /= scaleRatio;
-    iconMesh.scale.y /= scaleRatio;
-    iconMesh.rotation.x = Math.PI;
 
-    // move icon to center
-    iconSize = getBoundingBoxSize(iconMesh)
+    svgGroup.children.forEach(item => {
+      // Инвертировать по оси y, т.к. по умолчанию svg читаются вверх ногами в three.js
+      // https://muffinman.io/blog/three-js-extrude-svg-path/#svg-paths-are-inverted-on-y-axis
+      item.scale.y *= -1
+      // mesh.rotation.x = Math.PI
+      item.position.x = size.x / scaleRatio / -2
+      item.position.y = size.y / scaleRatio / 2
+      item.position.z = this.options.base.depth
 
-    iconMesh.position.x = -iconSize.x / 2
-    iconMesh.position.y = iconSize.y / 2
-    iconMesh.position.z = this.options.base.depth + this.options.code.depth
-    iconMesh.updateMatrix()
+      item.scale.x /= scaleRatio
+      item.scale.y /= scaleRatio
 
-    if (this.options.code.active && this.options.base.width < this.options.base.height) {
-      iconMesh.position.y += (this.options.base.height - this.options.base.width) / 2
-      iconMesh.updateMatrix()
-    }
+      if (this.options.code.active && this.options.base.width < this.options.base.height) {
+        item.position.y += (this.options.base.height - this.options.base.width) / 2
+      }
+    })
 
-    this.iconMesh = iconMesh
-
-    return iconMesh
+    this.iconMesh = svgGroup
+    return svgGroup
   }
 
   /**
@@ -476,7 +469,8 @@ class BaseTag3D {
   combined(collection) {
     const combined = new THREE.Geometry()
     for (const key in collection) {
-      if (key === 'qr') {
+      if (key === 'qr' || key === 'icon' || key === 'text') {
+        console.log(collection[key])
         for (const mesh of collection[key].children) {
           combined.merge(mesh.geometry, mesh.matrix)
         }

@@ -1,6 +1,4 @@
 <template lang="pug">
-//div(id="qrcodeMenu")
-
 button.button.is-info.is-medium.is-fullwidth.mb-3(@click="scannerModalVisible=true")
   span.icon
     i.fa.fa-camera

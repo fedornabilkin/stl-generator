@@ -3,7 +3,7 @@ nav.navbar(role='navigation' aria-label='main navigation')
   //.container
   .navbar-brand
     a.navbar-item(href='/')
-      img(src='../../assets/logo.png' alt='vsqr 3d генератор stl')
+      img(src='../../assets/logo.png' alt='vsqr.ru 3d генератор stl')
     p.is-hidden-mobile.navbar-item(v-if='showShareNotice')
       i.fa.fa-arrow-up.shake-vertical
       span.mx-2 {{$t('headerShareNotice')}}

@@ -14,8 +14,11 @@ const close = () => {
 
 const decode = (result) => {
   console.log('Scan QR:', result)
-  decodedData.value = result[0].rawValue
-  setInterval(() => {timer.value -=1}, 1000)
+
+  setInterval(() => {
+    decodedData.value = result[0].rawValue
+    timer.value -=1
+  }, 1000)
   setTimeout(() => {
     success()
   }, timer.value * 1000)
@@ -43,7 +46,7 @@ const success = () => {
           code.mt-3.is-size-5
             | {{decodedData}}
           .mt-2
-            button.button.is-success(@click='close') Вперед ({{ timer }})
+            button.button.is-success(@click='success') Вперед ({{ timer }})
     footer.modal-card-foot
       button.button(@click='close') Закрыть
 </template>
