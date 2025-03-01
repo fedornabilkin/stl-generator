@@ -17,57 +17,61 @@ const props = defineProps(['options', 'unit'])
             | {{ $t("textOnEdge") }}
 
 .box(v-if="props.options.text.active")
-  .field.is-horizontal
-    .field-body
-      .field
-        .control
-          textarea.textarea.is-small(rows='5' v-model='props.options.text.message' :placeholder="$t('theText')")
-          .buttons.are-small.mt-2.is-pulled-right
-            button(:class="{button: true, 'is-primary': props.options.text.align === 'left'}" @click="props.options.text.align = 'left'")
-              span.icon.is-small
-                i.fas.fa-align-left
-            button(:class="{ button: true, 'is-primary': props.options.text.align === 'center'}" @click="props.options.text.align = 'center'")
-              span.icon.is-small
-                i.fas.fa-align-center
-            button(:class="{ button: true, 'is-primary': props.options.text.align === 'right'}" @click="props.options.text.align = 'right'")
-              span.icon.is-small
-                i.fas.fa-align-right
-          p.help.content
-            | {{ $t("fontInfoText") }}
-            br
-            i.fas.fa-italic
-            |  {{ $t("italicInfoText") }}
-            br
-            i.fas.fa-bold
-            |  {{ $t("boldInfoText") }}
-            br
-  .field.is-horizontal
-    .field-label.is-small
-      label.label {{ $t("size") }}
-    .field-body
-      .field.has-addons
-        .control
-          input.input.is-small(type='number' v-model.number='props.options.text.size')
-        p.control
-          a.button.is-static.is-small {{ unit }}
-  .field.is-horizontal
-    .field-label.is-small
-      label.label {{ $t("depth") }}
-    .field-body
-      .field.has-addons
-        .control
-          input.input.is-small(type='number' v-model.number='props.options.text.depth')
-        p.control
-          a.button.is-static.is-small {{ unit }}
-  .field.is-horizontal
-    .field-label.is-small
-      label.label {{$t('margin')}}
-    .field-body
-      .field.has-addons
-        .control
-          input.input.is-small(type='number' v-model.number='props.options.text.margin')
-        p.control
-          a.button.is-static.is-small {{unit}}
+  .columns.is-multiline
+    .column
+      .field.is-horizontal
+        .field-body
+          .field
+            .control
+              textarea.textarea.is-small(rows='3' v-model='props.options.text.message' :placeholder="$t('theText')")
+              .buttons.are-small.mt-2.is-pulled-right
+                button(:class="{button: true, 'is-primary': props.options.text.align === 'left'}" @click="props.options.text.align = 'left'")
+                  span.icon.is-small
+                    i.fas.fa-align-left
+                button(:class="{ button: true, 'is-primary': props.options.text.align === 'center'}" @click="props.options.text.align = 'center'")
+                  span.icon.is-small
+                    i.fas.fa-align-center
+                button(:class="{ button: true, 'is-primary': props.options.text.align === 'right'}" @click="props.options.text.align = 'right'")
+                  span.icon.is-small
+                    i.fas.fa-align-right
+              p.help.content
+                | {{ $t("fontInfoText") }}
+                br
+                i.fas.fa-italic
+                |  {{ $t("italicInfoText") }}
+                br
+                i.fas.fa-bold
+                |  {{ $t("boldInfoText") }}
+                br
+
+    .column
+      .field.is-horizontal
+        .field-label.is-small
+          label.label {{ $t("size") }}
+        .field-body
+          .field.has-addons
+            .control
+              input.input.is-small(type='number' v-model.number='props.options.text.size')
+            p.control
+              a.button.is-static.is-small {{ unit }}
+      .field.is-horizontal
+        .field-label.is-small
+          label.label {{ $t("depth") }}
+        .field-body
+          .field.has-addons
+            .control
+              input.input.is-small(type='number' v-model.number='props.options.text.depth')
+            p.control
+              a.button.is-static.is-small {{ unit }}
+      .field.is-horizontal
+        .field-label.is-small
+          label.label {{$t('margin')}}
+        .field-body
+          .field.has-addons
+            .control
+              input.input.is-small(type='number' v-model.number='props.options.text.margin')
+            p.control
+              a.button.is-static.is-small {{unit}}
 
 </template>
 

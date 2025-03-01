@@ -17,26 +17,29 @@ const props = defineProps(['options', 'unit'])
             | {{ $t("borderAroundBase") }}
 
 .box(v-if="props.options.border.active")
-  .field.is-horizontal
-    .field-label.is-small
-      label.label {{ $t("width") }}
-    .field-body
-      .field.has-addons
-        .control
-          input.input.is-small(type="number" v-model.number="props.options.border.width")
-        p.control
-          a.button.is-static.is-small {{ props.unit }}
+  .columns.is-multiline
+    .column
+      .field.is-horizontal
+        .field-label.is-small
+          label.label {{ $t("width") }}
+        .field-body
+          .field.has-addons
+            .control
+              input.input.is-small(type="number" v-model.number="props.options.border.width")
+            p.control
+              a.button.is-static.is-small {{ props.unit }}
 
-  .field.is-horizontal
-    .field-label.is-small
-      label.label {{ $t("depth") }}
+    .column
+      .field.is-horizontal
+        .field-label.is-small
+          label.label {{ $t("depth") }}
 
-    .field-body
-      .field.has-addons
-        .control
-          input.input.is-small(type="number" v-model.number="props.options.border.depth")
-        p.control
-          a.button.is-static.is-small {{ props.unit }}
+        .field-body
+          .field.has-addons
+            .control
+              input.input.is-small(type="number" v-model.number="props.options.border.depth")
+            p.control
+              a.button.is-static.is-small {{ props.unit }}
 </template>
 
 <style scoped>

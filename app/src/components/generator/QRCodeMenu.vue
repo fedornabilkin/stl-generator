@@ -20,7 +20,7 @@ button.button.is-info.is-medium.is-fullwidth.mb-3(@click="scannerModalVisible=tr
         // Keychain Settings
         Keychain(:options='options' :unit='unit')
         // Icon Settings
-        Icon(:options='options')
+        Icon(:options='options' :unit='unit')
         // NFC Tag Section
         Magnet(:options='options' :unit='unit')
 

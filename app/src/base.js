@@ -319,7 +319,7 @@ class BaseTag3D {
     const svgData = svgLoader.parse(this.options.icon.src)
 
     svgData.paths.forEach((path) => {
-      const shapes = path.toShapes(true)
+      const shapes = path.toShapes(!this.options.icon.inverted)
       shapes.forEach((shape) => {
         const geometry = new THREE.ExtrudeGeometry(shape, {
           depth: this.options.code.depth,
@@ -349,8 +349,8 @@ class BaseTag3D {
       // https://muffinman.io/blog/three-js-extrude-svg-path/#svg-paths-are-inverted-on-y-axis
       item.scale.y *= -1
       // mesh.rotation.x = Math.PI
-      item.position.x = size.x / scaleRatio / -2
-      item.position.y = size.y / scaleRatio / 2
+      item.position.x = size.x / scaleRatio / -2 + this.options.icon.offsetX
+      item.position.y = size.y / scaleRatio / 2 + this.options.icon.offsetY
       item.position.z = this.options.base.depth
 
       item.scale.x /= scaleRatio

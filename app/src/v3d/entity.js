@@ -72,7 +72,12 @@ export class Text extends Entity {
 export class Icon extends Entity {
   name = 'none'
   ratio = 20
+  inverted = false
+  offsetX = 0
+  offsetY = 0
   data = undefined
+  src = undefined
+  srcCustom = undefined
   htmlId = 'icon-preview'
 
   constructor(config = {}) {

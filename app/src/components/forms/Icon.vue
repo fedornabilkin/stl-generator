@@ -1,12 +1,26 @@
 <script setup>
-const props = defineProps(['options'])
+import SpotifyModelOptionsPanel from "@/components/SpotifyModelOptionsPanel.vue";
+
+const props = defineProps(['options', 'unit'])
+
+const getSrc = () => {
+  let src = '/icons/' + props.options.icon.name + '.svg'
+  if (props.options.icon.srcCustom) {
+    src = props.options.icon.srcCustom
+  }
+  return src
+}
+
+const change = () => {
+  selected('none')
+  props.options.icon.src = props.options.icon.srcCustom
+}
 
 const selected = (name) => {
-  props.options.icon.active = false
   props.options.icon.name = name
 
   if (name !== 'none') {
-    props.options.icon.active = true
+    props.options.icon.srcCustom = ''
 
     const promise = new Promise((resolve) => {
       setTimeout(() => {
@@ -63,9 +77,23 @@ const icons = [
 </script>
 
 <template lang="pug">
+.field.is-horizontal
+  .field-label.is-small
+    label.label {{$t('icon')}}
+
+  .field-body
+    .field
+      .control
+        label.checkbox
+          input(type="checkbox" v-model="props.options.icon.active")
+          span.is-size-7
+            i.fa.fa-icons &nbsp;
+            | Выбрать иконку или указать свой svg
+
+.box(v-if="props.options.icon.active")
   .field.is-horizontal
     .field-label.is-small
-      label.label {{$t('icon')}}
+      label.label Выбрать
     .field-body
       .field
         .control
@@ -88,28 +116,77 @@ const icons = [
                       img(width='18' height='18' :src="'/icons/' + icon + '.svg'" loading='lazy')
 
           object(
-            v-if="props.options.icon.active"
+            v-if="props.options.icon.name !== 'none'"
             :id="props.options.icon.htmlId"
             type='image/svg+xml'
             width='32'
             height='32'
             :data="'/icons/' + props.options.icon.name + '.svg'"
           )
-          .is-size-7(v-if="props.options.icon.name !== 'none'")
-            | Icons by Fontawesome&nbsp;
-            a(href='https://fontawesome.com/license/free' target='_blank') CC BY 4.0
-            p.has-text-danger(v-if="props.options.code.active") {{$t('errorCorrectionChange')}}
-  .field.is-horizontal(v-if="props.options.icon.name !== 'none'")
-    .field-label.is-small
-      label.label {{$t('size')}}
-    .field-body
-      .field.has-addons
-        .control
-          input.input.is-small(type='number' v-model.number='props.options.icon.ratio')
-        p.control
-          a.button.is-static.is-small %
-        span.help-icon.icon.has-text-info(:title="$t('iconSizeHelp')")
-          i.fas.fa-info-circle
+
+  .field
+    .control
+      label.label.is-small Свой SVG
+      textarea.textarea.is-small(
+        v-model='props.options.icon.srcCustom'
+        @keyup="change"
+        rows='3'
+        placeholder="svg"
+      )
+
+  .columns
+    .column
+      .field.is-horizontal
+        .field-label.is-small
+          label.label {{$t('size')}}
+        .field-body
+          .field.has-addons
+            .control
+              a.button.is-static.is-small %
+            .control
+              input.input.is-small(type='number' v-model.number='props.options.icon.ratio')
+            .control(:title="$t('iconSizeHelp')")
+              .button.is-static.is-small
+                span.has-text-info
+                  i.fas.fa-info-circle
+
+      .field.is-horizontal
+        .field-label.is-small
+          label.label Инвертировать
+        .field-body
+          .field
+            .control
+              input(type="checkbox" v-model.number='props.options.icon.inverted')
+
+    .column
+      .field.is-horizontal
+        .field-body
+          .field.has-addons
+            p.control(title="Сдвинуть по горизонтали")
+              .button.is-static.is-small
+                span
+                  i.fa.fa-arrow-right
+            .control
+              input.input.is-small(type='number' v-model.number='props.options.icon.offsetX')
+            p.control
+              a.button.is-static.is-small {{unit}}
+
+      .field.is-horizontal
+        .field-body
+          .field.has-addons
+            p.control(title="Сдвинуть по вертикали")
+              .button.is-static.is-small
+                span
+                  i.fa.fa-arrow-up
+            .control
+              input.input.is-small(type='number' v-model.number='props.options.icon.offsetY')
+            p.control
+              a.button.is-static.is-small {{unit}}
+
+  .tag.is-light
+    | Иконки Fontawesome&nbsp;
+    a(href='https://fontawesome.com/license/free' target='_blank') CC BY 4.0
+  p.is-size-7.has-text-danger(v-if="props.options.code.active") {{$t('errorCorrectionChange')}}
 </template>
 
 <style scoped>

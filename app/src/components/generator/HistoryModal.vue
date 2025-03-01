@@ -17,7 +17,8 @@ div(:class="{'modal': true, 'is-active': isActive}")
       button.delete(aria-label="close" @click="close")
     section.modal-card-body
       .message.is-info
-        .message-body История сгенерированных моделей доступна в пределах одной вкладки
+        .message-body
+          p История сгенерированных моделей доступна в пределах одной вкладки не более {{ props.store.getLimit() }} шт.
       ExportList(:store="props.store" title="История")
 
     footer.modal-card-foot
