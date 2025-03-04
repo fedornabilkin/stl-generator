@@ -75,8 +75,11 @@ import {
   Magnet as MagnetEntity,
 } from "@/v3d/entity";
 import {useGenerateList} from "@/store/generateList";
+import {Director} from "@/v3d/director";
+import {toRaw} from "vue";
 
 const shareHash = useShareHash()
+const director = new Director()
 
 const base = new BaseEntity({active: true})
 const border = new BorderEntity()
@@ -147,7 +150,8 @@ export default {
     ScannerModal,
   },
   data: () => ({
-    options: JSON.parse(JSON.stringify(defaultOptions)),
+    // options: JSON.parse(JSON.stringify(defaultOptions)),
+    options: defaultOptions,
     diffOptions: {},
     qrCodeBitMask: null,
     unit: 'mm',
@@ -164,7 +168,9 @@ export default {
   }),
   mounted() {
     if (this.initData) {
-      this.options = merge(this.options, this.initData)
+      director.buildGroupBuilder(this.initData)
+      this.options = Object.assign(this.options, director.getEntities())
+      // this.options = merge(this.options, this.initData)
       this.prepareData()
     }
   },
@@ -205,17 +211,15 @@ export default {
           .then((result) => {
             for(const key in result) {
               this.box.addNode(result[key])
-              // this.addedMeshes.push(result[key])
             }
           })
           .then(() => {
-            this.diffOptions = diff(defaultOptions, this.options)
-            this.$emit('exportReady', this.diffOptions, this.box.getNodes())
+            // this.diffOptions = diff(defaultOptions, toRaw(this.options))
+            // console.log(defaultOptions, toRaw(this.options), this.diffOptions)
+            this.$emit('exportReady', this.options)
+            // this.$emit('exportReady', this.diffOptions)
             setTimeout(() => {this.addLastGenerate()}, 500)
           })
-          // .then(() => {
-          //   this.addLastGenerate()
-          // })
           .finally(() => {
             this.isGenerating = false
             this.generateError = ''
@@ -293,20 +297,17 @@ export default {
     addLastExport() {
       const exportList = useExportList()
 
-      exportList.add(this.createShare(shareHash.create(this.diffOptions), this.box.imgDataUrl()))
+      exportList.add(this.createShare(shareHash.create(this.options), this.box.imgDataUrl()))
       window.localStorage.setItem(exportList.keyStore, JSON.stringify(exportList.getCollection()))
     },
     addLastGenerate() {
       const generateList = useGenerateList()
 
-      generateList.add(this.createShare(shareHash.create(this.diffOptions), this.box.imgDataUrl()))
+      generateList.add(this.createShare(shareHash.create(this.options), this.box.imgDataUrl()))
       window.sessionStorage.setItem(generateList.keyStore, JSON.stringify(generateList.getCollection()))
     },
     createShare(hash, src) {
       return new Share({hash: hash, img: {src: src}, date: new Date().getTime()})
-    },
-    openQRScanner() {
-      this.scannerModalVisible = true;
     },
     onDecode(rawValue) {
       this.options.content = rawValue

@@ -470,7 +470,6 @@ class BaseTag3D {
     const combined = new THREE.Geometry()
     for (const key in collection) {
       if (key === 'qr' || key === 'icon' || key === 'text') {
-        console.log(collection[key])
         for (const mesh of collection[key].children) {
           combined.merge(mesh.geometry, mesh.matrix)
         }

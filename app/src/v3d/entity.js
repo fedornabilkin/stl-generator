@@ -1,12 +1,17 @@
-class Entity {
+export class Entity {
   active = false
 
   constructor(config = {}) {
     Object.assign(this, config)
   }
+
+  change() {
+    console.log(this)
+  }
 }
 
 export class Base extends Entity {
+  active = true
   shape = 'roundedRectangle'
   width = 100
   height = 100
@@ -20,7 +25,6 @@ export class Base extends Entity {
 }
 
 export class Border extends Entity {
-  name = 'border'
   width = 1
   depth = 1
 
@@ -52,6 +56,16 @@ export class Code extends Entity {
     super(config)
     Object.assign(this, config)
   }
+
+  clearPreview() {
+    this.preview.src = undefined
+  }
+
+  eventActive() {
+    if (!this.active) {
+      this.clearPreview()
+    }
+  }
 }
 
 export class Text extends Entity {
@@ -79,10 +93,52 @@ export class Icon extends Entity {
   src = undefined
   srcCustom = undefined
   htmlId = 'icon-preview'
+  temp = {
+    src: undefined,
+    srcCustom: undefined
+  }
 
   constructor(config = {}) {
     super(config)
     Object.assign(this, config)
+  }
+
+  setSrc(src) {
+    this.src = src
+  }
+
+  setSrcCustom(src) {
+    this.srcCustom = src
+  }
+
+  clearSrc() {
+    this.temp.src = this.src ? this.src : this.temp.src
+    this.src = undefined
+  }
+
+  clearSrcCustom() {
+    this.temp.srcCustom = this.srcCustom ? this.srcCustom : this.temp.srcCustom
+    this.srcCustom = undefined
+  }
+
+  restoreSource() {
+    this.setSrc(this.temp.src)
+    this.setSrcCustom(this.temp.srcCustom)
+  }
+
+  clearSource() {
+    this.name = 'none'
+    this.clearSrc()
+    this.clearSrcCustom()
+  }
+
+  eventActive() {
+    if (!this.active) {
+      this.clearSource()
+    }
+    if (this.active) {
+      this.restoreSource()
+    }
   }
 }
 

@@ -6,6 +6,11 @@ import Contact from "@/components/forms/Contact.vue";
 import SMS from "@/components/forms/SMS.vue";
 
 const props = defineProps(['options', 'unit'])
+
+const activeChange = () => {
+  props.options.code.eventActive()
+}
+
 const setActiveTab = (idx) => {
   props.options.activeTabIndex = idx
 }
@@ -20,7 +25,7 @@ const setActiveTab = (idx) => {
     .field
       .control
         label.checkbox
-          input(type="checkbox" v-model="props.options.code.active")
+          input(type="checkbox" v-model="props.options.code.active" @change="activeChange")
           span.is-size-7
             i.fa.fa-qrcode &nbsp;
             | {{ $t("qrHelp") }}

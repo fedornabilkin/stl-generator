@@ -1,14 +1,9 @@
 <script setup>
-import SpotifyModelOptionsPanel from "@/components/SpotifyModelOptionsPanel.vue";
 
 const props = defineProps(['options', 'unit'])
 
-const getSrc = () => {
-  let src = '/icons/' + props.options.icon.name + '.svg'
-  if (props.options.icon.srcCustom) {
-    src = props.options.icon.srcCustom
-  }
-  return src
+const activeChange = () => {
+  props.options.icon.eventActive()
 }
 
 const change = () => {
@@ -20,7 +15,7 @@ const selected = (name) => {
   props.options.icon.name = name
 
   if (name !== 'none') {
-    props.options.icon.srcCustom = ''
+    props.options.icon.clearSrcCustom()
 
     const promise = new Promise((resolve) => {
       setTimeout(() => {
@@ -85,7 +80,7 @@ const icons = [
     .field
       .control
         label.checkbox
-          input(type="checkbox" v-model="props.options.icon.active")
+          input(type="checkbox" v-model="props.options.icon.active" @change="activeChange")
           span.is-size-7
             i.fa.fa-icons &nbsp;
             | Выбрать иконку или указать свой svg

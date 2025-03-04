@@ -5,13 +5,31 @@ export function useShareHash () {
   const marker = ref('#share')
   const separator = ref('-')
 
+  const encode = (data) => {
+    return btoa(data)
+  }
+
+  const decode = (data) => {
+    return atob(data)
+  }
+
+  const encodeUri = (data) => {
+    return encodeURIComponent(data)
+  }
+
+  const decodeUri = (data) => {
+    return decodeURIComponent(data)
+  }
+
   const create = (data) => {
-    return `${marker.value}${separator.value}${btoa(JSON.stringify(data))}`
+    const encodeStr = encode(encodeURI(JSON.stringify(data, null, 0)))
+    return `${marker.value}${separator.value}${encodeStr}`
   }
 
   const parse = (hash) => {
     const raw = hash.split(separator.value)
-    return Object.assign(JSON.parse(atob(raw[1])), {})
+    const decodeStr = JSON.parse(decodeUri(decode(raw[1])))
+    return Object.assign(decodeStr, {})
   }
 
   const shareIsValid = (hash) => {
