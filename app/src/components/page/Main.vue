@@ -238,6 +238,9 @@ export default {
         return new Share(item)
       })
       exportList.fillCollection(collection)
+      exportList.setCallback((collection) => {
+        window.localStorage.setItem(exportList.keyStore, JSON.stringify(collection))
+      })
     },
     fillGenerateList() {
       const list = JSON.parse(window.sessionStorage.getItem(generateList.keyStore)) || []
@@ -246,6 +249,9 @@ export default {
       })
       this.hasGenerateList = collection.length > 0
       generateList.fillCollection(collection)
+      generateList.setCallback((collection) => {
+        window.sessionStorage.setItem(generateList.keyStore, JSON.stringify(collection))
+      })
     },
     exportReady(options) {
       this.expSettings.active = true

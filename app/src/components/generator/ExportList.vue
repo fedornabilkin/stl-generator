@@ -11,21 +11,27 @@ if (props.store) {
 const dateTimeFormat = (dt, format='DD.MM.YY HH:mm:ss') => {
   return moment(dt).format(format)
 }
+
+const removeItem = (item) => {
+  props.store.removeItem(item)
+}
 </script>
 
 <template lang="pug">
-.panel(v-if="items.length")
-  .panel-heading {{ props.title }}
-  .panel-block
-    table.table.is-striped.is-fullwidth
-      tbody
-        tr(v-for="item in items", :key="item.date")
-          td
-            img(v-if="item.img.src" :src="item.img.src" width="100")
-          td
-            a.button(:href="`/${item.hash}`" target="_blank") {{ $t('expListLoadItem') }}
-          td
-            span.is-size-6.has-text-grey {{ dateTimeFormat(item.date) }}
+table.table.is-striped.is-fullwidth(v-if="items.length")
+  thead
+    tr
+      th(colspan="4") {{ props.title }}
+  tbody
+    tr(v-for="item in items", :key="item.date")
+      td
+        img(v-if="item.img.src" :src="item.img.src" width="100")
+      td
+        a.button(:href="`/${item.hash}`" target="_blank") {{ $t('expListLoadItem') }}
+      td
+        span.is-size-6.has-text-grey {{ dateTimeFormat(item.date) }}
+      td
+        span.delete.pulled-right(aria-label="close" @click="removeItem(item)" title="Удалить")
 </template>
 
 <style scoped>

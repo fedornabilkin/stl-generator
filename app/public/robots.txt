@@ -1,2 +1,4 @@
 User-Agent: *
 Allow: /
+Host: https://vsqr.ru
+sitemap: https://vsqr.ru/sitemaps.xml
