@@ -314,9 +314,10 @@ class BaseTag3D {
       return undefined
     }
 
+    const data = (!this.options.icon.isNoneName()) ? this.options.icon.src : this.options.icon.srcCustom
     const svgGroup = new THREE.Group()
     const svgLoader = new SVGLoader()
-    const svgData = svgLoader.parse(this.options.icon.src)
+    const svgData = svgLoader.parse(data)
 
     svgData.paths.forEach((path) => {
       const shapes = path.toShapes(!this.options.icon.inverted)

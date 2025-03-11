@@ -76,7 +76,6 @@ import {
 } from "@/v3d/entity";
 import {useGenerateList} from "@/store/generateList";
 import {Director} from "@/v3d/director";
-import {toRaw} from "vue";
 
 const shareHash = useShareHash()
 const director = new Director()
@@ -98,7 +97,7 @@ const defaultOptions = {
   icon: icon,
   keychain: keychain,
   magnet: magnet,
-  content: '',
+  content: 'vsqr.ru',
   wifi: {
     ssid: '',
     password: '',
@@ -171,8 +170,8 @@ export default {
       director.buildGroupBuilder(this.initData)
       this.options = Object.assign(this.options, director.getEntities())
       // this.options = merge(this.options, this.initData)
-      this.prepareData()
     }
+    this.prepareData()
   },
 
   methods: {
@@ -216,6 +215,7 @@ export default {
           .then(() => {
             // this.diffOptions = diff(defaultOptions, toRaw(this.options))
             // console.log(defaultOptions, toRaw(this.options), this.diffOptions)
+            // console.log(this.options)
             this.$emit('exportReady', this.options)
             // this.$emit('exportReady', this.diffOptions)
             setTimeout(() => {this.addLastGenerate()}, 500)

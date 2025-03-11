@@ -13,8 +13,8 @@ export class Entity {
 export class Base extends Entity {
   active = true
   shape = 'roundedRectangle'
-  width = 100
-  height = 100
+  width = 55
+  height = 70
   depth = 3
   cornerRadius = 5
 
@@ -25,6 +25,7 @@ export class Base extends Entity {
 }
 
 export class Border extends Entity {
+  active = true
   width = 1
   depth = 1
 
@@ -35,6 +36,7 @@ export class Border extends Entity {
 }
 
 export class Code extends Entity {
+  active = true
   depth = 1
   margin = 2
   cityMode = false
@@ -66,10 +68,17 @@ export class Code extends Entity {
       this.clearPreview()
     }
   }
+
+  toJSON() {
+    let json = this
+    json.preview.src = ''
+    return json
+  }
 }
 
 export class Text extends Entity {
-  message = ''
+  active = true
+  message = 'VSQR.RU'
   placement = 'center'
   align = 'center'
   margin = 1
@@ -101,6 +110,10 @@ export class Icon extends Entity {
   constructor(config = {}) {
     super(config)
     Object.assign(this, config)
+  }
+
+  isNoneName() {
+    return this.name === 'none'
   }
 
   setSrc(src) {
@@ -139,6 +152,17 @@ export class Icon extends Entity {
     if (this.active) {
       this.restoreSource()
     }
+  }
+
+  toJSON() {
+    let json = this
+    if (this.isNoneName()) {
+      json.src = ''
+    } else {
+      json.srcCustom = ''
+    }
+    json.temp = {}
+    return json
   }
 }
 

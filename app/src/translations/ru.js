@@ -36,7 +36,7 @@ export default {
   promotionSubtitle: 'Here are some recommended 3d printers and 3d printer accessories to get you covered. If you want to support the development of this tool please consider using the links below to buy on AliExpress.',
   corner: 'corner',
   isGenerating: 'Генерация 3D модели...',
-  headerShareNotice: 'Сохрани ссылку на 3D',
+  headerShareNotice: 'Ссылка на 3D',
   copyExistingQRCode: 'Copy an existing QR Code',
   holdQRCodeInView: 'Hold the QR Code into view of the camera',
   decodedQRCodeData: 'Decoded QR Code data',

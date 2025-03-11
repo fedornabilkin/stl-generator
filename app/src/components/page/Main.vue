@@ -1,5 +1,5 @@
 <template lang="pug">
-.px-1.py-0.button.is-warning.is-small.share-button-shake(v-if='expSettings.active')
+.px-1.py-0.button.is-warning.is-small.share-button-shake(v-if='expSettings.active' @click="shareModalVisible=true")
   i.fa.fa-arrow-up.shake-vertical
   span.mx-2 {{$t('headerShareNotice')}}
   i.fa.fa-arrow-up.shake-vertical
@@ -67,6 +67,7 @@
       ExportList(:store="storeExport" title="История загрузок")
 
       ExportModal(v-if="exportModalVisible" :isActive="exportModalVisible" @close="exportModalVisible=false")
+      ShareModal(v-if="shareModalVisible" :isActive="shareModalVisible" @close="shareModalVisible=false")
 </template>
 
 <script>
@@ -84,6 +85,7 @@ import ExportList from "@/components/generator/ExportList.vue";
 import {BaseRotation} from "@/v3d/animation/baseRotation";
 import {useGenerateList} from "@/store/generateList";
 import HistoryModal from "@/components/generator/HistoryModal.vue";
+import ShareModal from "@/components/generator/ShareModal.vue";
 
 const shareHash = useShareHash()
 const exportList = useExportList()
@@ -94,6 +96,7 @@ box.createScene()
 export default {
   name: 'Main',
   components: {
+    ShareModal,
     HistoryModal,
     ExportList,
     Export,
@@ -115,6 +118,7 @@ export default {
       changelog: '',
       historyModalVisible: false,
       exportModalVisible: false,
+      shareModalVisible: false,
       shareData: null,
       storeExport: null,
       storeGenerate: null,

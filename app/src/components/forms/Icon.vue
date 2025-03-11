@@ -30,7 +30,7 @@ const selected = (name) => {
   }
 }
 
-if (props.options.icon.name !== 'none') {
+if (!props.options.icon.isNoneName()) {
   selected(props.options.icon.name)
 }
 
@@ -111,7 +111,7 @@ const icons = [
                       img(width='18' height='18' :src="'/icons/' + icon + '.svg'" loading='lazy')
 
           object(
-            v-if="props.options.icon.name !== 'none'"
+            v-if="!props.options.icon.isNoneName()"
             :id="props.options.icon.htmlId"
             type='image/svg+xml'
             width='32'
