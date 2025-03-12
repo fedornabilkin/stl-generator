@@ -27,11 +27,11 @@ table.table.is-striped.is-fullwidth(v-if="items.length")
       td
         img(v-if="item.img.src" :src="item.img.src" width="100")
       td
-        a.button(:href="`/${item.hash}`" target="_blank") {{ $t('expListLoadItem') }}
+        a.button(:href="`/${item.hash}`" target="_blank") {{ $t('e.loadItem') }}
       td
         span.is-size-6.has-text-grey {{ dateTimeFormat(item.date) }}
       td
-        span.delete.pulled-right(aria-label="close" @click="removeItem(item)" title="Удалить")
+        span.delete.pulled-right(aria-label="close" @click="removeItem(item)" :title="$t('g.remove')")
 </template>
 
 <style scoped>

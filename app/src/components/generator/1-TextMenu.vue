@@ -126,7 +126,7 @@
       </div>
     </nav>
 
-    <div class="notification is-danger is-light" v-if="generateError" style="margin-top: 20px 0">
+    <div class="notification is-danger is-light" v-if="generateError" style="margin-top: 20px">
       {{ generateError }}
     </div>
 
@@ -134,7 +134,7 @@
       <span class="icon">
         <i class="fa fa-cube"></i>
       </span>
-      <span>{{ $t("generateButton") }}</span>
+      <span>{{ $t('g.generateButton') }}</span>
     </button>
 <!--    {{isGenerating}}-->
 <!--    v-bind:class="{ 'is-loading': isGenerating }"-->
@@ -149,7 +149,7 @@ import { diff } from 'deep-object-diff';
 import merge from 'deepmerge';
 import JSZip from 'jszip';
 
-import { save, saveAsString, saveAsArrayBuffer } from '../../utils';
+import { save, saveAsString, saveAsArrayBuffer } from '@/utils';
 import BaseTag3D from "@/base";
 import {Model} from "@/v3d/create/model";
 import {TextModel} from "@/v3d/create/base";

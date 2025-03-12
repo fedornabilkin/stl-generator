@@ -5,7 +5,7 @@ const props = defineProps(['options', 'unit'])
 <template lang="pug">
 .field.is-horizontal
   .field-label.is-small
-    label.label {{ $t("border") }}
+    label.label {{ $t('form.border.active') }}
 
   .field-body
     .field
@@ -14,14 +14,14 @@ const props = defineProps(['options', 'unit'])
           input(type="checkbox" v-model="props.options.border.active")
           span.is-size-7
             i.fa.fa-border-all &nbsp;
-            | {{ $t("borderAroundBase") }}
+            | {{ $t('form.border.activeLabel') }}
 
 .box(v-if="props.options.border.active")
   .columns.is-multiline
     .column
       .field.is-horizontal
         .field-label.is-small
-          label.label {{ $t("width") }}
+          label.label {{ $t('form.width') }}
         .field-body
           .field.has-addons
             .control
@@ -32,7 +32,7 @@ const props = defineProps(['options', 'unit'])
     .column
       .field.is-horizontal
         .field-label.is-small
-          label.label {{ $t("depth") }}
+          label.label {{ $t('form.depth') }}
 
         .field-body
           .field.has-addons

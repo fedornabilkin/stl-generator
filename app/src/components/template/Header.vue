@@ -4,10 +4,6 @@ nav.navbar(role='navigation' aria-label='main navigation')
   .navbar-brand
     a.navbar-item(href='/')
       img(src='../../assets/logo.png' alt='vsqr.ru 3d генератор stl')
-    p.is-hidden-mobile.navbar-item(v-if='showShareNotice')
-      i.fa.fa-arrow-up.shake-vertical
-      span.mx-2 {{$t('headerShareNotice')}}
-      i.fa.fa-arrow-up.shake-vertical
     a.navbar-burger.burger(role='button' :class="{ 'is-active': navbarOpen }" aria-label='menu' aria-expanded='false' @click='toggleNavigation')
       span(aria-hidden='true')
       span(aria-hidden='true')
@@ -40,7 +36,6 @@ export default {
       navbarOpen: false,
       showThankYou: false,
       newVersion: false,
-      showShareNotice: false,
       headerAd: '',
     };
   },
@@ -69,10 +64,6 @@ export default {
 
 .unread {
   animation: shake-horizontal 1s cubic-bezier(.645,.045,.355,1.000) 1.5s 4;
-}
-
-.shake-vertical {
-  animation: shake-vertical 2s linear infinite;
 }
 
 @keyframes shake-horizontal {
@@ -104,18 +95,4 @@ export default {
   }
 }
 
-@keyframes shake-vertical {
-  0%, 40%{
-    -webkit-transform: translateY(0);
-            transform: translateY(0);
-  }
-  10%{
-    -webkit-transform: translateY(2px);
-            transform: translateY(2px);
-  }
-  30%{
-    -webkit-transform: translateY(-5px);
-            transform: translateY(-5px);
-  }
-}
 </style>

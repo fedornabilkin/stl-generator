@@ -28,7 +28,7 @@ const change = (idx) => {
           span.icon.is-small
             i.far.fa-address-card(aria-hidden="true")
           //span.is-hidden-mobile {{$t('contact')}} (vCard)
-      //li(:class="{ 'is-active': activeTabIndex === 4 }" @click="change(4)")
+      li(:class="{ 'is-active': activeTabIndex === 4 }" @click="change(4)")
         a
           span.icon.is-small
             i.far.fa-comment(aria-hidden="true")

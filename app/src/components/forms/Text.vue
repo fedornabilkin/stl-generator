@@ -5,7 +5,7 @@ const props = defineProps(['options', 'unit'])
 <template lang="pug">
 .field.is-horizontal
   .field-label.is-small
-    label.label {{ $t("text") }}
+    label.label {{ $t('form.text.active') }}
 
   .field-body
     .field
@@ -14,7 +14,7 @@ const props = defineProps(['options', 'unit'])
           input(type="checkbox" v-model="props.options.text.active")
           span.is-size-7
             i.fa.fa-font &nbsp;
-            | {{ $t("textOnEdge") }}
+            | {{ $t('form.text.activeLabel') }}
 
 .box(v-if="props.options.text.active")
   .columns.is-multiline
@@ -23,7 +23,7 @@ const props = defineProps(['options', 'unit'])
         .field-body
           .field
             .control
-              textarea.textarea.is-small(rows='3' v-model='props.options.text.message' :placeholder="$t('theText')")
+              textarea.textarea.is-small(rows='3' v-model='props.options.text.message' :placeholder="$t('form.text.placeholder')")
               .buttons.are-small.mt-2.is-pulled-right
                 button(:class="{button: true, 'is-primary': props.options.text.align === 'left'}" @click="props.options.text.align = 'left'")
                   span.icon.is-small
@@ -35,19 +35,20 @@ const props = defineProps(['options', 'unit'])
                   span.icon.is-small
                     i.fas.fa-align-right
               p.help.content
-                | {{ $t("fontInfoText") }}
+                | {{ $t('form.text.textLabel') }}
                 br
-                i.fas.fa-italic
-                |  {{ $t("italicInfoText") }}
-                br
-                i.fas.fa-bold
-                |  {{ $t("boldInfoText") }}
-                br
+                .tags.is-multiline
+                  .tag.is-light
+                    i.fas.fa-italic
+                    |  {{ $t('form.text.italic') }}
+                  .tag.is-light
+                    i.fas.fa-bold
+                    |  {{ $t('form.text.bold') }}
 
     .column
       .field.is-horizontal
         .field-label.is-small
-          label.label {{ $t("size") }}
+          label.label {{ $t('form.size') }}
         .field-body
           .field.has-addons
             .control
@@ -56,7 +57,7 @@ const props = defineProps(['options', 'unit'])
               a.button.is-static.is-small {{ unit }}
       .field.is-horizontal
         .field-label.is-small
-          label.label {{ $t("depth") }}
+          label.label {{ $t('form.depth') }}
         .field-body
           .field.has-addons
             .control
@@ -65,7 +66,7 @@ const props = defineProps(['options', 'unit'])
               a.button.is-static.is-small {{ unit }}
       .field.is-horizontal
         .field-label.is-small
-          label.label {{$t('margin')}}
+          label.label {{$t('form.margin')}}
         .field-body
           .field.has-addons
             .control

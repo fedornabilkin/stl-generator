@@ -5,7 +5,7 @@ const props = defineProps(['expSettings'])
 <template lang="pug">
   .field.is-horizontal
     .field-label.is-small
-      label.label {{ $t("expTypeLabel") }}
+      label.label {{ $t("e.typeLabel") }}
     .field-body
       .field
         .control
@@ -16,14 +16,14 @@ const props = defineProps(['expSettings'])
 
   .field.is-horizontal
     .field-label.is-small
-      label.label {{ $t("expMultipleLabel") }}
+      label.label {{ $t("e.multipleLabel") }}
     .field-body
       .field
         .control
           .select
             select(v-model="props.expSettings.multiple")
-              option(:value="false") {{$t('no')}}
-              option(:value="true") {{$t('yes')}}
+              option(:value="false") {{$t('g.no')}}
+              option(:value="true") {{$t('g.yes')}}
 
 </template>
 

@@ -10,7 +10,7 @@ footer.footer
       .column
         Yoomoney
       .column
-        a.button.is-info(href="/examples") Смотреть примеры
+        a.button.is-info(href="/examples") {{ $t('t.exampleButton') }}
 
       .column
         ShareButtons
@@ -22,7 +22,7 @@ footer.footer
       .button.is-light
         a(href="https://t.me/+dSgck2GM29syZTQ6" target="_blank")
           i.fab.fa-telegram
-          | &nbsp;обсудить
+          | &nbsp;{{ $t('t.discussionButton') }}
 </template>
 
 <style scoped>

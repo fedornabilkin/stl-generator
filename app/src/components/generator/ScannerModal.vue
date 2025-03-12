@@ -36,17 +36,17 @@ const success = () => {
   .modal-background
   .modal-card
     header.modal-card-head
-      p.modal-card-title Код должен быть перед камерой
+      p.modal-card-title {{$t('g.scanModalTitle')}}
       button.delete(aria-label='close' @click='close')
     section.modal-card-body
       qrcode-stream(@detect='decode')
         .has-text-centered.py-3(v-if='decodedData' style='background: rgba(0,0,0,0.6)')
           p.is-size-4.mb-3(style='color: #fff;')
-            | Данные QR-кода
+            | {{$t('g.scanData')}}
           code.mt-3.is-size-5
             | {{decodedData}}
           .mt-2
-            button.button.is-success(@click='success') Вперед ({{ timer }})
+            button.button.is-success(@click='success') {{$t('g.nextButton', [timer])}}
     footer.modal-card-foot
-      button.button(@click='close') Закрыть
+      button.button(@click='close') {{$t('g.close')}}
 </template>

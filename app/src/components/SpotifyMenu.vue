@@ -78,7 +78,7 @@
       <span class="icon">
         <i class="fa fa-cube"></i>
       </span>
-      <span>{{$t('generateButton')}}</span>
+      <span>{{$t('g.generateButton')}}</span>
     </button>
   </div>
 </template>

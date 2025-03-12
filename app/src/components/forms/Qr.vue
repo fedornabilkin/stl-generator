@@ -19,7 +19,7 @@ const setActiveTab = (idx) => {
 <template lang="pug">
 .field.is-horizontal
   .field-label.is-small
-    label.label {{ $t("QR") }}
+    label.label {{ $t('form.qr.active') }}
 
   .field-body
     .field
@@ -28,13 +28,13 @@ const setActiveTab = (idx) => {
           input(type="checkbox" v-model="props.options.code.active" @change="activeChange")
           span.is-size-7
             i.fa.fa-qrcode &nbsp;
-            | {{ $t("qrHelp") }}
+            | {{ $t('form.qr.activeLabel') }}
 
 .box(v-if="props.options.code.active")
   QRCodeTabs(:active-tab-index='options.activeTabIndex' @change='setActiveTab')
   // Text
   .option-pane(v-if='options.activeTabIndex === 0')
-    textarea.textarea(:placeholder="$t('qrCodeTextPlaceholder')" v-model='options.content' rows="2" style='width: 100%')
+    textarea.textarea(:placeholder="$t('form.qr.placeholder')" v-model='options.content' rows="2" style='width: 100%')
   // Wifi
   .option-pane(v-if='options.activeTabIndex === 1')
     Wifi(:wifi='options.wifi')
@@ -65,7 +65,7 @@ const setActiveTab = (idx) => {
                   |  {{$t('invertText')}}
       .field.is-horizontal
         .field-label.is-small
-          label.label {{$t('depth')}}
+          label.label {{$t('form.depth')}}
         .field-body
           .field.has-addons
             .control
@@ -74,7 +74,7 @@ const setActiveTab = (idx) => {
               a.button.is-static.is-small {{unit}}
       .field.is-horizontal
         .field-label.is-small
-          label.label {{$t('margin')}}
+          label.label {{$t('form.margin')}}
         .field-body
           .field.has-addons
             .control
@@ -85,47 +85,47 @@ const setActiveTab = (idx) => {
       // Error Correction
       .field.is-horizontal
         .field-label.is-small
-          label.label {{$t('errorCorrection')}}
+          label.label {{$t('form.qr.correction.title')}}
         .field-body
           .field
             .control
               .select.is-small
                 select(v-model='props.options.code.errorCorrectionLevel')
-                  option(value='L') L (Low, 7% redundant)
-                  option(value='M') M (Medium, 15% redundant)
-                  option(value='Q') Q (Quartile, 25% redundant)
-                  option(value='H') H (High, 30% redundant)
-              p.help {{$t('errorCorrectionHelp')}}
+                  option(value='L') {{$t('form.qr.correction.l')}}
+                  option(value='M') {{$t('form.qr.correction.m')}}
+                  option(value='Q') {{$t('form.qr.correction.q')}}
+                  option(value='H') {{$t('form.qr.correction.h')}}
+              p.help {{$t('form.qr.correction.label')}}
 
     .column
       .field.is-horizontal
         .field-label.is-small
-          label.label {{$t('block')}} {{$t('size')}}
+          label.label {{$t('form.qr.blockSize')}}
         .field-body
           .field.has-addons
             .control
               input.input.is-small(type='number' v-model.number='props.options.code.block.ratio')
             p.control
               a.button.is-static.is-small %
-            span.help-icon.icon.has-text-info(:title="$t('blockSizeHelp')")
+            span.help-icon.icon.has-text-info(:title="$t('form.qr.blockSizeLabel')")
               i.fas.fa-info-circle
 
       .field.is-horizontal
         .field-label.is-small
-          label.label {{$t('block')}} {{$t('shape')}}
+          label.label {{$t('form.qr.blockShape.title')}}
         .field-body
           .field.has-addons
             .control
               .select.is-small
                 select(v-model='props.options.code.block.shape')
-                  option(value='classic') Классика
-                  option(value='rotation') Ромб
-                  option(value='round') Круг
+                  option(value='classic') {{$t('form.qr.blockShape.classic')}}
+                  option(value='rotation') {{$t('form.qr.blockShape.rhombus')}}
+                  option(value='round') {{$t('form.qr.blockShape.round')}}
 
       // Skyscraper Mode
       .field.is-horizontal(v-if='!props.options.code.invert')
         .field-label.is-small
-          label.label {{$t('cityMode')}}
+          label.label {{$t('form.qr.cityMode')}}
         .field-body
           .field
             .control
@@ -133,12 +133,12 @@ const setActiveTab = (idx) => {
                 input(type='checkbox' v-model='props.options.code.block.cityMode')
                 span.is-size-7
                   i.fa.fa-city
-                  |  {{$t('cityModeText')}}
+                  |  {{$t('form.qr.cityModeLabel')}}
 
       div(v-if='props.options.code.block.cityMode')
         .field.is-horizontal
           .field-label.is-small
-            label.label {{$t('depth')}} {{$t('min')}}
+            label.label {{$t('form.depth')}} {{$t('form.min')}}
           .field-body
             .field.has-addons
               .control
@@ -147,7 +147,7 @@ const setActiveTab = (idx) => {
                 a.button.is-static.is-small {{unit}}
         .field.is-horizontal
           .field-label.is-small
-            label.label {{$t('depth')}} {{$t('max')}}
+            label.label {{$t('form.depth')}} {{$t('form.max')}}
           .field-body
             .field.has-addons
               .control

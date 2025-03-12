@@ -5,21 +5,21 @@ const props = defineProps(['options', 'unit'])
 <template lang="pug">
 .field.is-horizontal
   .field-label.is-small
-    label.label {{$t('magnet')}}
+    label.label {{$t('form.magnet.active')}}
   .field-body
     .control
       label.checkbox
         .field
           input(type='checkbox' v-model='props.options.magnet.active')
           span.is-size-7
-            |  {{$t('magnetHelp')}}
+            |  {{$t('form.magnet.activeLabel')}}
 
 .box(v-if='props.options.magnet.active')
   .columns.is-multiline
     .column
       .field.is-horizontal
         .field-label.is-small
-          label.label {{$t('size')}}
+          label.label {{$t('form.size')}}
         .field-body
           .field.has-addons
             .control
@@ -28,7 +28,7 @@ const props = defineProps(['options', 'unit'])
               a.button.is-static.is-small {{unit}}
       .field.is-horizontal
         .field-label.is-small
-          label.label {{$t('depth')}}
+          label.label {{$t('form.depth')}}
         .field-body
           .field.has-addons
             .control
@@ -50,14 +50,14 @@ const props = defineProps(['options', 'unit'])
     .column
       .field.is-horizontal
         .field-label.is-small
-          label.label {{$t('shape')}}
+          label.label {{$t('form.magnet.shape')}}
         .field-body
           .field
             .control.has-icons-left
               .select.is-small
                 select(v-model='props.options.magnet.shape')
-                  option(value='round') {{$t('round')}}
-                  option(value='square') {{$t('square')}}
+                  option(value='round') {{$t('form.magnet.round')}}
+                  option(value='square') {{$t('form.magnet.square')}}
                 span.icon.is-small.is-left
                   i.fa.fa-shapes
 </template>

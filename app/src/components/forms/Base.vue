@@ -4,7 +4,7 @@ const props = defineProps(['options', 'unit'])
 
 <template lang="pug">
 .field
-  label.label {{ $t("base") }}
+  label.label {{ $t("form.base.title") }}
 .box
   .columns.is-multiline
     .column
@@ -22,7 +22,7 @@ const props = defineProps(['options', 'unit'])
       //            i.fa.fa-shapes
       .field.is-horizontal
         .field-label.is-small
-          label.label {{ $t("width") }}
+          label.label {{ $t('form.width') }}
         .field-body
           .field.has-addons
             .control
@@ -31,7 +31,7 @@ const props = defineProps(['options', 'unit'])
               a.button.is-static.is-small {{ unit }}
       .field.is-horizontal
         .field-label.is-small
-          label.label {{ $t("height") }}
+          label.label {{ $t('form.height') }}
         .field-body
           .field.has-addons
             .control
@@ -42,7 +42,7 @@ const props = defineProps(['options', 'unit'])
     .column
       .field.is-horizontal
         .field-label.is-small
-          label.label {{ $t("depth") }}
+          label.label {{ $t('form.depth') }}
         .field-body
           .field.has-addons
             .control
@@ -51,7 +51,7 @@ const props = defineProps(['options', 'unit'])
               a.button.is-static.is-small {{ unit }}
       .field.is-horizontal(v-if="options.base.shape === 'roundedRectangle'")
         .field-label.is-small
-          label.label {{ $t("cornerRadius") }}
+          label.label {{ $t('form.base.cornerRadius') }}
         .field-body
           .field.has-addons
             .control
@@ -62,14 +62,14 @@ const props = defineProps(['options', 'unit'])
 
   .field.is-horizontal
     .field-label.is-small
-      label.label {{ $t("baseActive") }}
+      label.label {{ $t('form.base.active') }}
     .field-body
       .control
         label.checkbox
           input(type="checkbox" v-model="props.options.base.active")
           span.is-size-7
             i.fa.fa-cube &nbsp;
-            | {{ $t("baseActiveLabel") }}
+            | {{ $t('form.base.activeLabel') }}
 
 </template>
 

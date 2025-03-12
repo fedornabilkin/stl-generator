@@ -2,10 +2,10 @@
 button.button.is-info.is-medium.is-fullwidth.mb-3(@click="scannerModalVisible=true")
   span.icon
     i.fa.fa-camera
-  span Сканировать QR-код
+  span {{$t('form.scanQRButton')}}
 
 .panel
-  p.panel-heading {{$t('modelOptions')}}
+  p.panel-heading {{$t('form.optionsTitle')}}
   .panel-block
     .columns
       .column
@@ -36,7 +36,7 @@ button.button.is-info.is-medium.is-fullwidth.mb-3(@click="scannerModalVisible=tr
     button.button.is-success.is-large(:class="{'is-loading': isGenerating}" @click="prepareData")
       span.icon
         i.fa.fa-cube
-      span {{$t('generateButton')}}
+      span {{$t('g.generateButton')}}
   .column
     progress.progress.is-success(v-if="isGenerating" :value="progressGenerating" max='100')
       | {{ progressGenerating }}

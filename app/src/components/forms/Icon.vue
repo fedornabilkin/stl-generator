@@ -74,7 +74,7 @@ const icons = [
 <template lang="pug">
 .field.is-horizontal
   .field-label.is-small
-    label.label {{$t('icon')}}
+    label.label {{$t('form.icon.active')}}
 
   .field-body
     .field
@@ -83,12 +83,12 @@ const icons = [
           input(type="checkbox" v-model="props.options.icon.active" @change="activeChange")
           span.is-size-7
             i.fa.fa-icons &nbsp;
-            | Выбрать иконку или указать свой svg
+            | {{$t('form.icon.activeLabel')}}
 
 .box(v-if="props.options.icon.active")
   .field.is-horizontal
     .field-label.is-small
-      label.label Выбрать
+      label.label {{$t('form.icon.select')}}
     .field-body
       .field
         .control
@@ -105,7 +105,7 @@ const icons = [
                 .columns.is-multiline
                   .column.is-12
                     .no-icon.icon-item.dropdown-item.is-vcentered(@click="selected('none')")
-                      span.title.is-size-7 {{$t('noIcon')}}
+                      span.title.is-size-7 {{$t('form.icon.noIcon')}}
                   .column.is-4(v-for='icon in icons' :key='icon')
                     .icon-item.dropdown-item.is-vcentered(@click='selected(icon)')
                       img(width='18' height='18' :src="'/icons/' + icon + '.svg'" loading='lazy')
@@ -121,7 +121,7 @@ const icons = [
 
   .field
     .control
-      label.label.is-small Свой SVG
+      label.label.is-small {{$t('form.icon.custom')}}
       textarea.textarea.is-small(
         v-model='props.options.icon.srcCustom'
         @keyup="change"
@@ -133,21 +133,21 @@ const icons = [
     .column
       .field.is-horizontal
         .field-label.is-small
-          label.label {{$t('size')}}
+          label.label {{$t('form.size')}}
         .field-body
           .field.has-addons
             .control
               a.button.is-static.is-small %
             .control
               input.input.is-small(type='number' v-model.number='props.options.icon.ratio')
-            .control(:title="$t('iconSizeHelp')")
+            .control(:title="$t('form.icon.sizeLabel')")
               .button.is-static.is-small
                 span.has-text-info
                   i.fas.fa-info-circle
 
       .field.is-horizontal
         .field-label.is-small
-          label.label Инвертировать
+          label.label {{$t('form.icon.inverted')}}
         .field-body
           .field
             .control
@@ -157,7 +157,7 @@ const icons = [
       .field.is-horizontal
         .field-body
           .field.has-addons
-            p.control(title="Сдвинуть по горизонтали")
+            p.control(:title="$t('form.icon.offsetX')")
               .button.is-static.is-small
                 span
                   i.fa.fa-arrow-right
@@ -169,7 +169,7 @@ const icons = [
       .field.is-horizontal
         .field-body
           .field.has-addons
-            p.control(title="Сдвинуть по вертикали")
+            p.control(:title="$t('form.icon.offsetY')")
               .button.is-static.is-small
                 span
                   i.fa.fa-arrow-up
@@ -179,9 +179,9 @@ const icons = [
               a.button.is-static.is-small {{unit}}
 
   .tag.is-light
-    | Иконки Fontawesome&nbsp;
+    | {{$t('form.icon.title')}} Fontawesome&nbsp;
     a(href='https://fontawesome.com/license/free' target='_blank') CC BY 4.0
-  p.is-size-7.has-text-danger(v-if="props.options.code.active") {{$t('errorCorrectionChange')}}
+  p.is-size-7.has-text-warning(v-if="props.options.code.active") {{$t('form.errorCorrection')}}
 </template>
 
 <style scoped>

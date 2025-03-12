@@ -11,26 +11,26 @@ const socials = {
   telegram: {
     href: `https://telegram.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`,
     icon: 'fab fa-telegram',
-    title: 'socTelegram',
-    reader: 'socTelegram',
+    title: 's.telegram',
+    reader: 's.telegram',
   },
   vk: {
     href: `https://vk.com/share.php?url=${encodeURIComponent(url)}`,
     icon: 'fab fa-vk',
-    title: 'socVk',
-    reader: 'socVk',
+    title: 's.vk',
+    reader: 's.vk',
   },
   ok: {
     href: `https://connect.ok.ru/offer?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}&imageUrl=${encodeURIComponent(imageUrl)}`,
     icon: 'fab fa-odnoklassniki',
-    title: 'socOk',
-    reader: 'socOk',
+    title: 's.ok',
+    reader: 's.ok',
   },
   facebook: {
     href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(fullText)}`,
     icon: 'fab fa-facebook-square',
-    title: 'socFacebook',
-    reader: 'socFacebook'
+    title: 's.facebook',
+    reader: 's.facebook'
   },
   instagram: {
     href: '',
@@ -54,8 +54,8 @@ const socials = {
     // href: `https://twitter.com/intent/tweet?source=${encodeURIComponent(url)}&text=${encodeURIComponent(fullText)}&via=${twitterHandle}`,
     href: `https://twitter.com/intent/tweet?source=${encodeURIComponent(url)}&text=${encodeURIComponent(fullText)}`,
     icon: 'fab fa-twitter-square',
-    title: 'socTwitter',
-    reader: 'socTwitter'
+    title: 's.twitter',
+    reader: 's.twitter'
   },
   tiktok: {
     href: '',
@@ -66,30 +66,30 @@ const socials = {
   reddit: {
     href: `http://www.reddit.com/submit?url=${encodeURIComponent(url)}&title=${encodeURIComponent(text)}`,
     icon: 'fab fa-reddit-square',
-    title: 'socReddit',
-    reader: 'socReddit'
+    title: 's.reddit',
+    reader: 's.reddit'
   },
   pinterest: {
     href: `http://pinterest.com/pin/create/button/?url=${encodeURIComponent(url)}&media=${encodeURIComponent(imageUrl)}&description=${encodeURIComponent(text)}`,
     icon: 'fab fa-pinterest-square',
-    title: 'socPinterest',
-    reader: 'socPinterest'
+    title: 's.pinterest',
+    reader: 's.pinterest'
   },
   pocket: {
     href: `https://getpocket.com/save?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`,
     icon: 'fab fa-get-pocket',
-    title: 'socPocket',
-    reader: 'socPocket'
+    title: 's.pocket',
+    reader: 's.pocket'
   },
   email: {
     href: `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(fullText)}`,
     icon: 'fas fa-envelope-square',
-    title: 'socialEmail',
-    reader: 'socialEmail'
+    title: 's.email',
+    reader: 's.email'
   },
 }
 
-const isActive = (key, item) => {
+const isActive = (key) => {
   const enable = ['telegram', 'vk', 'ok', 'email']
   return enable.includes(key)
 }

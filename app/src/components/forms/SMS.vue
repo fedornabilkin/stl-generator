@@ -1,41 +1,20 @@
-<template>
-  <div>
-    <div class="field has-text-centered">{{$t('optionalFieldsHint')}}</div>
-    <div class="field is-horizontal">
-      <div class="field-label is-normal">
-        <label class="label">{{$t('phone')}}</label>
-      </div>
-      <div class="field-body">
-        <div class="field">
-          <div class="control">
-            <input
-              class="input"
-              type="text"
-              :placeholder="$t('phonePlaceholder')"
-              v-model="sms.recipient"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="field is-horizontal">
-      <div class="field-label is-normal">
-        <label class="label">{{$t('smsMessage')}}</label>
-      </div>
-      <div class="field-body">
-        <div class="field">
-          <div class="control">
-            <textarea
-              class="textarea"
-              :placeholder="$t('smsMessagePlaceholder')"
-              v-model="sms.message"
-              style="width: 100%"
-            ></textarea>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<template lang="pug">
+  div
+    .field.is-horizontal
+      .field-label.is-small
+        label.label {{$t('form.qr.content.sms.phone')}}
+      .field-body
+        .field
+          .control
+            input.input.is-small(type='text' :placeholder="$t('form.qr.content.sms.phonePlaceholder')" v-model='sms.recipient')
+    .field.is-horizontal
+      .field-label.is-small
+        label.label {{$t('form.qr.content.sms.message')}}
+      .field-body
+        .field
+          .control
+            textarea.textarea.is-small(:placeholder="$t('form.qr.content.sms.messagePlaceholder')" v-model='sms.message' rows="2" style='width: 100%')
+
 </template>
 
 <script>

@@ -3,24 +3,24 @@ div(:class="{'modal': true, 'is-active': isActive}")
   div.modal-background
   div.modal-card
     header.modal-card-head
-      p.modal-card-title {{ $t('expModalTitle') }}
+      p.modal-card-title {{ $t('e.modalTitle') }}
       button.delete(aria-label="close" @click="close")
     section.modal-card-body
       p.is-size-4
-        span(v-if="seconds > 0") {{ $t('expYourDownloadWillStartIn') }} {{ seconds }} {{ $t('expUnit') }}.
-        span(v-if="seconds === 0") {{ $t('expYourDownloadWillStartNow') }}
+        span(v-if="seconds > 0") {{ $t('e.downloadStart', [seconds]) }}
+        span(v-if="seconds === 0") {{ $t('e.downloadStarted') }}
         progress.progress.is-small.is-primary(max="100" v-if="seconds !== 0")
         progress.progress.is-small.is-primary(max="100" v-if="seconds === 0" value="100")
     section.modal-card-body
       .mb-4.message
-        .message-body {{ $t('expMotivationText') }}
+        .message-body {{ $t('e.motivationText') }}
       .is-pulled-right
         Yoomoney
       .is-light
-        a.button(href="/examples") Смотреть примеры
+        a.button(href="/examples") {{ $t('e.exampleButton') }}
     footer.modal-card-foot
-      button.button.mr-1(@click="close") OK
-      span {{ $t('expThankYouSupportProject') }}
+      button.button.mr-1(@click="close") {{ $t('g.close') }}
+      span {{ $t('e.thankYouSupport') }}
 </template>
 
 <script>

@@ -13,7 +13,7 @@ const showingThankYou = ref(false)
   )
     span.icon
       i.fa.fa-credit-card
-    span {{ $t('moneySupportProject') }}
+    span {{ $t('m.supportProject') }}
 
   a.button.is-danger(
     v-if="showingThankYou"
@@ -22,7 +22,7 @@ const showingThankYou = ref(false)
   )
     span.icon
       i.fa.fa-heart
-    span {{ $t('moneyThankYou') }}
+    span {{ $t('m.thankYou') }}
 </template>
 
 <style scoped>

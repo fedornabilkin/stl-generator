@@ -1,21 +1,16 @@
-<template>
-  <div class="dropdown is-hoverable">
-    <div class="dropdown-trigger">
-      <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-        <span><img :src="'/flags/gif/' + currentLocale + '.gif'" :alt="currentLocale" /> {{$t("changeLanguage")}}</span>
-        <span class="icon is-small">
-          <i class="fas fa-angle-down" aria-hidden="true"></i>
-        </span>
-      </button>
-    </div>
-    <div class="dropdown-menu" id="dropdown-menu" role="menu">
-      <div class="dropdown-content">
-        <a class="dropdown-item" v-for="locale in locales" :key="locale" @click="changeLanguage(locale)">
-          <img :src="'/flags/gif/' + locale + '.gif'" :alt="locale" /> {{ $i18n.messages[locale]['languageLocalName'] }}
-        </a>
-      </div>
-    </div>
-  </div>
+<template lang="pug">
+  .dropdown.is-hoverable
+    .dropdown-trigger
+      button.button(aria-haspopup='true' aria-controls='dropdown-menu')
+        span
+          img(:src="'/flags/gif/' + currentLocale + '.gif'" :alt='currentLocale')
+        span.icon.is-small
+          i.fas.fa-angle-down(aria-hidden='true')
+    #dropdown-menu.dropdown-menu(role='menu')
+      .dropdown-content
+        a.dropdown-item(v-for='locale in locales' :key='locale' @click='changeLanguage(locale)')
+          img(:src="'/flags/gif/' + locale + '.gif'" :alt='locale')
+          |  {{ $i18n.messages[locale]['name'] }}
 </template>
 
 <script>

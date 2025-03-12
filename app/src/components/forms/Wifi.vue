@@ -1,73 +1,39 @@
-<template>
-  <div>
-    <div class="field is-horizontal">
-      <div class="field-label is-normal">
-        <label class="label">SSID</label>
-      </div>
-      <div class="field-body">
-        <div class="field">
-          <div class="control">
-            <input
-              class="input"
-              type="text"
-              :placeholder="$t('ssidPlaceholder')"
-              v-model="wifi.ssid"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="field is-horizontal" v-if="wifi.security !== 'nopass'">
-      <div class="field-label is-normal">
-        <label class="label">{{$t('password')}}</label>
-      </div>
-      <div class="field-body">
-        <div class="field">
-          <div class="control">
-            <input
-              class="input"
-              type="text"
-              :placeholder="$t('passwordPlaceholder')"
-              v-model="wifi.password"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="field is-horizontal">
-      <div class="field-label is-normal">
-        <label class="label">{{$t('security')}}</label>
-      </div>
-      <div class="field-body">
-        <div class="field">
-          <div class="control">
-            <div class="select">
-              <select v-model="wifi.security">
-                <option value="WPA">WPA</option>
-                <option value="WEP">WEP</option>
-                <option value="nopass">No password</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="field is-horizontal">
-      <div class="field-label is-normal">
-        <label class="label">{{$t('hidden')}}?</label>
-      </div>
-      <div class="field-body">
-        <div class="field">
-          <div class="control">
-            <label class="checkbox">
-              <input type="checkbox" v-model="wifi.hidden" />
-              {{$t('hiddenText')}}
-            </label>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<template lang="pug">
+  div
+    .field.is-horizontal
+      .field-label.is-small
+        label.label SSID
+      .field-body
+        .field
+          .control
+            input.input.is-small(type='text' :placeholder="$t('form.qr.content.wifi.ssid')" v-model='wifi.ssid')
+    .field.is-horizontal(v-if="wifi.security !== 'nopass'")
+      .field-label.is-small
+        label.label {{$t('form.qr.content.wifi.password')}}
+      .field-body
+        .field
+          .control
+            input.input.is-small(type='text' :placeholder="$t('form.qr.content.wifi.passwordPlaceholder')" v-model='wifi.password')
+    .field.is-horizontal
+      .field-label.is-small
+        label.label {{$t('form.qr.content.wifi.security')}}
+      .field-body
+        .field
+          .control
+            .select.is-small
+              select(v-model='wifi.security')
+                option(value='WPA') WPA
+                option(value='WEP') WEP
+                option(value='nopass') No password
+    .field.is-horizontal
+      .field-label.is-small
+        label.label {{$t('form.qr.content.wifi.hidden')}}?
+      .field-body
+        .field
+          .control
+            label.checkbox
+              input.is-small(type='checkbox' v-model='wifi.hidden')
+              | {{$t('form.qr.content.wifi.hiddenText')}}
 </template>
 
 <script>

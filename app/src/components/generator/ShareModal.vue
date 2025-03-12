@@ -50,16 +50,15 @@ getShortLink()
   .modal-background
   .modal-card
     header.modal-card-head
-      p.modal-card-title Поделись ссылкой на 3d модель
+      p.modal-card-title {{$t('s.modalTitle')}}
       button.delete(aria-label='close' @click='close')
     section.modal-card-body
-      p Скопируй ссылку из адресной строки, там хранятся настройки 3d модели.
       p
-        | Попробуй сократить ссылку через сервис сокращения&nbsp;
+        | {{$t('s.modalBody')}} &nbsp;
         a(href="https://go-link.ru/" target="_blank") go-link.ru
 
       .field.mt-3(v-if="shortActive")
-        label.label Короткая ссылка на эту страницу
+        label.label {{$t('s.shortLinkLabel')}}
         .control.has-icons-left.has-icons-right
           input.input.is-success(v-model='shortLink' type="url")
           span.icon.is-small.is-left
@@ -67,8 +66,8 @@ getShortLink()
           span.icon.is-small.is-right
             i.fas.fa-check
         p.help.is-link
-          a(:href="endpoint" target="_blank") clck.ru от Yandex
+          a(:href="endpoint" target="_blank") {{$t('s.shortServiceLabel')}}
 
     footer.modal-card-foot
-      button.button(@click='close') Закрыть
+      button.button(@click='close') {{$t('g.close')}}
 </template>

@@ -13,14 +13,14 @@ div(:class="{'modal': true, 'is-active': isActive}")
   div.modal-background
   div.modal-card
     header.modal-card-head
-      p.modal-card-title История сгенерированных моделей
+      p.modal-card-title {{ $t('e.generateHistory') }}
       button.delete(aria-label="close" @click="close")
     section.modal-card-body
       .message.is-info
         .message-body
-          p История сгенерированных моделей доступна в пределах одной вкладки не более {{ props.store.getLimit() }} шт.
-      ExportList(:store="props.store" title="История")
+          p {{ $t('e.helpHistory', [props.store.getLimit()]) }}
+      ExportList(:store="props.store" :title="$t('g.historyButton')")
 
     footer.modal-card-foot
-      button.button.mr-1(@click="close") Закрыть
+      button.button.mr-1(@click="close") {{ $t('g.close') }}
 </template>

@@ -5,7 +5,7 @@ const props = defineProps(['options', 'unit'])
 <template lang="pug">
 .field.is-horizontal
   .field-label.is-small
-    label.label {{ $t("keychain") }}
+    label.label {{ $t('form.keychain.active') }}
   .field-body
     .control
       label.checkbox
@@ -13,37 +13,35 @@ const props = defineProps(['options', 'unit'])
           input(type='checkbox' v-model='props.options.keychain.active')
           span.is-size-7
             i.fa.fa-key &nbsp;
-            | {{ $t("keychainHelp") }}
+            | {{ $t('form.keychain.activeLabel') }}
 .box(v-if='props.options.keychain.active')
   .columns.is-multiline
     .column
       .field.is-horizontal
         .field-label.is-small
-          label.label {{ $t("placement") }}
+          label.label {{ $t('form.keychain.placement') }}
         .field-body
           .field
-            .control.has-icons-left
+            .control
               .select.is-small
                 select(v-model='props.options.keychain.placement')
-                  option(value='top') {{ $t("top") }}
-                  option(value='left') {{ $t("left") }}
-                  option(value='topLeft') {{ $t("top") }}-{{ $t("left") }}
-                span.icon.is-small.is-left
-                  i.fa.fa-arrows-alt-v
+                  option(value='top') {{ $t('form.top') }}
+                  option(value='left') {{ $t('form.left') }}
+                  option(value='topLeft') {{ $t('form.top') }}-{{ $t('form.left') }}
       .field.is-horizontal
         .field-label.is-small
-          label.label {{ $t("mirrorHoles") }}
+          label.label {{ $t('form.keychain.mirror') }}
         .field-body
           .control
             label.checkbox
               .field
                 input(type='checkbox' v-model='props.options.keychain.mirror')
-                span.is-size-7 {{ $t("mirrorHolesHelp") }}
+                span.is-size-7 {{ $t('form.keychain.mirrorLabel') }}
 
     .column
       .field.is-horizontal
         .field-label.is-small
-          label.label {{ $t("keychainHoleDiameter") }}
+          label.label {{ $t('form.keychain.holeDiameter') }}
         .field-body
           .field.has-addons
             .control

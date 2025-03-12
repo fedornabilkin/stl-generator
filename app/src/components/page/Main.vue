@@ -1,13 +1,13 @@
 <template lang="pug">
 .px-1.py-0.button.is-warning.is-small.share-button-shake(v-if='expSettings.active' @click="shareModalVisible=true")
   i.fa.fa-arrow-up.shake-vertical
-  span.mx-2 {{$t('headerShareNotice')}}
+  span.mx-2 {{$t('g.shareUrlNotice')}}
   i.fa.fa-arrow-up.shake-vertical
 .container
   .columns.is-multiline
     .column
-      h1.title {{ $t("title") }}
-      //h2.subtitle {{ $t("subtitle") }}
+      h1.title {{ $t('g.title') }}
+      //h2.subtitle {{ $t('g.subtitle') }}
 
       QRCodeMenu(v-if="mode === 'QR'"
         ref="qrcode"
@@ -21,34 +21,34 @@
       button.button(v-if="hasGenerateList" @click="historyModalVisible=true")
         span.icon
           i.fa.fa-calendar-day(aria-hidden="true")
-        span История
+        span {{$t('g.historyButton')}}
 
       HistoryModal(
         v-if="historyModalVisible"
         :isActive="historyModalVisible"
         :store="storeGenerate"
-        title="История"
+        :title="$t('g.historyButton')"
         @close="historyModalVisible=false"
       )
 
     .column
       .columns
         .column
-          p.title {{$t('preview')}}
-          p.subtitle {{ $t("controlsHint") }}
+          p.title {{$t('g.preview')}}
+          p.subtitle {{ $t('g.controlsHint') }}
         .column
           //.field.has-addons
             .control
               span.button
                 input.checkbox(type='checkbox' v-model='autoRotation')
             .control
-              span.button.is-static.is-small {{$t('autoRotation')}}
+              span.button.is-static.is-small {{$t('g.autoRotation')}}
 
       .mb-5(id="container3d" :class="{ 'is-loading': isGenerating }")
 
 
       .panel(v-if="expSettings.active")
-        .panel-heading {{$t('expSettings')}}
+        .panel-heading {{$t('e.title')}}
         .panel-block
           .columns
             .column.is-half
@@ -58,13 +58,13 @@
               button.button.export-button.is-primary.is-medium(@click="exportSTL")
                 span.icon
                   i.fa.fa-cube
-                span {{$t('expStlButton')}}
+                span {{$t('e.buttonStl')}}
               //button.button.export-button.is-primary.is-medium(@click="renderPNG")
                 span.icon
                   i.fa.fa-image
-                span {{$t('expPngButton')}}
+                span {{$t('e.buttonPng')}}
 
-      ExportList(:store="storeExport" title="История загрузок")
+      ExportList(:store="storeExport" :title="$t('e.downloadHistory')")
 
       ExportModal(v-if="exportModalVisible" :isActive="exportModalVisible" @close="exportModalVisible=false")
       ShareModal(v-if="shareModalVisible" :isActive="shareModalVisible" @close="shareModalVisible=false")
