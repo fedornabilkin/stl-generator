@@ -21,7 +21,9 @@ export default {
     generateButton: 'Create 3D model',
     historyButton: 'History',
     scanModalTitle: 'The code must be in front of the camera',
+    readModalTitle: 'Load QR code from file',
     scanData: 'QR code data',
+    readData: 'Data from image',
     nextButton: 'Next {0}',
     no: 'no',
     yes: 'yes',
@@ -46,6 +48,7 @@ export default {
    */
   form: {
     scanQRButton: 'Scan QR code',
+    readQRButton: 'Read QR code',
     optionsTitle: '3D model settings',
     min: 'min',
     max: 'max',
@@ -212,7 +215,7 @@ export default {
    * Monetization
    */
   m: {
-    supportProject: 'Support the project',
+    supportProject: 'Support project',
     thankYou: 'Thank you.',
   },
 

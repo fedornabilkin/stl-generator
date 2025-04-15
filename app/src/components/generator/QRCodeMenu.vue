@@ -1,8 +1,15 @@
 <template lang="pug">
-button.button.is-info.is-medium.is-fullwidth.mb-3(@click="scannerModalVisible=true")
-  span.icon
-    i.fa.fa-camera
-  span {{$t('form.scanQRButton')}}
+.columns.is-mobile
+  .column
+    button.button.is-info(@click="scannerModalVisible=true")
+        span.icon
+          i.fa.fa-camera
+        span.is-hidden-mobile {{$t('form.scanQRButton')}}
+  .column
+    button.button.is-info(@click="readModalVisible=true")
+      span.icon
+        i.fa.fa-file
+      span.is-hidden-mobile {{$t('form.readQRButton')}}
 
 .panel
   p.panel-heading {{$t('form.optionsTitle')}}
@@ -42,6 +49,7 @@ button.button.is-info.is-medium.is-fullwidth.mb-3(@click="scannerModalVisible=tr
       | {{ progressGenerating }}
 
 ScannerModal(v-if="scannerModalVisible" :isActive="scannerModalVisible" @decode="onDecode" @close="scannerModalVisible=false")
+ReaderModal(v-if="readModalVisible" :isActive="readModalVisible" @decode="onDecode" @close="readModalVisible=false")
 </template>
 
 <script>
@@ -76,6 +84,7 @@ import {
 } from "@/v3d/entity";
 import {useGenerateList} from "@/store/generateList";
 import {Director} from "@/v3d/director";
+import ReaderModal from "@/components/generator/ReaderModal.vue";
 
 const shareHash = useShareHash()
 const director = new Director()
@@ -139,6 +148,7 @@ export default {
     exporter: Object,
   },
   components: {
+    ReaderModal,
     Magnet,
     Icon,
     Keychain,
@@ -161,6 +171,7 @@ export default {
     progressGenerating: 0,
     generateError: undefined,
     scannerModalVisible: false,
+    readModalVisible: false,
     addedMeshes: [],
     generator: undefined,
     model3d: undefined,

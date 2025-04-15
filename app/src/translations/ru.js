@@ -21,7 +21,9 @@ export default {
     generateButton: 'Создать 3D модель',
     historyButton: 'История',
     scanModalTitle: 'Код должен быть перед камерой',
+    readModalTitle: 'Загрузите файл с QR-кодом',
     scanData: 'Данные QR-кода',
+    readData: 'Данные из картинки',
     nextButton: 'Вперед {0}',
     no: 'нет',
     yes: 'да',
@@ -46,6 +48,7 @@ export default {
    */
   form: {
     scanQRButton: 'Сканировать QR-код',
+    readQRButton: 'Распознать QR-код',
     optionsTitle: 'Настройки 3D модели',
     min: 'min',
     max: 'max',
