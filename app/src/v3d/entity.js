@@ -70,7 +70,7 @@ export class Code extends Entity {
   }
 
   toJSON() {
-    let json = this
+    const json = JSON.parse(JSON.stringify(Object.assign({}, this), null, 0))
     json.preview.src = ''
     return json
   }

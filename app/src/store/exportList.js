@@ -2,13 +2,18 @@ import {ref} from "vue";
 
 const collection = ref([])
 const keyStore = 'exportList'
-let syncCallback = undefined
+let syncCallback = (items) => {}
 
 export function useExportList () {
 
   const getCollection = () => {
     return collection.value
   }
+
+  const getLimit = () => {
+    return 5
+  }
+
   const fillCollection = (items) => {
     return collection.value = items
   }
@@ -17,18 +22,16 @@ export function useExportList () {
     syncCallback = cb
   }
 
-  const add = (item) => {
+  const add = (item, max = getLimit()) => {
     collection.value.unshift(item)
-    if(collection.value.length > 5) {
+    if(collection.value.length > max) {
       collection.value.pop()
     }
   }
 
   const removeItem = (item) => {
     collection.value.splice(collection.value.indexOf(item), 1)
-    if (syncCallback !== undefined) {
-      syncCallback(collection.value)
-    }
+    syncCallback(collection.value)
   }
 
   return {
@@ -36,6 +39,7 @@ export function useExportList () {
     fillCollection,
     add,
     keyStore,
+    getLimit,
     removeItem,
     setCallback,
   }

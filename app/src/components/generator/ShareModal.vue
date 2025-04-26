@@ -54,8 +54,8 @@ getShortLink()
       button.delete(aria-label='close' @click='close')
     section.modal-card-body
       p
-        | {{$t('s.modalBody')}} &nbsp;
-        a(href="https://go-link.ru/" target="_blank") go-link.ru
+        | {{$t('s.modalBody')}}
+        a.ml-1(href="https://go-link.ru/" target="_blank") go-link.ru
 
       .field.mt-3(v-if="shortActive")
         label.label {{$t('s.shortLinkLabel')}}

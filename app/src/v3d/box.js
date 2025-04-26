@@ -78,6 +78,10 @@ export class Box {
     return this.scene
   }
 
+  getScene() {
+    return this.scene
+  }
+
   createCamera(width, height) {
     this.camera = new PerspectiveCamera(50, width / height, 1, 10000)
     this.camera.position.set(0, 0, 150)

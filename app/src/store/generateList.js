@@ -2,7 +2,7 @@ import {ref} from "vue";
 
 const collection = ref([])
 const keyStore = 'generateList'
-let syncCallback = undefined
+let syncCallback = (items) => {}
 
 export function useGenerateList () {
 
@@ -11,7 +11,7 @@ export function useGenerateList () {
   }
 
   const getLimit = () => {
-    return 20
+    return 30
   }
 
   const fillCollection = (items) => {
@@ -31,9 +31,7 @@ export function useGenerateList () {
 
   const removeItem = (item) => {
     collection.value.splice(collection.value.indexOf(item), 1)
-    if (syncCallback !== undefined) {
-      syncCallback(collection.value)
-    }
+    syncCallback(collection.value)
   }
 
   return {

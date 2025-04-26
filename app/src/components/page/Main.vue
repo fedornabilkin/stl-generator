@@ -5,34 +5,27 @@
   i.fa.fa-arrow-up.shake-vertical
 .container
   .columns.is-multiline
+
     .column
-      h1.title {{ $t('g.title') }}
+      //h1.title {{ $t('g.title') }}
       //h2.subtitle {{ $t('g.subtitle') }}
+      .container-settings
+        QRCodeMenu(v-if="mode === 'QR'"
+          ref="qrcode"
+          :box="box"
+          :exporter="exporter"
+          :initData="shareData"
+          @generating="generating"
+          @exportReady="exportReady"
+        )
 
-      QRCodeMenu(v-if="mode === 'QR'"
-        ref="qrcode"
-        :box="box"
-        :exporter="exporter"
-        :initData="shareData"
-        @generating="generating"
-        @exportReady="exportReady"
-      )
-
-      button.button(v-if="hasGenerateList" @click="historyModalVisible=true")
-        span.icon
-          i.fa.fa-calendar-day(aria-hidden="true")
-        span {{$t('g.historyButton')}}
-
-      HistoryModal(
-        v-if="historyModalVisible"
-        :isActive="historyModalVisible"
-        :store="storeGenerate"
-        :title="$t('g.historyButton')"
-        @close="historyModalVisible=false"
-      )
+        button.button(v-if="hasGenerateList" @click="historyModalVisible=true")
+          span.icon
+            i.fa.fa-calendar-day(aria-hidden="true")
+          span {{$t('g.historyButton')}} ({{ storeGenerate.getCollection().length }})
 
     .column
-      .columns
+      //.columns
         .column
           p.title {{$t('g.preview')}}
           p.subtitle {{ $t('g.controlsHint') }}
@@ -43,49 +36,81 @@
                 input.checkbox(type='checkbox' v-model='autoRotation')
             .control
               span.button.is-static.is-small {{$t('g.autoRotation')}}
-
-      .mb-5(id="container3d" :class="{ 'is-loading': isGenerating }")
-
-
-      .panel(v-if="expSettings.active")
-        .panel-heading {{$t('e.title')}}
-        .panel-block
-          .columns
-            .column.is-half
-              Export(:expSettings="expSettings")
-
-            .column.is-half
-              button.button.export-button.is-primary.is-medium(@click="exportSTL")
+      .container-3d
+        .mb-0(id="container3d" :class="{ 'is-loading': isGenerating }")
+        div(v-if="expSettings.active") {{$t('e.title')}}
+          .field.has-addons
+            .control
+              button.button.is-primary.is-small(@click="exportSTL")
                 span.icon
                   i.fa.fa-cube
                 span {{$t('e.buttonStl')}}
-              //button.button.export-button.is-primary.is-medium(@click="renderPNG")
+            .control
+              span.button
+                input.checkbox(type='checkbox' v-model='expSettings.multiple')
+            .control
+              span.button.is-static.is-small {{ $t("e.multipleLabel") }}
+            .control
+              span.button
+                input.checkbox(type='checkbox' v-model='expSettings.ascii')
+            .control
+              span.button.is-static.is-small ASCII
+
+          .field.has-addons
+            .control
+              button.button.is-info.is-small(@click="exportOBJ")
+                span.icon
+                  i.fa.fa-cube
+                span {{$t('e.buttonObj')}}
+            //.control
+              button.button.export-button.is-primary.is-small(@click="renderPNG")
                 span.icon
                   i.fa.fa-image
                 span {{$t('e.buttonPng')}}
 
-      ExportList(:store="storeExport" :title="$t('e.downloadHistory')")
 
-      ExportModal(v-if="exportModalVisible" :isActive="exportModalVisible" @close="exportModalVisible=false")
-      ShareModal(v-if="shareModalVisible" :isActive="shareModalVisible" @close="shareModalVisible=false")
+            button.button.is-small(@click="historyDownloadModalVisible=true")
+              span.icon
+                i.fa.fa-calendar-day(aria-hidden="true")
+              span {{$t('e.downloadHistory')}} ({{ storeExport.getCollection().length }})
+
+
+ExportModal(v-if="exportModalVisible" :isActive="exportModalVisible" @close="exportModalVisible=false")
+ShareModal(v-if="shareModalVisible" :isActive="shareModalVisible" @close="shareModalVisible=false")
+
+HistoryModal(
+  v-if="historyModalVisible"
+  :isActive="historyModalVisible"
+  :store="storeGenerate"
+  :title="$t('g.historyButton')"
+  @close="historyModalVisible=false"
+)
+
+HistoryModal(
+  v-if="historyDownloadModalVisible"
+  :isActive="historyDownloadModalVisible"
+  :store="storeExport"
+  :title="$t('e.downloadHistory')"
+  @close="historyDownloadModalVisible=false"
+)
 </template>
 
 <script>
 import * as THREE from 'three';
-import { STLExporter } from 'three/examples/jsm/exporters/STLExporter';
 import ExportModal from '../generator/ExportModal.vue';
 import QRCodeMenu from '../generator/QRCodeMenu.vue';
 import { saveAsArrayBuffer, trimCanvas } from '@/utils';
 import {Box} from "@/v3d/box";
-import Export from "@/components/forms/Export.vue";
 import {useShareHash} from "@/service/shareHash";
 import {useExportList} from "@/store/exportList";
+import {useGenerateList} from "@/store/generateList";
 import {Share} from "@/entity/share";
 import ExportList from "@/components/generator/ExportList.vue";
 import {BaseRotation} from "@/v3d/animation/baseRotation";
-import {useGenerateList} from "@/store/generateList";
 import HistoryModal from "@/components/generator/HistoryModal.vue";
 import ShareModal from "@/components/generator/ShareModal.vue";
+import { STLExporter } from 'three/examples/jsm/exporters/STLExporter';
+import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter";
 
 const shareHash = useShareHash()
 const exportList = useExportList()
@@ -99,7 +124,6 @@ export default {
     ShareModal,
     HistoryModal,
     ExportList,
-    Export,
     QRCodeMenu,
     ExportModal,
   },
@@ -108,15 +132,15 @@ export default {
       mode: 'QR',
       expSettings: {
         active: false,
-        type: 'binary',
+        ascii: false,
         multiple: false,
       },
       box: undefined,
       autoRotation: false,
       changelogModalVisible: false,
-      // changelog: changelog.split('\n').slice(3).join('\n'),
       changelog: '',
       historyModalVisible: false,
+      historyDownloadModalVisible: false,
       exportModalVisible: false,
       shareModalVisible: false,
       shareData: null,
@@ -125,6 +149,7 @@ export default {
       hasGenerateList: false,
       isGenerating: false,
       exporter: null,
+      exportTimer: 5000,
       scene: null,
       camera: null,
       renderer: null,
@@ -168,13 +193,25 @@ export default {
       };
       requestAnimationFrame(animate)
     },
+    exportOBJ() {
+      this.exportModalVisible = true
+      this.autoRotation = false
+
+      setTimeout(() => {
+        const timestamp = new Date().getTime()
+        const exporter = new OBJExporter()
+        const result = exporter.parse(box.getScene())
+        const filename = `vsqr-3d-${timestamp}.obj`
+        saveAsArrayBuffer(result, filename)
+      }, this.exportTimer)
+    },
     exportSTL() {
       this.exportModalVisible = true
       this.autoRotation = false
 
       setTimeout(() => {
-        this.$refs.qrcode.exportSTL(this.expSettings.type, this.expSettings.multiple)
-      }, 5000);
+        this.$refs.qrcode.exportSTL(this.expSettings)
+      }, this.exportTimer)
     },
     renderPNG() {
       this.exportModalVisible = true;
@@ -274,10 +311,23 @@ export default {
 </script>
 
 <style>
+.container-3d {
+  z-index: 100;
+}
+
+.container-settings {}
+
+@media screen and (min-width: 768px) {
+  .container-3d {
+    /*position: fixed;*/
+  }
+}
+
+
 
 #container3d {
   width: 100%;
-  height: 600px;
+  height: 350px;
   border-radius: 5px;
   overflow: hidden;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -300,10 +350,6 @@ export default {
   100% {
     opacity: 0.3;
   }
-}
-
-.export-button {
-  margin: 0 10px;
 }
 
 #mode-buttons>button {

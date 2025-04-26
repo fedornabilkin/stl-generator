@@ -1,6 +1,7 @@
 <script setup>
 import ShareButtons from './ShareButtons.vue';
 import Yoomoney from "@/components/monetisation/Yoomoney.vue";
+import LanguageSelector from "@/components/template/LanguageSelector.vue";
 </script>
 
 <template lang="pug">
@@ -14,6 +15,8 @@ footer.footer
 
       .column
         ShareButtons
+      .column
+        LanguageSelector
 
     .box
       .is-pulled-right

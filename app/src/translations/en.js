@@ -192,6 +192,7 @@ export default {
   e: {
     title: 'Export settings',
     buttonStl: 'Download STL',
+    buttonObj: 'Download OBJ',
     buttonPng: 'PNG',
     downloadHistory: 'Download history',
 

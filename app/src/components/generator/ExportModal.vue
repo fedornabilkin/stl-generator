@@ -9,8 +9,7 @@ div(:class="{'modal': true, 'is-active': isActive}")
       p.is-size-4
         span(v-if="seconds > 0") {{ $t('e.downloadStart', [seconds]) }}
         span(v-if="seconds === 0") {{ $t('e.downloadStarted') }}
-        progress.progress.is-small.is-primary(max="100" v-if="seconds !== 0")
-        progress.progress.is-small.is-primary(max="100" v-if="seconds === 0" value="100")
+        progress.progress.is-small.is-primary(max="100" :value="progress")
     section.modal-card-body
       .mb-4.message
         .message-body {{ $t('e.motivationText') }}
@@ -37,21 +36,33 @@ export default {
     },
   },
   data: () => ({
-    seconds: 5
+    seconds: 5,
+    progress: 0,
+    progressPart: 20,
+    intervalId: null,
   }),
   mounted() {
-    this.seconds = 5
-    setInterval(() => {
+    this.timerReset()
+    this.intervalId = setInterval(() => {
       if (this.seconds > 0) {
         this.seconds -= 1
+        this.progress += this.progressPart
       }
     }, 1000)
   },
   methods: {
     close() {
-      this.seconds = 5
+      this.timerReset()
+      clearInterval(this.intervalId)
       this.$emit('close')
     },
+    timerReset() {
+      const min = 3
+      const max = 7
+      this.seconds = Math.floor(Math.random() * (max - min + 1)) + min
+      this.progress = 0
+      this.progressPart = 100 / this.seconds
+    }
   },
 }
 </script>

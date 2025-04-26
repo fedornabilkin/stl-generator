@@ -1,17 +1,14 @@
 <template lang="pug">
-.columns.is-mobile
-  .column
-    button.button.is-info(@click="scannerModalVisible=true")
-        span.icon
-          i.fa.fa-camera
-        span.is-hidden-mobile {{$t('form.scanQRButton')}}
-  .column
-    button.button.is-info(@click="readModalVisible=true")
-      span.icon
-        i.fa.fa-file
-      span.is-hidden-mobile {{$t('form.readQRButton')}}
+button.mr-1.button.is-info(@click="scannerModalVisible=true")
+    span.icon
+      i.fa.fa-camera
+    span.is-hidden-mobile {{$t('form.scanQRButton')}}
+button.button.is-info(@click="readModalVisible=true")
+  span.icon
+    i.fa.fa-file
+  span.is-hidden-mobile {{$t('form.readQRButton')}}
 
-.panel
+.panel.mt-1
   p.panel-heading {{$t('form.optionsTitle')}}
   .panel-block
     .columns
@@ -261,9 +258,7 @@ export default {
 
           qrConfig.margin = 1
           qrcode.toDataURL(txt, qrConfig, (err, src) => {
-            if (err) {
-              throw err
-            }
+            if (err) {throw err}
             this.options.code.preview.src = src
           })
         } catch (e) {
@@ -275,12 +270,12 @@ export default {
 
       this.render3d()
     },
-    exportSTL(stlType, multipleParts) {
+    exportSTL(settings) {
       const timestamp = new Date().getTime()
-      const exportAsBinary = stlType === 'binary'
+      const exportAsBinary = !settings.ascii
       const expConfig = {binary: exportAsBinary}
 
-      if (multipleParts) {
+      if (settings.multiple) {
         const parts = this.model3d.collection()
         const zip = new JSZip()
 

@@ -3,6 +3,7 @@ import {createApp} from 'vue';
 import {router} from './router';
 import { createI18n } from "vue-i18n";
 import translations from './translations/loader';
+import { initYandexMetrika } from 'yandex-metrika-vue3';
 
 import App from './App.vue';
 
@@ -15,9 +16,17 @@ const i18n = createI18n({
   messages: translations,
 })
 
-const app = createApp(App)
+const ymId = import.meta.env.VITE_YM_ID
+const nodeEnv = import.meta.env.VITE_NODE_ENV
 
-app
+const app = createApp(App)
+// app.use(initYandexMetrika, {
+//   id: ymId,
+//   router: router,
+//   env: nodeEnv
+//   // other options
+// })
+
   // .use(createPinia())
   .use(router)
   .use(i18n)

@@ -155,7 +155,7 @@ const setActiveTab = (idx) => {
               p.control
                 a.button.is-static.is-small {{unit}}
 
-  .box.mt-1(style="width: fit-content")
+  .mt-1(style="width: fit-content")
     figure.image.is-64x64(:class="{'is-skeleton': !props.options.code.preview.src}")
       img(:src="props.options.code.preview.src")
 
