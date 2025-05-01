@@ -36,6 +36,11 @@
                 input.checkbox(type='checkbox' v-model='autoRotation')
             .control
               span.button.is-static.is-small {{$t('g.autoRotation')}}
+      .tags.has-addons.are-medium
+        .tag {{$t('t.setting')}}
+        .tag {{$t('t.create')}}
+        .tag {{$t('t.check')}}
+        .tag {{$t('t.download')}}
       .container-3d
         .mb-0(id="container3d" :class="{ 'is-loading': isGenerating }")
         div(v-if="expSettings.active") {{$t('e.title')}}

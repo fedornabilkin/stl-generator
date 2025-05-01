@@ -113,7 +113,7 @@ class BaseTag3D {
   }
 
   /**
-   * @return {THREE.Mesh|undefined} the mesh of the text
+   * @return {THREE.Group|undefined} the mesh of the text
    */
   getTextMesh() {
     if (!this.options.text.active) {
@@ -166,9 +166,11 @@ class BaseTag3D {
         subtitleMesh.position.y -= this.options.base.width - this.options.base.height / 2 + oneHeight - this.options.code.margin
       }
 
+      subtitleMesh.position.x += this.options.text.offsetX
+      subtitleMesh.position.y += this.options.text.offsetY
+
       textGroup.add(subtitleMesh)
     }
-
     return textGroup
   }
 

@@ -41,6 +41,10 @@ export default {
   t: {
     exampleButton: 'Смотреть примеры',
     discussionButton: 'Обсудить',
+    setting: 'Настроить',
+    create: 'Создать',
+    check: 'Проверить',
+    download: 'Скачать',
   },
 
   /**

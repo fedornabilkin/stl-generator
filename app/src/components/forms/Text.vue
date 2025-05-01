@@ -24,7 +24,7 @@ const props = defineProps(['options', 'unit'])
           .field
             .control
               textarea.textarea.is-small(rows='3' v-model='props.options.text.message' :placeholder="$t('form.text.placeholder')")
-              .buttons.are-small.mt-2.is-pulled-right
+              //.buttons.are-small.mt-2.is-pulled-right
                 button(:class="{button: true, 'is-primary': props.options.text.align === 'left'}" @click="props.options.text.align = 'left'")
                   span.icon.is-small
                     i.fas.fa-align-left
@@ -38,12 +38,8 @@ const props = defineProps(['options', 'unit'])
                 | {{ $t('form.text.textLabel') }}
                 br
                 .tags.is-multiline
-                  .tag.is-light
-                    i.fas.fa-italic
-                    |  {{ $t('form.text.italic') }}
-                  .tag.is-light
-                    i.fas.fa-bold
-                    |  {{ $t('form.text.bold') }}
+                  .tag.is-light {{ $t('form.text.italic') }}
+                  .tag.is-light {{ $t('form.text.bold') }}
 
     .column
       .field.is-horizontal
@@ -71,6 +67,30 @@ const props = defineProps(['options', 'unit'])
           .field.has-addons
             .control
               input.input.is-small(type='number' v-model.number='props.options.text.margin')
+            p.control
+              a.button.is-static.is-small {{unit}}
+
+      .field.is-horizontal
+        .field-body
+          .field.has-addons
+            p.control(:title="$t('form.icon.offsetX')")
+              .button.is-static.is-small
+                span
+                  i.fa.fa-arrow-right
+            .control
+              input.input.is-small(type='number' v-model.number='props.options.text.offsetX')
+            p.control
+              a.button.is-static.is-small {{unit}}
+
+      .field.is-horizontal
+        .field-body
+          .field.has-addons
+            p.control(:title="$t('form.icon.offsetY')")
+              .button.is-static.is-small
+                span
+                  i.fa.fa-arrow-up
+            .control
+              input.input.is-small(type='number' v-model.number='props.options.text.offsetY')
             p.control
               a.button.is-static.is-small {{unit}}
 
