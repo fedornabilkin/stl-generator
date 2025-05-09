@@ -54,14 +54,11 @@ import qrcode from 'qrcode';
 import vcardjs from 'vcards-js';
 import { diff } from 'deep-object-diff';
 import merge from 'deepmerge';
-import JSZip from 'jszip';
 import ScannerModal from './ScannerModal.vue';
-import { save, saveAsString, saveAsArrayBuffer } from '@/utils';
 import QRCode3D from "@/qrcode3d";
 import {QRCodeModel} from "@/v3d/create/base";
 import {Model} from "@/v3d/create/model";
 import {useShareHash} from "@/service/shareHash";
-import {useExportList} from "@/store/exportList";
 import {Share} from "@/entity/share";
 import Base from "@/components/forms/Base.vue";
 import Qr from "@/components/forms/Qr.vue";
@@ -142,7 +139,6 @@ export default {
   props: {
     initData: Object,
     box: Object,
-    exporter: Object,
   },
   components: {
     ReaderModal,
@@ -217,7 +213,7 @@ export default {
       addPromise
           .then((result) => {
             for(const key in result) {
-              this.box.addNode(result[key])
+              this.box.addNode(key, result[key])
             }
           })
           .then(() => {
@@ -270,47 +266,9 @@ export default {
 
       this.render3d()
     },
-    exportSTL(settings) {
-      const timestamp = new Date().getTime()
-      const exportAsBinary = !settings.ascii
-      const expConfig = {binary: exportAsBinary}
-
-      if (settings.multiple) {
-        const parts = this.model3d.collection()
-        const zip = new JSZip()
-
-        for(const key in parts) {
-          const data = this.exporter.parse(parts[key], expConfig)
-          zip.file(`${key}-${timestamp}.stl`, data.buffer)
-        }
-
-        zip.generateAsync({ type: 'blob' }).then((content) => {
-          save(new Blob([content]), `vsqr-3d-${timestamp}.zip`)
-        })
-      } else {
-        const mesh = this.model3d.export(this.generator)
-        const filename = `vsqr-3d-${timestamp}.stl`
-        const result = this.exporter.parse(mesh, expConfig)
-
-        if (exportAsBinary) {
-          saveAsArrayBuffer(result, filename)
-        } else {
-          saveAsString(result, filename)
-        }
-      }
-      this.addLastExport()
-    },
-    addLastExport() {
-      const exportList = useExportList()
-
-      exportList.add(this.createShare(shareHash.create(this.options), this.box.imgDataUrl()))
-      window.localStorage.setItem(exportList.keyStore, JSON.stringify(exportList.getCollection()))
-    },
     addLastGenerate() {
       const generateList = useGenerateList()
-
       generateList.add(this.createShare(shareHash.create(this.options), this.box.imgDataUrl()))
-      window.sessionStorage.setItem(generateList.keyStore, JSON.stringify(generateList.getCollection()))
     },
     createShare(hash, src) {
       return new Share({hash: hash, img: {src: src}, date: new Date().getTime()})

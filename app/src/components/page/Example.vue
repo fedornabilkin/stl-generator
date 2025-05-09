@@ -1,4 +1,6 @@
 <script setup>
+import CardExample from "@/components/example/CardExample.vue";
+
 const items = {
   qr1: {
     url: 'https://clck.ru/3GwBgK',
@@ -38,6 +40,21 @@ const items = {
     tags: [
       'Основа',
       'Иконка',
+      'Отверстие',
+      'Рамка',
+    ]
+  },
+  key3: {
+    url: 'https://clck.ru/3Lx7dA',
+    img: {
+      src: '/example/base-icon-text-key-frame.png',
+      alt: ''
+    },
+    text: 'Брелок с иконкой и текстом. Размер иконки обычно 18-20% от базового размера. Ваш текст или слоган. Отверстие слева и рамка.',
+    tags: [
+      'Основа',
+      'Иконка',
+      'Текст',
       'Отверстие',
       'Рамка',
     ]
@@ -114,18 +131,7 @@ const items = {
 
     .columns.is-desktop
       .column(v-for="item in items")
-        .box
-          article.media
-            .media-left
-              figure.image.is-128x128
-                img(:src="item.img.src" :alt="item.img.alt")
-              a.tag.is-link(:href="item.url") Создать
-            .media-content
-              .content
-                p {{ item.text }}
-                .tags
-                  span.tag(v-for="tag in item.tags")
-                   | {{ tag }}
+        CardExample(:item="item")
 </template>
 
 <style scoped>

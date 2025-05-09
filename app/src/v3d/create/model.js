@@ -13,7 +13,4 @@ export class Model {
     return this.strategy.getCollectMesh()
   }
 
-  export(generator) {
-    return this.strategy.export(generator)
-  }
 }

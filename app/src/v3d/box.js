@@ -19,6 +19,7 @@ export class Box {
 
   sceneGraphRoot = undefined
   collectNodes = []
+  collectionNodes = {}
   animation = undefined
 
   debug = false
@@ -27,8 +28,9 @@ export class Box {
     Object.assign(this, config)
   }
 
-  addNode(node) {
+  addNode(name, node) {
     this.collectNodes.push(node)
+    this.collectionNodes[name] = node
     this.sceneGraphRoot.add(node)
   }
 
@@ -38,6 +40,21 @@ export class Box {
 
   removeNode(node) {
     this.sceneGraphRoot.remove(node)
+  }
+
+  combinedNodes() {
+    const combined = new THREE.Geometry()
+    for (const key in this.collectionNodes) {
+      if (key === 'qr' || key === 'icon' || key === 'text') {
+        for (const mesh of this.collectionNodes[key].children) {
+          combined.merge(mesh.geometry, mesh.matrix)
+        }
+      }
+      else {
+        combined.merge(this.collectionNodes[key].geometry, this.collectionNodes[key].matrix)
+      }
+    }
+    return new THREE.Mesh(combined, new THREE.MeshPhongMaterial({color: 0xffffff}))
   }
 
   setAnimation(animation) {

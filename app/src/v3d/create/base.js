@@ -20,11 +20,11 @@ class Base {
     this.addMesh('keychain', generator.getKeychainMesh())
   }
 
-  export(generator) {
-    return generator.combined(this.getCollectMesh())
-  }
 }
 
+/**
+ * @deprecated
+ */
 export class TextModel extends Base {
 
   create(generator) {

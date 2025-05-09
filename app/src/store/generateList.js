@@ -2,7 +2,7 @@ import {ref} from "vue";
 
 const collection = ref([])
 const keyStore = 'generateList'
-let syncCallback = (items) => {}
+let syncCallback = (items) => {return items}
 
 export function useGenerateList () {
 
@@ -27,6 +27,7 @@ export function useGenerateList () {
     if(collection.value.length > max) {
       collection.value.pop()
     }
+    syncCallback(collection.value)
   }
 
   const removeItem = (item) => {

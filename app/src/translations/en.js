@@ -199,6 +199,7 @@ export default {
     buttonObj: 'Download OBJ',
     buttonPng: 'PNG',
     downloadHistory: 'Download history',
+    downloadAll: 'Download all',
 
     loadItem: 'Load',
     typeLabel: 'Type',

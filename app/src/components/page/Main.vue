@@ -11,9 +11,7 @@
       //h2.subtitle {{ $t('g.subtitle') }}
       .container-settings
         QRCodeMenu(v-if="mode === 'QR'"
-          ref="qrcode"
           :box="box"
-          :exporter="exporter"
           :initData="shareData"
           @generating="generating"
           @exportReady="exportReady"
@@ -79,6 +77,11 @@
                 i.fa.fa-calendar-day(aria-hidden="true")
               span {{$t('e.downloadHistory')}} ({{ storeExport.getCollection().length }})
 
+            button.button.is-small(v-if="storeExport.getDownloadAll() > 0")
+              span.icon
+                i.fa.fa-arrow-circle-down(aria-hidden="true")
+              span {{$t('e.downloadAll')}} ({{ storeExport.getDownloadAll() }})
+
 
 ExportModal(v-if="exportModalVisible" :isActive="exportModalVisible" @close="exportModalVisible=false")
 ShareModal(v-if="shareModalVisible" :isActive="shareModalVisible" @close="shareModalVisible=false")
@@ -104,7 +107,7 @@ HistoryModal(
 import * as THREE from 'three';
 import ExportModal from '../generator/ExportModal.vue';
 import QRCodeMenu from '../generator/QRCodeMenu.vue';
-import { saveAsArrayBuffer, trimCanvas } from '@/utils';
+import {save, saveAsArrayBuffer, saveAsString, trimCanvas} from '@/utils';
 import {Box} from "@/v3d/box";
 import {useShareHash} from "@/service/shareHash";
 import {useExportList} from "@/store/exportList";
@@ -116,6 +119,7 @@ import HistoryModal from "@/components/generator/HistoryModal.vue";
 import ShareModal from "@/components/generator/ShareModal.vue";
 import { STLExporter } from 'three/examples/jsm/exporters/STLExporter';
 import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter";
+import JSZip from "jszip";
 
 const shareHash = useShareHash()
 const exportList = useExportList()
@@ -140,6 +144,7 @@ export default {
         ascii: false,
         multiple: false,
       },
+      options: {},
       box: undefined,
       autoRotation: false,
       changelogModalVisible: false,
@@ -173,7 +178,6 @@ export default {
   mounted() {
     this.initScene()
     this.startAnimation()
-    this.exporter = new STLExporter()
   },
   methods: {
     initScene() {
@@ -208,6 +212,10 @@ export default {
         const result = exporter.parse(box.getScene())
         const filename = `vsqr-3d-${timestamp}.obj`
         saveAsArrayBuffer(result, filename)
+
+        exportList.add(this.createShare(shareHash.create(this.options), this.box.imgDataUrl()))
+        exportList.downloadAllUpdate()
+        window.localStorage.setItem(exportList.keyStoreAll, exportList.getDownloadAll())
       }, this.exportTimer)
     },
     exportSTL() {
@@ -215,7 +223,38 @@ export default {
       this.autoRotation = false
 
       setTimeout(() => {
-        this.$refs.qrcode.exportSTL(this.expSettings)
+        const timestamp = new Date().getTime()
+        const exporter = new STLExporter()
+
+        const exportAsBinary = !this.expSettings.ascii
+        const expConfig = {binary: exportAsBinary}
+
+        if (this.expSettings.multiple) {
+          const parts = this.box.getNodes()
+          const zip = new JSZip()
+
+          for(const key in parts) {
+            const data = exporter.parse(parts[key], expConfig)
+            zip.file(`${key}-${timestamp}.stl`, data.buffer)
+          }
+
+          zip.generateAsync({ type: 'blob' }).then((content) => {
+            save(new Blob([content]), `vsqr-3d-${timestamp}.zip`)
+          })
+        } else {
+          const filename = `vsqr-3d-${timestamp}.stl`
+          const result = exporter.parse(this.box.combinedNodes(), expConfig)
+
+          if (exportAsBinary) {
+            saveAsArrayBuffer(result, filename)
+          } else {
+            saveAsString(result, filename)
+          }
+        }
+
+        exportList.add(this.createShare(shareHash.create(this.options), this.box.imgDataUrl()))
+        exportList.downloadAllUpdate()
+        window.localStorage.setItem(exportList.keyStoreAll, exportList.getDownloadAll())
       }, this.exportTimer)
     },
     renderPNG() {
@@ -267,6 +306,9 @@ export default {
         });
       }, 1000);
     },
+    createShare(hash, src) {
+      return new Share({hash: hash, img: {src: src}, date: new Date().getTime()})
+    },
     parseUrlShareHash() {
       if (shareHash.shareIsValid(window.location.hash)) {
         try {
@@ -287,6 +329,13 @@ export default {
       exportList.setCallback((collection) => {
         window.localStorage.setItem(exportList.keyStore, JSON.stringify(collection))
       })
+
+      let downloadAll = window.localStorage.getItem(exportList.keyStoreAll)
+      // 60 days
+      if (collection.length > 0 && collection.length > downloadAll) {
+        downloadAll = collection.length
+      }
+      exportList.setDownloadAll(downloadAll)
     },
     fillGenerateList() {
       const list = JSON.parse(window.sessionStorage.getItem(generateList.keyStore)) || []
@@ -303,6 +352,7 @@ export default {
       this.expSettings.active = true
       this.hasGenerateList = true
       try {
+        this.options = options
         window.location.hash = shareHash.create(options)
       } catch (error) {
         console.error(error)

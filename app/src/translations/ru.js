@@ -199,6 +199,7 @@ export default {
     buttonObj: 'Скачать OBJ',
     buttonPng: 'PNG',
     downloadHistory: 'История загрузок',
+    downloadAll: 'Скачано всего',
 
     loadItem: 'Загрузить',
     typeLabel: 'Тип файла',
