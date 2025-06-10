@@ -10,7 +10,7 @@ button.button.is-info(@click="readModalVisible=true")
 
 .panel.mt-1
   p.panel-heading {{$t('form.optionsTitle')}}
-  .panel-block
+  .panel-block.form-options(:class="{'need-generate-color': needGenerating}")
     .columns
       .column
         // Base Settings
@@ -161,6 +161,7 @@ export default {
     blockWidth: null,
     blockHeight: null,
     isGenerating: false,
+    needGenerating: false,
     progressGenerating: 0,
     generateError: undefined,
     scannerModalVisible: false,
@@ -176,6 +177,13 @@ export default {
       // this.options = merge(this.options, this.initData)
     }
     this.prepareData()
+
+    let elements = document.querySelectorAll('.form-options input')
+    const genFlag = () => this.needGenerating = true
+
+    for (let elem of elements) {
+      elem.addEventListener('change', genFlag)
+    }
   },
 
   methods: {
@@ -225,6 +233,7 @@ export default {
             setTimeout(() => {this.addLastGenerate()}, 500)
           })
           .finally(() => {
+            this.needGenerating = false
             this.isGenerating = false
             this.generateError = ''
             this.progressGenerating = 0
@@ -357,5 +366,15 @@ export default {
 <style scoped>
 #mode-buttons>button {
   margin-right: 20px;
+}
+
+.need-generate-color {
+  border: 0.1rem solid rgb(255 183 15 / 80%);
+  border-top: 0;
+  animation: linearGradientMove 1.5s infinite alternate;
+}
+
+@keyframes linearGradientMove {
+  100% {border-color: rgb(255 183 15 / 10%);}
 }
 </style>

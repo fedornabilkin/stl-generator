@@ -72,7 +72,7 @@ const icons = [
 </script>
 
 <template lang="pug">
-.field.is-horizontal
+.field.is-horizontal.form-bg-diff
   .field-label.is-small
     label.label {{$t('form.icon.active')}}
 
@@ -85,7 +85,7 @@ const icons = [
             i.fa.fa-icons &nbsp;
             | {{$t('form.icon.activeLabel')}}
 
-.box(v-if="props.options.icon.active")
+.box.form-bg-diff(v-if="props.options.icon.active")
   .field.is-horizontal
     .field-label.is-small
       label.label {{$t('form.icon.select')}}
@@ -185,5 +185,5 @@ const icons = [
 </template>
 
 <style scoped>
-
+.form-bg-diff {background: lightyellow;}
 </style>

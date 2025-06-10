@@ -107,7 +107,7 @@ HistoryModal(
 import * as THREE from 'three';
 import ExportModal from '../generator/ExportModal.vue';
 import QRCodeMenu from '../generator/QRCodeMenu.vue';
-import {save, saveAsArrayBuffer, saveAsString, trimCanvas} from '@/utils';
+import {dataURItoBlob, save, saveAsArrayBuffer, saveAsString, trimCanvas} from '@/utils';
 import {Box} from "@/v3d/box";
 import {useShareHash} from "@/service/shareHash";
 import {useExportList} from "@/store/exportList";
@@ -252,9 +252,39 @@ export default {
           }
         }
 
-        exportList.add(this.createShare(shareHash.create(this.options), this.box.imgDataUrl()))
+        const image = this.box.imgDataUrl()
+
+        exportList.add(this.createShare(shareHash.create(this.options), image))
         exportList.downloadAllUpdate()
         window.localStorage.setItem(exportList.keyStoreAll, exportList.getDownloadAll())
+
+        const host = window.location.host
+        const hash = window.location.hash
+        const url = `https://vsqr.ru/${hash}`
+        const params = new URLSearchParams({ url: url, host: host }).toString()
+        const endpointApi = `/api/image?${params}`
+        // const endpointApi = `https://92.63.98.81:1881/send?${params}`
+
+        const blob = dataURItoBlob(image)
+
+        if (!host.includes('localhost')) {
+          fetch(endpointApi, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'image/png'
+              },
+              body: blob
+            })
+            .then(res => res.text())
+            .then((res) => {
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+            .finally(() => {
+            })
+        }
+
       }, this.exportTimer)
     },
     renderPNG() {

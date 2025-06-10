@@ -74,6 +74,7 @@ export const save = (blob, filename) => {
   link.href = URL.createObjectURL(blob);
   link.download = filename;
   link.click();
+  URL.revokeObjectURL(link.href)
 };
 
 export const saveAsString = (text, filename) => {
@@ -86,6 +87,25 @@ export const saveAsArrayBuffer = (buffer, filename) => {
     filename,
   );
 };
+
+export const dataURItoBlob = (dataURI, callback) => {
+  // convert base64 to raw binary data held in a string
+  // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+  const byteString = atob(dataURI.split(',')[1]);
+
+  // separate out the mime component
+  const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+  // write the bytes of the string to an ArrayBuffer
+  const ab = new ArrayBuffer(byteString.length);
+  let ia = new Uint8Array(ab);
+  for (var i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+
+  // write the ArrayBuffer to a blob, and you're done
+  return new Blob([ab])
+}
 
 // https://gist.github.com/timdown/021d9c8f2aabc7092df564996f5afbbf
 // eslint-disable-next-line func-names

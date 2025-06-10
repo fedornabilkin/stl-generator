@@ -3,7 +3,7 @@ const props = defineProps(['options', 'unit'])
 </script>
 
 <template lang="pug">
-.field.is-horizontal
+.field.is-horizontal.form-bg-diff
   .field-label.is-small
     label.label {{ $t('form.text.active') }}
 
@@ -16,7 +16,7 @@ const props = defineProps(['options', 'unit'])
             i.fa.fa-font &nbsp;
             | {{ $t('form.text.activeLabel') }}
 
-.box(v-if="props.options.text.active")
+.box.form-bg-diff(v-if="props.options.text.active")
   .columns.is-multiline
     .column
       .field.is-horizontal
@@ -97,5 +97,5 @@ const props = defineProps(['options', 'unit'])
 </template>
 
 <style scoped>
-
+.form-bg-diff {background: azure;}
 </style>

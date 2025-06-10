@@ -3,7 +3,7 @@ const props = defineProps(['options', 'unit'])
 </script>
 
 <template lang="pug">
-.field.is-horizontal
+.field.is-horizontal.form-bg-diff
   .field-label.is-small
     label.label {{ $t('form.keychain.active') }}
   .field-body
@@ -14,7 +14,7 @@ const props = defineProps(['options', 'unit'])
           span.is-size-7
             i.fa.fa-key &nbsp;
             | {{ $t('form.keychain.activeLabel') }}
-.box(v-if='props.options.keychain.active')
+.box.form-bg-diff(v-if='props.options.keychain.active')
   .columns.is-multiline
     .column
       .field.is-horizontal
@@ -60,5 +60,5 @@ const props = defineProps(['options', 'unit'])
 </template>
 
 <style scoped>
-
+.form-bg-diff {background: ghostwhite;}
 </style>
