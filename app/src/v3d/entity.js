@@ -1,9 +1,13 @@
-export class Entity {
+import {DefaultEntity} from "@/entity/entity";
+
+
+export class Entity extends DefaultEntity{
   active = false
   offsetX = 0
   offsetY = 0
 
   constructor(config = {}) {
+    super(config)
     Object.assign(this, config)
   }
 

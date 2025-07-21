@@ -1,59 +1,24 @@
-import moment from "moment/moment";
 import {Base, Border, Code, Entity, Icon, Keychain, Magnet, Text} from "@/v3d/entity";
+import {DefaultBuilder} from "@/entity/builder";
 
-class MainBuilder {
-  data = {}
-  entity = undefined
-  collection = []
+class MainBuilder extends DefaultBuilder{
 
   constructor(config = {}) {
+    super(config)
     Object.assign(this, config)
-    this.reset()
   }
 
   createEntity() {
     return new Entity()
   }
 
-  reset() {
-    this.entity = this.createEntity()
-  }
-
-  getEntity() {
-    const result = this.entity
-    this.reset()
-    return result
-  }
-
   build(data) {
+    super.build(data)
     if (data && data.active !== undefined) {
       this.entity.active = data.active
     }
   }
 
-  baseBuild(builder, data) {
-    builder.build(data)
-    return builder.getEntity()
-  }
-
-  createCollection(data) {
-    this.collection = []
-    for (let item in data) {
-      this.build(data[item])
-      this.collection.push(this.getEntity())
-    }
-  }
-
-  getCollection() {
-    const collection = this.collection
-    this.collection = []
-    return collection
-  }
-
-  createDate(data, field, format = 'DD.MM.YYYY HH:mm:ss') {
-    this.entity[field] = data
-    this.entity[field + "_format"] = moment(data).format(format)
-  }
 }
 
 export class BaseBuilder extends MainBuilder {

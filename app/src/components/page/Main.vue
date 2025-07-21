@@ -41,6 +41,9 @@
         .tag {{$t('t.download')}}
       .container-3d
         .mb-0(id="container3d" :class="{ 'is-loading': isGenerating }")
+
+        .message(v-if="randomTooltip.content" )
+          .message-body {{ randomTooltip.content }}
         div(v-if="expSettings.active") {{$t('e.title')}}
           .field.has-addons
             .control
@@ -120,6 +123,8 @@ import ShareModal from "@/components/generator/ShareModal.vue";
 import { STLExporter } from 'three/examples/jsm/exporters/STLExporter';
 import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter";
 import JSZip from "jszip";
+import {Tooltip} from "@/entity/tooltip";
+import {TooltipBuilder} from "@/entity/builder";
 
 const shareHash = useShareHash()
 const exportList = useExportList()
@@ -152,6 +157,7 @@ export default {
       historyModalVisible: false,
       historyDownloadModalVisible: false,
       exportModalVisible: false,
+      randomTooltip: {},
       shareModalVisible: false,
       shareData: null,
       storeExport: null,
@@ -167,6 +173,11 @@ export default {
       addedMeshes: [],
     };
   },
+  setup() {
+    const tltBuilder = new TooltipBuilder()
+
+    return {tltBuilder}
+  },
   created() {
     this.parseUrlShareHash()
     this.fillExportList()
@@ -178,8 +189,27 @@ export default {
   mounted() {
     this.initScene()
     this.startAnimation()
+    this.getTooltip()
   },
   methods: {
+    getTooltip() {
+      let endpointApi = `/api/tooltip`
+
+      const host = window.location.host
+      if (host.includes('localhost')) {
+        endpointApi = `https://92.63.98.81:1881${endpointApi}`
+      }
+
+      fetch(endpointApi)
+        .then(res => res.json())
+        .then((res) => {
+          this.tltBuilder.build(res.data)
+          this.randomTooltip = this.tltBuilder.getEntity()
+        })
+        .catch((err) => {console.log(err)})
+        .finally(() => {})
+
+    },
     initScene() {
       const container = document.getElementById('container3d')
 
@@ -276,13 +306,9 @@ export default {
               body: blob
             })
             .then(res => res.text())
-            .then((res) => {
-            })
-            .catch((err) => {
-              console.log(err)
-            })
-            .finally(() => {
-            })
+            .then((res) => {})
+            .catch((err) => {console.log(err)})
+            .finally(() => {})
         }
 
       }, this.exportTimer)

@@ -1,0 +1,72 @@
+import moment from "moment/moment";
+import {DefaultEntity} from "@/entity/entity";
+import {Tooltip} from "@/entity/tooltip";
+
+export class DefaultBuilder {
+  data = {}
+  entity = undefined
+  collection = []
+
+  constructor(config = {}) {
+    Object.assign(this, config)
+    this.reset()
+  }
+
+  createEntity() {
+    return new DefaultEntity()
+  }
+
+  reset() {
+    this.entity = this.createEntity()
+  }
+
+  getEntity() {
+    const result = this.entity
+    this.reset()
+    return result
+  }
+
+  build(data) {
+
+  }
+
+  baseBuild(builder, data) {
+    builder.build(data)
+    return builder.getEntity()
+  }
+
+  createCollection(data) {
+    this.collection = []
+    for (let item in data) {
+      this.build(data[item])
+      this.collection.push(this.getEntity())
+    }
+  }
+
+  getCollection() {
+    const collection = this.collection
+    this.collection = []
+    return collection
+  }
+
+  createDate(data, field, format = 'DD.MM.YYYY HH:mm:ss') {
+    this.entity[field] = data
+    this.entity[field + "_format"] = moment(data).format(format)
+  }
+}
+
+export class TooltipBuilder extends DefaultBuilder {
+  constructor(config = {}) {
+    super(config)
+    Object.assign(this, config)
+  }
+
+  createEntity() {
+    return new Tooltip()
+  }
+
+  build(data) {
+    super.build(data)
+    this.entity.content = data.content
+  }
+}
