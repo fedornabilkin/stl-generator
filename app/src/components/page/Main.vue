@@ -426,7 +426,11 @@ export default {
   z-index: 100;
 }
 
-.container-settings {}
+.container-settings {
+  max-height: calc(100vh - 4rem);
+  overflow: hidden;
+  overflow-y: scroll;
+}
 
 @media screen and (min-width: 768px) {
   .container-3d {

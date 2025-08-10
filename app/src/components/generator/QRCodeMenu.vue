@@ -1,8 +1,8 @@
 <template lang="pug">
 button.mr-1.button.is-info(@click="scannerModalVisible=true")
-    span.icon
-      i.fa.fa-camera
-    span.is-hidden-mobile {{$t('form.scanQRButton')}}
+  span.icon
+    i.fa.fa-camera
+  span.is-hidden-mobile {{$t('form.scanQRButton')}}
 button.button.is-info(@click="readModalVisible=true")
   span.icon
     i.fa.fa-file

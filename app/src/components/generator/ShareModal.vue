@@ -1,5 +1,6 @@
 <script setup>
 import {ref} from "vue";
+import {useUrlCreator} from "@/service/urlCreator.js";
 
 const props = defineProps(['isActive'])
 const emit = defineEmits(['close'])
@@ -8,10 +9,15 @@ let shortLink = ''
 let loading = false
 let shortActive = ref(false)
 
-const url = 'https://vsqr.ru/' + window.location.hash
-const params = new URLSearchParams({ url: url }).toString()
-const endpointApi = `https://clck.ru/--?${params}`
-const endpoint = `https://clck.ru/?${params}`
+const params = { url: 'https://vsqr.ru/' + window.location.hash }
+
+const {endpoint: endpointApi} = useUrlCreator('https://clck.ru/--', params)
+const {endpoint: endpoint} = useUrlCreator('https://clck.ru/', params)
+const {endpoint: endpointShorter} = useUrlCreator('https://go-link.ru/', {
+  utm_source: 'vsqr.ru',
+  utm_medium: 'free',
+  utm_campaign: 'shareModal'
+})
 
 const close = () => {
   emit('close')
@@ -20,7 +26,7 @@ const close = () => {
 const getShortLink = () => {
   loading = true
 
-  fetch(endpointApi)
+  fetch(endpointApi.value)
     .then((res) => {
       if (res.status !== 200) {
         throw(res.statusText)
@@ -55,7 +61,9 @@ getShortLink()
     section.modal-card-body
       p
         | {{$t('s.modalBody')}}
-        a.ml-1(href="https://go-link.ru/" target="_blank") go-link.ru
+        a.ml-1(:href="endpointShorter" target="_blank") go-link.ru
+
+      button.button.is-warning.is-large(v-if="!shortActive" :class="{'is-loading': loading}")
 
       .field.mt-3(v-if="shortActive")
         label.label {{$t('s.shortLinkLabel')}}
