@@ -1,4 +1,3 @@
-import moment from "moment/moment";
 import {DefaultEntity} from "@/entity/entity";
 import {Tooltip} from "@/entity/tooltip";
 
@@ -51,7 +50,23 @@ export class DefaultBuilder {
 
   createDate(data, field, format = 'DD.MM.YYYY HH:mm:ss') {
     this.entity[field] = data
-    this.entity[field + "_format"] = moment(data).format(format)
+
+    const date = new Date(data)
+
+    const options = {
+      era: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      weekday: 'long',
+      timezone: 'UTC',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric'
+    }
+
+    this.entity[field + "_format"] = date.toLocaleString("ru", options)
+    // const de = date.toLocaleString("en-US", options)
   }
 }
 

@@ -22,14 +22,15 @@ export default defineConfig({
             'vue',
             'vue-i18n',
             'vue-router',
-            'moment',
           ],
           tree: [
             'three',
             'three-csg-ts',
             'three-text-geometry',
           ],
-          network: [],
+          network: [
+            // 'yandex-metrika-vue3',
+          ],
           utils: [
             'jszip',
             'vue-qrcode-reader',
@@ -41,9 +42,10 @@ export default defineConfig({
           ],
           ui: [
             // 'bulma',
+            // 'sass-embedded',
           ],
           icons: [
-            '@fortawesome/fontawesome-free',
+            // '@fortawesome/fontawesome-free',
           ],
         },
       },

@@ -12,7 +12,7 @@ div(:class="{'modal': true, 'is-active': isActive}")
         progress.progress.is-small.is-primary(max="100" :value="progress")
     section.modal-card-body
       .mb-4.message
-        .message-body {{ $t('e.motivationText') }}
+        sbp-money
       .is-pulled-right
         Yoomoney
       .is-light
@@ -25,10 +25,11 @@ div(:class="{'modal': true, 'is-active': isActive}")
 <script>
 
 import Yoomoney from "@/components/monetisation/Yoomoney.vue";
+import SbpMoney from "@/components/monetisation/SbpMoney.vue";
 
 export default {
   name: 'ExportModal',
-  components: {Yoomoney},
+  components: {SbpMoney, Yoomoney},
   props: {
     isActive: {
       type: Boolean,

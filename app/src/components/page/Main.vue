@@ -34,15 +34,16 @@
                 input.checkbox(type='checkbox' v-model='autoRotation')
             .control
               span.button.is-static.is-small {{$t('g.autoRotation')}}
-      .tags.has-addons.are-medium
+      //.tags.has-addons.are-medium
         .tag {{$t('t.setting')}}
         .tag {{$t('t.create')}}
         .tag {{$t('t.check')}}
         .tag {{$t('t.download')}}
+      sbp-money
       .container-3d
         .mb-0(id="container3d" :class="{ 'is-loading': isGenerating }")
 
-        .message(v-if="randomTooltip.content" )
+        .message(v-if="randomTooltip.content")
           .message-body {{ randomTooltip.content }}
         div(v-if="expSettings.active") {{$t('e.title')}}
           .field.has-addons
@@ -123,8 +124,8 @@ import ShareModal from "@/components/generator/ShareModal.vue";
 import { STLExporter } from 'three/examples/jsm/exporters/STLExporter';
 import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter";
 import JSZip from "jszip";
-import {Tooltip} from "@/entity/tooltip";
 import {TooltipBuilder} from "@/entity/builder";
+import SbpMoney from "@/components/monetisation/SbpMoney.vue";
 
 const shareHash = useShareHash()
 const exportList = useExportList()
@@ -135,6 +136,7 @@ box.createScene()
 export default {
   name: 'Main',
   components: {
+    SbpMoney,
     ShareModal,
     HistoryModal,
     ExportList,
@@ -156,7 +158,7 @@ export default {
       changelog: '',
       historyModalVisible: false,
       historyDownloadModalVisible: false,
-      exportModalVisible: false,
+      exportModalVisible: true,
       randomTooltip: {},
       shareModalVisible: false,
       shareData: null,
@@ -306,7 +308,7 @@ export default {
               body: blob
             })
             .then(res => res.text())
-            .then((res) => {})
+            .then(() => {})
             .catch((err) => {console.log(err)})
             .finally(() => {})
         }

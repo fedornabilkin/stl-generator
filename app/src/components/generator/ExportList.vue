@@ -1,5 +1,4 @@
 <script setup>
-import moment from "moment";
 
 const props = defineProps(['store', 'title'])
 
@@ -8,8 +7,17 @@ if (props.store) {
   items = props.store.getCollection()
 }
 
-const dateTimeFormat = (dt, format='DD.MM.YY HH:mm:ss') => {
-  return moment(dt).format(format)
+const dateTimeFormat = (dt, format= {
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+  hour: 'numeric',
+  minute: 'numeric',
+  second: 'numeric'
+}) => {
+  // https://learn.javascript.ru/datetime
+  const date = new Date(dt)
+  return date.toLocaleString("ru", format)
 }
 
 const removeItem = (item) => {
