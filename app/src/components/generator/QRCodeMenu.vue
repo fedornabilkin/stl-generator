@@ -28,12 +28,7 @@ button.button.is-info(@click="readModalVisible=true")
         // NFC Tag Section
         Magnet(:options='options' :unit='unit')
 
-.notification.is-danger.is-light(v-if="generateError" style="margin-top: 20px 0;")
-  | {{generateError}}
-
-.notification.is-warning.is-light(v-if="(blockWidth && blockHeight) && (blockWidth < 2 || blockHeight < 2)")
-  strong {{$t('printabilityWarning')}}:
-  | {{$t('printabilityWarningBody', { dimensions: `${Number(blockWidth).toFixed(1)}mm x ${Number(blockHeight).toFixed(1)}mm` })}}
+.notification.is-danger.is-light(v-if="generateError" style="margin-top: 20px 0;") {{generateError}}
 
 .columns
   .column
@@ -55,9 +50,8 @@ import vcardjs from 'vcards-js';
 import { diff } from 'deep-object-diff';
 import merge from 'deepmerge';
 import ScannerModal from './ScannerModal.vue';
-import QRCode3D from "@/qrcode3d";
-import {QRCodeModel} from "@/v3d/create/base";
-import {Model} from "@/v3d/create/model";
+import {QRCodeModel, TextModel} from "@/v3d/create/base";
+import {Model3D} from "@/v3d/create/model3D.js";
 import {useShareHash} from "@/service/shareHash";
 import {Share} from "@/entity/share";
 import Base from "@/components/forms/Base.vue";
@@ -79,6 +73,8 @@ import {
 import {useGenerateList} from "@/store/generateList";
 import {Director} from "@/v3d/director";
 import ReaderModal from "@/components/generator/ReaderModal.vue";
+import BaseGenerator from "@/v3d/generator/baseGenerator.js";
+import QRCodeGenerator from "@/v3d/generator/QRCodeGenerator.js";
 
 const shareHash = useShareHash()
 const director = new Director()
@@ -157,18 +153,16 @@ export default {
     diffOptions: {},
     qrCodeBitMask: null,
     unit: 'mm',
-    mesh: null,
-    blockWidth: null,
-    blockHeight: null,
     isGenerating: false,
     needGenerating: false,
     progressGenerating: 0,
     generateError: undefined,
     scannerModalVisible: false,
     readModalVisible: false,
-    addedMeshes: [],
+    mesh: null, // remove
+    addedMeshes: [], // remove
     generator: undefined,
-    model3d: undefined,
+    model3d: undefined, // local variable?
   }),
   mounted() {
     if (this.initData) {
@@ -188,21 +182,17 @@ export default {
 
   methods: {
     render3d() {
-      for(const item of this.box.getNodes()) {
-        this.box.removeNode(item)
-      }
-
-      this.generator = new QRCode3D(this.qrCodeBitMask, this.options)
-
-      const strategy = new QRCodeModel()
-      this.model3d = new Model()
-      this.model3d.setStrategy(strategy)
-
+      console.log(this.box.getNodes())
+      this.box.clear()
+      this.model3d = new Model3D()
 
       const addPromise = new Promise((resolve) => {
-        this.model3d.create(this.generator)
 
         if (this.options.code.active) {
+          this.generator = new QRCodeGenerator(this.qrCodeBitMask, this.options)
+          this.model3d.setStrategy(new QRCodeModel())
+          this.model3d.create(this.generator)
+
           this.generator.process = (percent) => {
             this.progressGenerating = percent
             if (percent >= 100) {
@@ -211,6 +201,10 @@ export default {
             }
           }
         } else {
+          this.generator = new BaseGenerator(this.options)
+          this.model3d.setStrategy(new TextModel())
+          this.model3d.create(this.generator)
+
           this.progressGenerating = 95
           setTimeout(() => {
             resolve(this.model3d.collection())
@@ -228,9 +222,11 @@ export default {
             // this.diffOptions = diff(defaultOptions, toRaw(this.options))
             // console.log(defaultOptions, toRaw(this.options), this.diffOptions)
             // console.log(this.options)
-            this.$emit('exportReady', this.options)
             // this.$emit('exportReady', this.diffOptions)
-            setTimeout(() => {this.addLastGenerate()}, 500)
+            this.$emit('exportReady', this.options)
+            setTimeout(() => {
+              this.addLastGenerate()
+            }, 500)
           })
           .finally(() => {
             this.needGenerating = false

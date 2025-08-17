@@ -18,13 +18,11 @@ class Base {
     this.addMesh('base', generator.getBaseMesh())
     this.addMesh('border', generator.getBorderMesh())
     this.addMesh('keychain', generator.getKeychainMesh())
+    this.addMesh('icon', generator.getIconMesh())
   }
 
 }
 
-/**
- * @deprecated
- */
 export class TextModel extends Base {
 
   create(generator) {
@@ -37,7 +35,7 @@ export class QRCodeModel extends Base {
 
   create(generator) {
     super.create(generator)
-    this.addMesh('icon', generator.getIconMesh())
+
     generator.getQRCodeMesh()
     this.addMesh('text', generator.getTextMesh())
   }

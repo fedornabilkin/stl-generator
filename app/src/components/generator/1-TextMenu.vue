@@ -151,7 +151,7 @@ import JSZip from 'jszip';
 
 import { save, saveAsString, saveAsArrayBuffer } from '@/utils';
 import BaseTag3D from "@/base";
-import {Model} from "@/v3d/create/model";
+import {Model3D} from "@/v3d/create/model3D.js";
 import {TextModel} from "@/v3d/create/base";
 import Border from "@/components/forms/Border.vue";
 import Keychain from "@/components/forms/Keychain.vue";
@@ -247,7 +247,7 @@ export default {
       this.generator = new BaseTag3D(this.options)
 
       const strategy = new TextModel()
-      this.model3d = new Model()
+      this.model3d = new Model3D()
       this.model3d.setStrategy(strategy)
       const parts = await this.model3d.create(this.generator)
 

@@ -18,7 +18,6 @@ export class Box {
   grid = undefined
 
   sceneGraphRoot = undefined
-  collectNodes = []
   collectionNodes = {}
   animation = undefined
 
@@ -29,17 +28,25 @@ export class Box {
   }
 
   addNode(name, node) {
-    this.collectNodes.push(node)
     this.collectionNodes[name] = node
     this.sceneGraphRoot.add(node)
   }
 
   getNodes() {
-    return this.collectNodes
+    return this.collectionNodes
   }
 
-  removeNode(node) {
+  removeNode(key) {
+    const node = this.collectionNodes[key]
     this.sceneGraphRoot.remove(node)
+    delete this.collectionNodes[key]
+  }
+
+  clear() {
+    this.scene.remove(this.sceneGraphRoot)
+    this.sceneGraphRoot = new THREE.Object3D()
+    this.scene.add(this.sceneGraphRoot)
+    this.collectionNodes = {}
   }
 
   combinedNodes() {

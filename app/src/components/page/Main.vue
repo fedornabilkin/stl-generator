@@ -10,12 +10,7 @@
       //h1.title {{ $t('g.title') }}
       //h2.subtitle {{ $t('g.subtitle') }}
       .container-settings
-        QRCodeMenu(v-if="mode === 'QR'"
-          :box="box"
-          :initData="shareData"
-          @generating="generating"
-          @exportReady="exportReady"
-        )
+        QRCodeMenu(:box="box" :initData="shareData" @generating="generating" @exportReady="exportReady")
 
         button.button(v-if="hasGenerateList" @click="historyModalVisible=true")
           span.icon
@@ -109,23 +104,24 @@ HistoryModal(
 
 <script>
 import * as THREE from 'three';
-import ExportModal from '../generator/ExportModal.vue';
-import QRCodeMenu from '../generator/QRCodeMenu.vue';
-import {dataURItoBlob, save, saveAsArrayBuffer, saveAsString, trimCanvas} from '@/utils';
 import {Box} from "@/v3d/box";
+import {BaseRotation} from "@/v3d/animation/baseRotation";
 import {useShareHash} from "@/service/shareHash";
+import {useUrlCreator} from "@/service/urlCreator.js";
 import {useExportList} from "@/store/exportList";
 import {useGenerateList} from "@/store/generateList";
-import {Share} from "@/entity/share";
+import QRCodeMenu from '@/components/generator/QRCodeMenu.vue';
 import ExportList from "@/components/generator/ExportList.vue";
-import {BaseRotation} from "@/v3d/animation/baseRotation";
+import ExportModal from '@/components/generator/ExportModal.vue';
 import HistoryModal from "@/components/generator/HistoryModal.vue";
 import ShareModal from "@/components/generator/ShareModal.vue";
+import SbpMoney from "@/components/monetisation/SbpMoney.vue";
 import { STLExporter } from 'three/examples/jsm/exporters/STLExporter';
 import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter";
-import JSZip from "jszip";
+import {Share} from "@/entity/share";
 import {TooltipBuilder} from "@/entity/builder";
-import SbpMoney from "@/components/monetisation/SbpMoney.vue";
+import JSZip from "jszip";
+import {dataURItoBlob, save, saveAsArrayBuffer, saveAsString, trimCanvas} from '@/utils';
 
 const shareHash = useShareHash()
 const exportList = useExportList()
@@ -145,7 +141,6 @@ export default {
   },
   data() {
     return {
-      mode: 'QR',
       expSettings: {
         active: false,
         ascii: false,
@@ -154,11 +149,11 @@ export default {
       options: {},
       box: undefined,
       autoRotation: false,
-      changelogModalVisible: false,
-      changelog: '',
+      changelogModalVisible: false, // remove
+      changelog: '', // remove
       historyModalVisible: false,
       historyDownloadModalVisible: false,
-      exportModalVisible: true,
+      exportModalVisible: false,
       randomTooltip: {},
       shareModalVisible: false,
       shareData: null,
@@ -166,19 +161,14 @@ export default {
       storeGenerate: null,
       hasGenerateList: false,
       isGenerating: false,
-      exporter: null,
       exportTimer: 5000,
-      scene: null,
       camera: null,
       renderer: null,
+      scene: null,
       grid: null,
-      addedMeshes: [],
+      exporter: null, // remove
+      addedMeshes: [], // remove
     };
-  },
-  setup() {
-    const tltBuilder = new TooltipBuilder()
-
-    return {tltBuilder}
   },
   created() {
     this.parseUrlShareHash()
@@ -205,11 +195,11 @@ export default {
       fetch(endpointApi)
         .then(res => res.json())
         .then((res) => {
-          this.tltBuilder.build(res.data)
-          this.randomTooltip = this.tltBuilder.getEntity()
+          const tltBuilder = new TooltipBuilder()
+          tltBuilder.build(res.data)
+          this.randomTooltip = tltBuilder.getEntity()
         })
         .catch((err) => {console.log(err)})
-        .finally(() => {})
 
     },
     initScene() {
@@ -245,9 +235,11 @@ export default {
         const filename = `vsqr-3d-${timestamp}.obj`
         saveAsArrayBuffer(result, filename)
 
-        exportList.add(this.createShare(shareHash.create(this.options), this.box.imgDataUrl()))
+        const image = this.box.imgDataUrl()
+        exportList.add(this.createShare(shareHash.create(this.options), image))
         exportList.downloadAllUpdate()
         window.localStorage.setItem(exportList.keyStoreAll, exportList.getDownloadAll())
+        this.sendImage(image)
       }, this.exportTimer)
     },
     exportSTL() {
@@ -290,28 +282,7 @@ export default {
         exportList.downloadAllUpdate()
         window.localStorage.setItem(exportList.keyStoreAll, exportList.getDownloadAll())
 
-        const host = window.location.host
-        const hash = window.location.hash
-        const url = `https://vsqr.ru/${hash}`
-        const params = new URLSearchParams({ url: url, host: host }).toString()
-        const endpointApi = `/api/image?${params}`
-        // const endpointApi = `https://92.63.98.81:1881/send?${params}`
-
-        const blob = dataURItoBlob(image)
-
-        if (!host.includes('localhost')) {
-          fetch(endpointApi, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'image/png'
-              },
-              body: blob
-            })
-            .then(res => res.text())
-            .then(() => {})
-            .catch((err) => {console.log(err)})
-            .finally(() => {})
-        }
+        this.sendImage(image)
 
       }, this.exportTimer)
     },
@@ -363,6 +334,29 @@ export default {
           }, 4000);
         });
       }, 1000);
+    },
+    sendImage(image) {
+      const host = window.location.host
+      const hash = window.location.hash
+      const url = `https://vsqr.ru/${hash}`
+
+      const {endpoint: endpointApi} = useUrlCreator('/api/image', { url: url, host: host })
+
+      if (host.includes('localhost')) {
+        return
+      }
+
+      fetch(endpointApi, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'image/png'
+        },
+        body: dataURItoBlob(image)
+      })
+        .then(res => res.text())
+        .then(() => {})
+        .catch((err) => {console.log(err)})
+        .finally(() => {})
     },
     createShare(hash, src) {
       return new Share({hash: hash, img: {src: src}, date: new Date().getTime()})

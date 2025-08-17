@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import QRCode3D from '../qrcode3d';
+import QRCodeGenerator from '../QRCodeGenerator.js';
 import BaseTag3D from '../base';
 import SpotifyCode3D from '../spotifyCode3D';
 
@@ -7,7 +7,7 @@ import SpotifyCode3D from '../spotifyCode3D';
 addEventListener('message', async (event) => {
   let generator;
   if (event.data.mode === 'QR') {
-    generator = new QRCode3D(event.data.qrCodeBitMask, event.data.options);
+    generator = new QRCodeGenerator(event.data.qrCodeBitMask, event.data.options);
   } else if (event.data.mode === 'Spotify') {
     generator = new SpotifyCode3D(event.data.spotifyCodeShapes, event.data.options);
   } else if (event.data.mode === 'Text') {

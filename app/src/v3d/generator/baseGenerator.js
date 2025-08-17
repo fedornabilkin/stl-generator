@@ -1,15 +1,15 @@
 import * as THREE from 'three';
-import fontInterSemiBold from './assets/fonts/Inter_SemiBold.json';
-import fontInterSemiBoldItalic from './assets/fonts/Inter_SemiBold_Italic.json';
-import fontInterExtraBold from './assets/fonts/Inter_ExtraBold.json';
-import fontInterExtraBoldItalic from './assets/fonts/Inter_ExtraBold_Italic.json';
-import {subtractMesh, unionMesh, getBoundingBoxSize} from './utils';
+import fontInterSemiBold from '@/assets/fonts/Inter_SemiBold.json';
+import fontInterSemiBoldItalic from '@/assets/fonts/Inter_SemiBold_Italic.json';
+import fontInterExtraBold from '@/assets/fonts/Inter_ExtraBold.json';
+import fontInterExtraBoldItalic from '@/assets/fonts/Inter_ExtraBold_Italic.json';
+import {subtractMesh, unionMesh, getBoundingBoxSize} from '@/utils';
 import {RectangleRoundedCornerShape, RectangleRoundedShape} from "@/v3d/primitives/shape";
 import {SVGLoader} from "three/examples/jsm/loaders/SVGLoader";
 
 const lineSpacing = 2
 
-class BaseTag3D {
+export default class BaseGenerator {
 
   collectMesh = {}
 
@@ -368,5 +368,3 @@ class BaseTag3D {
   }
 
 }
-
-export default BaseTag3D

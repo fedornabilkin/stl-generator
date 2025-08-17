@@ -1,4 +1,4 @@
-export class Model {
+export class Model3D {
   strategy = undefined
 
   setStrategy(strategy) {

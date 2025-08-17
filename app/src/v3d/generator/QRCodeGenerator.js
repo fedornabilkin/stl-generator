@@ -1,12 +1,12 @@
 import * as THREE from 'three';
-import BaseTag3D from './base';
-import { getBoundingBoxSize } from './utils';
+import { getBoundingBoxSize } from '@/utils.js';
+import BaseGenerator from "./baseGenerator.js";
 
 /**
  * Class used for generating the 3D model from a bitmask that contains the QR Code Data.
  * qrCodeBitmask must be a square number (QR Code of dimensions 21x21 => Bitmask of length 441 (21*21)).
  */
-class QRCode3D extends BaseTag3D {
+export default class QRCodeGenerator extends BaseGenerator {
   finalBlock
   blockGeometry
   process = (percent) => {return percent}
@@ -210,5 +210,3 @@ class QRCode3D extends BaseTag3D {
   }
 
 }
-
-export default QRCode3D;
