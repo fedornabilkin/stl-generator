@@ -346,7 +346,7 @@ export default {
         return
       }
 
-      fetch(endpointApi, {
+      fetch(endpointApi.value, {
         method: 'POST',
         headers: {
           'Content-Type': 'image/png'

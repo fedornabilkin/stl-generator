@@ -46,8 +46,6 @@ export default class BaseGenerator {
     this.combinedMesh = null;
     this.exportedMeshes = {}
     this.collectMesh = {}
-
-    console.log('options', options)
   }
 
   createMaterial(color) {
