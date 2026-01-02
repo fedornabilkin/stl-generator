@@ -97,6 +97,17 @@ const setActiveTab = (idx) => {
                   option(value='H') {{$t('form.qr.correction.h')}}
               p.help {{$t('form.qr.correction.label')}}
 
+      .field.is-horizontal
+        .field-label.is-small
+          label.label {{$t('form.qr.emptyCenter')}}
+        .field-body
+          .field
+            .control
+              label.checkbox
+                input(type='checkbox' v-model='props.options.code.emptyCenter')
+                span.is-size-7
+                  |  {{$t('form.qr.emptyCenterHelp')}}
+
     .column
       .field.is-horizontal
         .field-label.is-small

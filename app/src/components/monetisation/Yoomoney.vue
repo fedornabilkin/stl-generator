@@ -8,7 +8,7 @@ const showingThankYou = ref(false)
   .boxb.b
     a.button(
       v-if="!showingThankYou"
-      href="https://yoomoney.ru/fundraise/187LKGIJ2GT.250205"
+      href="https://yoomoney.ru/fundraise/1ET4AORVPH6.251226"
       target="_blank"
       @click="showingThankYou=true"
     )
@@ -18,7 +18,7 @@ const showingThankYou = ref(false)
 
     a.button.is-danger(
       v-if="showingThankYou"
-      href="https://yoomoney.ru/fundraise/187LKGIJ2GT.250205"
+      href="https://yoomoney.ru/fundraise/1ET4AORVPH6.251226"
       target="_blank"
     )
       span.icon

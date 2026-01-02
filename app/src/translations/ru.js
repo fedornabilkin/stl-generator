@@ -84,6 +84,8 @@ export default {
         q: 'Q (Четверть, 25% лишних)',
         h: 'H (Высокий, 30% лишних)',
       },
+      emptyCenter: 'Пустой центр',
+      emptyCenterHelp: 'Убирает блоки из центра, если добавлена иконка',
       correctionLabel: '',
       blockSize: 'Размер блока',
       blockSizeLabel: `
@@ -184,6 +186,8 @@ export default {
     magnet: {
       active: 'Углубление',
       activeLabel: 'Добавить углубление для магнита или NFC-метки с обратной стороны модели.',
+      hidden: 'Спрятать',
+      hiddenHelp: 'Сдвигает на 0.6 мм по Z',
       shape: 'Форма',
       square: 'квадрат',
       round: 'круг',

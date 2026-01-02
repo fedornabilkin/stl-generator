@@ -11,11 +11,12 @@ div(:class="{'modal': true, 'is-active': isActive}")
         span(v-if="seconds === 0") {{ $t('e.downloadStarted') }}
         progress.progress.is-small.is-primary(max="100" :value="progress")
     section.modal-card-body
-      .mb-4.message
+      .mb-2.message
         sbp-money
       .is-pulled-right
-        Yoomoney
-      .is-light
+        //Yoomoney
+        YoomoneyWidget
+      //.is-light
         a.button(href="/examples") {{ $t('e.exampleButton') }}
     footer.modal-card-foot
       button.button.mr-1(@click="close") {{ $t('g.close') }}
@@ -26,10 +27,11 @@ div(:class="{'modal': true, 'is-active': isActive}")
 
 import Yoomoney from "@/components/monetisation/Yoomoney.vue";
 import SbpMoney from "@/components/monetisation/SbpMoney.vue";
+import YoomoneyWidget from "@/components/monetisation/YoomoneyWidget.vue";
 
 export default {
   name: 'ExportModal',
-  components: {SbpMoney, Yoomoney},
+  components: {YoomoneyWidget, SbpMoney, Yoomoney},
   props: {
     isActive: {
       type: Boolean,

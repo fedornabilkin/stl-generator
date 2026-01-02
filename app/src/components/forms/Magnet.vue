@@ -35,9 +35,9 @@ const props = defineProps(['options', 'unit'])
               input.input.is-small(type='number' v-model.number='props.options.magnet.depth')
             p.control
               a.button.is-static.is-small {{props.unit}}
-      //.field.is-horizontal
+      .field.is-horizontal
         .field-label.is-small
-          label.label {{$t('hidden')}}
+          label.label {{$t('form.magnet.hidden')}}
         .field-body
           .control
             label.checkbox
@@ -45,7 +45,7 @@ const props = defineProps(['options', 'unit'])
                 input(type='checkbox' v-model='props.options.magnet.hidden')
                 span.is-size-7
                   i.fa.fa-layer-group
-                  |  {{$t('nfcIndentationHiddenHelp')}}
+                  |  {{$t('form.magnet.hiddenHelp')}}
 
     .column
       .field.is-horizontal

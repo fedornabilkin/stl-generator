@@ -84,6 +84,8 @@ export default {
         q: 'Q (Quartile, 25% redundant)',
         h: 'H (High, 30% redundant)',
       },
+      emptyCenter: 'Empty center',
+      emptyCenterHelp: 'Removes blocks from the center if an icon is added',
       correctionLabel: '',
       blockSize: 'Block size',
       blockSizeLabel: `
@@ -184,6 +186,8 @@ export default {
     magnet: {
       active: 'Deepening',
       activeLabel: 'Add a recess for a magnet or NFC tag on the back of the model.',
+      hidden: 'Hide',
+      hiddenHelp: 'Move 0.6 мм to Z',
       shape: 'Shape',
       square: 'square',
       round: 'round',

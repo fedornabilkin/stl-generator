@@ -61,7 +61,7 @@ export default class QRCodeGenerator extends BaseGenerator {
             let posY = etoQr.correctPositionY(etoQr.availableWidth, etoQr.yCountPosition, etoQr.blockWidth, y)
             const posZ = etoQr.correctPositionZ(etoQr.options.base.depth, blockDepth)
 
-            if (etoQr.options.icon.active && etoQr.iconMesh) {
+            if (etoQr.options.code.emptyCenter === true && etoQr.iconMesh) {
               if ((posX > -etoQr.iconSize.x / 2 - etoQr.safetyMargin
                   && posX < etoQr.iconSize.x / 2 + etoQr.safetyMargin)
                 && (posY > -etoQr.iconSize.y / 2 - etoQr.safetyMargin

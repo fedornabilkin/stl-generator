@@ -5,6 +5,7 @@ export class Entity extends DefaultEntity{
   active = false
   offsetX = 0
   offsetY = 0
+  offsetZ = 0
 
   constructor(config = {}) {
     super(config)
@@ -45,6 +46,7 @@ export class Code extends Entity {
   cityMode = false
   depthMax = 2
   errorCorrectionLevel = 'M'
+  emptyCenter = true
   invert = false
   block = {
     ratio: 100,
@@ -186,5 +188,6 @@ export class Magnet extends Entity {
   constructor(config = {}) {
     super(config)
     Object.assign(this, config)
+    this.offsetZ = 0.6
   }
 }

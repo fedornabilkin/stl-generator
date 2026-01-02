@@ -24,6 +24,8 @@ export default class BaseGenerator {
     // default material for the base
     this.materialBase = new THREE.MeshPhongMaterial({
       color: this.options.baseColor,
+      // transparent: true,
+      // opacity: 0.5,
     });
     // default material for qr code, border, etc.
     this.materialDetail = new THREE.MeshPhongMaterial({
@@ -83,20 +85,21 @@ export default class BaseGenerator {
       const width = this.options.magnet.size
       const height = this.options.magnet.size
       const depth = this.options.magnet.depth
+      const material = this.createMaterial('0x000000')
 
       let holeMesh;
       if (this.options.magnet.shape === 'round') {
         const geometryMagnet = new THREE.CylinderGeometry(width / 2, height / 2, depth, 32)
-        holeMesh = new THREE.Mesh(geometryMagnet, this.materialBase)
+        holeMesh = new THREE.Mesh(geometryMagnet, material)
         holeMesh.rotation.x = -Math.PI / 2
       } else {
         // shape = square
         const geometryMagnet = new THREE.BoxGeometry(width, height, depth)
-        holeMesh = new THREE.Mesh(geometryMagnet, this.materialBase)
+        holeMesh = new THREE.Mesh(geometryMagnet, material)
       }
       holeMesh.position.z = depth / 2
       if (this.options.magnet.hidden) {
-        holeMesh.position.z += 1
+        holeMesh.position.z += this.options.magnet.offsetZ
       }
 
       holeMesh.position.x = baseMesh.position.x

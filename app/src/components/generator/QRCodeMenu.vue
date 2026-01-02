@@ -182,7 +182,6 @@ export default {
 
   methods: {
     render3d() {
-      console.log(this.box.getNodes())
       this.box.clear()
       this.model3d = new Model3D()
 

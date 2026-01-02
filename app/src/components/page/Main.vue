@@ -23,7 +23,7 @@
           p.title {{$t('g.preview')}}
           p.subtitle {{ $t('g.controlsHint') }}
         .column
-          //.field.has-addons
+          .field.has-addons
             .control
               span.button
                 input.checkbox(type='checkbox' v-model='autoRotation')
@@ -81,6 +81,8 @@
                 i.fa.fa-arrow-circle-down(aria-hidden="true")
               span {{$t('e.downloadAll')}} ({{ storeExport.getDownloadAll() }})
 
+      YoomoneyWidget
+
 
 ExportModal(v-if="exportModalVisible" :isActive="exportModalVisible" @close="exportModalVisible=false")
 ShareModal(v-if="shareModalVisible" :isActive="shareModalVisible" @close="shareModalVisible=false")
@@ -122,6 +124,7 @@ import {Share} from "@/entity/share";
 import {TooltipBuilder} from "@/entity/builder";
 import JSZip from "jszip";
 import {dataURItoBlob, save, saveAsArrayBuffer, saveAsString, trimCanvas} from '@/utils';
+import YoomoneyWidget from "@/components/monetisation/YoomoneyWidget.vue";
 
 const shareHash = useShareHash()
 const exportList = useExportList()
@@ -132,6 +135,7 @@ box.createScene()
 export default {
   name: 'Main',
   components: {
+    YoomoneyWidget,
     SbpMoney,
     ShareModal,
     HistoryModal,
@@ -229,10 +233,9 @@ export default {
       this.autoRotation = false
 
       setTimeout(() => {
-        const timestamp = new Date().getTime()
         const exporter = new OBJExporter()
         const result = exporter.parse(box.getScene())
-        const filename = `vsqr-3d-${timestamp}.obj`
+        const filename = `${this.fileName()}.obj`
         saveAsArrayBuffer(result, filename)
 
         const image = this.box.imgDataUrl()
@@ -247,7 +250,6 @@ export default {
       this.autoRotation = false
 
       setTimeout(() => {
-        const timestamp = new Date().getTime()
         const exporter = new STLExporter()
 
         const exportAsBinary = !this.expSettings.ascii
@@ -259,14 +261,14 @@ export default {
 
           for(const key in parts) {
             const data = exporter.parse(parts[key], expConfig)
-            zip.file(`${key}-${timestamp}.stl`, data.buffer)
+            zip.file(`${this.fileName(key)}.stl`, data.buffer)
           }
 
           zip.generateAsync({ type: 'blob' }).then((content) => {
-            save(new Blob([content]), `vsqr-3d-${timestamp}.zip`)
+            save(new Blob([content]), `${this.fileName()}.zip`)
           })
         } else {
-          const filename = `vsqr-3d-${timestamp}.stl`
+          const filename = `${this.fileName()}.stl`
           const result = exporter.parse(this.box.combinedNodes(), expConfig)
 
           if (exportAsBinary) {
@@ -285,6 +287,24 @@ export default {
         this.sendImage(image)
 
       }, this.exportTimer)
+    },
+    fileName(key = '') {
+      const timestamp = new Date().getTime()
+      let prefix = `vsqr-3d-`
+      if (key !== '') {
+        prefix = key
+      }
+
+      let param = ''
+      if (key === '') {
+        prefix = ''
+        if (this.options.keychain.active) param += 'key_'
+        if (this.options.code.active) param += 'qr_'
+        if (this.options.base.active) param += `${this.options.base.width}x${this.options.base.height}x${this.options.base.depth}-radius${this.options.base.cornerRadius}_`
+        if (this.options.text.active) param += `text${this.options.text.size}_`
+        if (this.options.magnet.active) param += `magnet${this.options.magnet.size}x${this.options.magnet.depth}_`
+      }
+      return `${prefix}${param}${timestamp}`
     },
     renderPNG() {
       this.exportModalVisible = true;
